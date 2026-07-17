@@ -1,0 +1,54 @@
+/* Namma E Store — cart page styles (extracted from cart/index.php per the no-inline-CSS coding rule) */
+
+.page-hero{background:linear-gradient(135deg,#c2185b,#e91e8c,#1565c0);padding:20px;text-align:center;}
+.page-hero h1{font-family:'Sora',sans-serif;color:white;font-size:1.5rem;}
+.cart-layout{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start;}
+@media(max-width:900px){.cart-layout{grid-template-columns:1fr;}}
+.card{background:white;border-radius:14px;border:1.5px solid #f0e6ef;margin-bottom:16px;}
+.card-head{padding:14px 18px;border-bottom:1px solid #f8f0f7;display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-weight:700;font-size:.92rem;color:var(--dark);display:flex;align-items:center;gap:8px;}
+.card-link{font-size:.8rem;color:var(--blue-main);text-decoration:none;}
+.card-body{padding:16px 18px;}
+.card-body.tight{padding-bottom:4px;}
+.cart-item{display:grid;grid-template-columns:80px 1fr auto;gap:14px;padding:14px 0;border-bottom:1px solid #fdf0f7;align-items:start;}
+.cart-item:last-child{border-bottom:none;}
+.ci-img{width:80px;height:80px;border-radius:12px;background:var(--pink-pale);border:1.5px solid #f0e6ef;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:2.2rem;}
+.ci-img img{width:100%;height:100%;object-fit:cover;}
+.ci-vendor{font-size:.7rem;color:var(--gray);margin-bottom:3px;}
+.ci-name{font-size:.88rem;font-weight:700;color:var(--dark);margin-bottom:4px;line-height:1.3;}
+.ci-variant{font-size:.72rem;color:var(--gray);margin-bottom:8px;}
+.ci-controls{display:flex;align-items:center;gap:8px;}
+.qty-btn{width:28px;height:28px;border-radius:7px;border:1.5px solid #f0e6ef;background:white;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all var(--transition);}
+.qty-btn:hover{background:var(--pink-main);color:white;border-color:var(--pink-main);}
+.qty-val{font-size:.88rem;font-weight:700;min-width:22px;text-align:center;}
+.btn-rm{background:none;border:none;cursor:pointer;color:var(--gray);font-size:.75rem;padding:2px 6px;transition:color var(--transition);}
+.btn-rm:hover{color:var(--red);}
+.ci-price{font-weight:800;color:var(--pink-deep);font-size:.95rem;white-space:nowrap;}
+.ci-orig{font-size:.75rem;color:var(--gray);text-decoration:line-through;}
+.empty-cart{text-align:center;padding:60px 20px;}
+.empty-cart .ec-icon{font-size:5rem;margin-bottom:16px;}
+.empty-cart h3{font-family:'Sora',sans-serif;font-size:1.4rem;color:var(--dark);margin-bottom:8px;}
+.empty-cart p{color:var(--gray);margin-bottom:24px;font-size:.9rem;}
+.btn-continue{display:inline-block;padding:12px 28px;background:linear-gradient(90deg,var(--pink-main),var(--pink-deep));color:white;border-radius:10px;text-decoration:none;font-weight:700;}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:.88rem;}
+.summary-row.total{border-top:2px solid #f0e6ef;margin-top:6px;padding-top:14px;font-weight:800;font-size:1rem;}
+.summary-row .label{color:var(--gray);}
+.summary-row.total .label,.summary-row.total .val{color:var(--dark);}
+.summary-row .val{font-weight:700;color:var(--dark);}
+.summary-row .val.free{color:var(--green);}
+.summary-row .val.green{color:var(--green);}
+.summary-row.total .val.grand{color:var(--pink-deep);font-size:1.1rem;}
+.btn-checkout{width:100%;padding:14px;background:linear-gradient(90deg,var(--pink-main),var(--pink-deep));color:white;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all var(--transition);box-shadow:0 4px 16px rgba(233,30,140,.3);text-decoration:none;display:block;text-align:center;}
+.btn-checkout:hover{background:linear-gradient(90deg,var(--pink-deep),var(--blue-main));}
+.btn-continue-shop{width:100%;padding:11px;background:white;color:var(--pink-main);border:2px solid var(--pink-main);border-radius:12px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px;text-decoration:none;display:block;text-align:center;transition:all var(--transition);}
+.btn-continue-shop:hover{background:var(--pink-pale);}
+.coupon-form{display:flex;gap:8px;margin-top:12px;}
+.coupon-input{flex:1;border:1.5px solid #f0e6ef;border-radius:9px;padding:9px 13px;font-size:.83rem;font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
+.coupon-input:focus{border-color:var(--pink-main);}
+.btn-coupon{padding:9px 16px;background:var(--dark);color:white;border:none;border-radius:9px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;}
+.free-ship-banner{background:var(--green-pale);color:var(--green);text-align:center;padding:9px;border-radius:9px;font-size:.78rem;font-weight:700;margin-bottom:12px;}
+.ship-nudge{background:var(--blue-pale);color:var(--blue-main);text-align:center;padding:9px;border-radius:9px;font-size:.78rem;font-weight:700;margin-bottom:12px;}
+
+/* GST rows in order summary */
+.summary-row.gst-row .label{padding-left:10px;font-size:.8rem;}
+.summary-row.gst-row .val{font-size:.8rem;font-weight:600;}

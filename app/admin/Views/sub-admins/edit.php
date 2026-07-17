@@ -1,0 +1,32 @@
+<?php $p=ADMIN_URL;
+$moduleLabels=['products'=>'Product Management','payments'=>'Payment Monitoring','reports'=>'Reports & Analytics','activity'=>'Activity Logs','banners'=>'Banner Management'];
+$moduleIcons=['products'=>'box-seam','payments'=>'credit-card','reports'=>'bar-chart','activity'=>'clock-history','banners'=>'images']; ?>
+<div class="d-flex align-items-center gap-3 mb-4"><a href="<?= $p ?>/sub-admins" class="btn btn-sm btn-outline-secondary btn-icon"><i class="bi bi-arrow-left"></i></a><h5 style="font-weight:800;margin:0;">Edit: <?= e($subAdmin['name']) ?></h5></div>
+<form method="POST" action="<?= $p ?>/sub-admins/<?= $subAdmin['id'] ?>">
+  <?= csrf_field() ?>
+<div class="row g-3">
+  <div class="col-lg-7"><div class="card"><div class="card-header"><span class="card-title">Account Details</span></div><div class="card-body"><div class="row g-3">
+    <div class="col-md-6"><label class="form-label">Full Name *</label><input type="text" name="name" class="form-control" required value="<?= e($subAdmin['name']) ?>"></div>
+    <div class="col-md-6"><label class="form-label">Email <span style="color:var(--muted);font-weight:400;">(cannot change)</span></label><input type="email" class="form-control" value="<?= e($subAdmin['email']) ?>" disabled></div>
+    <div class="col-md-6"><label class="form-label">New Password <span style="color:var(--muted);font-weight:400;">(leave blank to keep)</span></label><input type="password" name="password" class="form-control" placeholder="Set new password..."></div>
+  </div></div></div></div>
+  <div class="col-lg-5"><div class="card"><div class="card-header"><span class="card-title">Module Access</span></div><div class="card-body">
+    <?php foreach($modules as $m): $has=isset($permMap[$m]); $pm=$permMap[$m]??[]; ?>
+    <div style="background:var(--bg);border-radius:9px;padding:11px 13px;margin-bottom:10px;">
+      <label style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;cursor:pointer;margin:0;">
+        <input type="checkbox" name="modules[]" value="<?= $m ?>" <?= $has?'checked':'' ?> onchange="toggleP(this,'<?= $m ?>')" style="width:16px;height:16px;">
+        <i class="bi bi-<?= $moduleIcons[$m] ?>" style="color:var(--purple);"></i>
+        <?= $moduleLabels[$m] ?>
+      </label>
+      <div id="p-<?= $m ?>" style="display:<?= $has?'block':'none' ?>;padding-left:24px;margin-top:8px;">
+        <?php foreach(['create'=>'Create','edit'=>'Edit','delete'=>'Delete'] as $a=>$al): ?>
+        <label style="font-size:12px;margin-right:14px;cursor:pointer;"><input type="checkbox" name="perm[<?= $m ?>][<?= $a ?>]" value="1" <?= ($pm['can_'.$a]??0)?'checked':'' ?>> <?= $al ?></label>
+        <?php endforeach; ?>
+      </div>
+    </div>
+    <?php endforeach; ?>
+  </div></div></div>
+  <div class="col-12"><div class="d-flex gap-2"><button type="submit" class="btn btn-primary px-4">Save Changes</button><a href="<?= $p ?>/sub-admins" class="btn btn-outline-secondary">Cancel</a></div></div>
+</div>
+</form>
+<?php $scripts='<script>function toggleP(cb,m){document.getElementById("p-"+m).style.display=cb.checked?"block":"none";}</script>'; ?>

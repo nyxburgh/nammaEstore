@@ -1,0 +1,13 @@
+{
+    "name": "bazario/marketplace",
+    "description": "Multi-vendor marketplace platform",
+    "type": "project",
+    "require": {
+        "php": ">=8.3",
+        "dompdf/dompdf": "^3.0",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}

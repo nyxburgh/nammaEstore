@@ -1,0 +1,22 @@
+# Environment secrets
+.env
+
+# Composer dependencies
+/vendor/
+
+# User-uploaded content
+/uploads/*
+!/uploads/.htaccess
+/public/uploads/*
+!/public/uploads/.htaccess
+
+# Logs and temp files
+*.log
+/storage/
+/tmp/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

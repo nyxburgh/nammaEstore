@@ -1,0 +1,23 @@
+Options -Indexes
+Options +FollowSymLinks
+RewriteEngine On
+
+# Serve real files and folders directly (assets, uploads etc.)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route everything else through index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# ── Security ──────────────────────────────────────────────────
+<FilesMatch "\.(env|sql|log|bak|sh|git|htpasswd|md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ── PHP settings ──────────────────────────────────────────────
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value max_execution_time 60
+</IfModule>

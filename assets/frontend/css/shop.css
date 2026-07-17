@@ -1,0 +1,82 @@
+/* Namma E Store — product listing / search / category page styles (extracted from products/index.php per the no-inline-CSS coding rule) */
+
+.page-hero{background:linear-gradient(135deg,#c2185b 0%,#e91e8c 50%,#1565c0 100%);padding:22px 0;margin-bottom:0;}
+.page-hero-inner{max-width:1400px;margin:0 auto;padding:0 20px;}
+.page-hero h1{font-family:'Sora',sans-serif;color:white;font-size:1.6rem;margin-bottom:4px;}
+.page-hero .breadcrumb{display:flex;align-items:center;gap:6px;font-size:.75rem;color:rgba(255,255,255,.7);flex-wrap:wrap;}
+.page-hero .breadcrumb a{color:rgba(255,255,255,.7);text-decoration:none;}
+.page-hero .breadcrumb a:hover{color:white;}
+.page-hero .breadcrumb .sep{opacity:.5;}
+
+.shop-layout{display:grid;grid-template-columns:240px 1fr;gap:22px;align-items:start;}
+@media(max-width:900px){.shop-layout{grid-template-columns:1fr;}}
+
+/* Sidebar Filters */
+.filter-sidebar{background:white;border-radius:14px;border:1.5px solid #f0e6ef;padding:18px;position:sticky;top:72px;}
+@media(max-width:900px){.filter-sidebar{display:none;}}
+.fs-title{font-family:'Sora',sans-serif;font-size:1.1rem;color:var(--dark);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #f0e6ef;}
+.filter-group{margin-bottom:20px;}
+.filter-group h4{font-size:.8rem;font-weight:700;color:var(--dark);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px;}
+.filter-chip{display:inline-flex;align-items:center;padding:5px 12px;border:1.5px solid #f0e6ef;border-radius:50px;font-size:.76rem;font-weight:600;cursor:pointer;margin:3px;transition:all var(--transition);text-decoration:none;color:var(--dark);}
+.filter-chip:hover,.filter-chip.active{background:var(--pink-main);color:white;border-color:var(--pink-main);}
+.price-inputs{display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.price-inputs input{flex:1;border:1.5px solid #f0e6ef;border-radius:8px;padding:6px 8px;font-size:.78rem;font-family:'Plus Jakarta Sans',sans-serif;outline:none;width:80px;}
+.price-inputs input:focus{border-color:var(--pink-main);}
+.price-inputs span{color:var(--gray);font-size:.75rem;}
+.btn-filter{width:100%;padding:9px;background:var(--pink-main);color:white;border:none;border-radius:9px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+
+/* Products area */
+.sort-bar{background:white;border-radius:10px;border:1.5px solid #f0e6ef;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;flex-wrap:wrap;}
+.sort-bar .result-count{font-size:.82rem;color:var(--gray);}
+.sort-bar .result-count strong{color:var(--dark);}
+.sort-select{border:1.5px solid #f0e6ef;border-radius:8px;padding:6px 12px;font-size:.8rem;font-family:'Plus Jakarta Sans',sans-serif;outline:none;cursor:pointer;color:var(--dark);}
+.sort-select:focus{border-color:var(--pink-main);}
+.layout-btns{display:flex;gap:4px;}
+.layout-btn{width:30px;height:30px;border:1.5px solid #f0e6ef;border-radius:7px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all var(--transition);}
+.layout-btn.active{background:var(--pink-main);color:white;border-color:var(--pink-main);}
+
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+@media(max-width:1200px){.products-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:700px){.products-grid{grid-template-columns:repeat(2,1fr);gap:8px;}}
+
+/* Same product-card styles from home */
+.product-card{background:white;border-radius:var(--radius);border:1.5px solid #f0e6ef;overflow:hidden;cursor:pointer;transition:all var(--transition);}
+.product-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.product-img{height:180px;background:var(--pink-pale);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.product-img img{width:100%;height:100%;object-fit:cover;}
+.product-discount-badge{position:absolute;top:8px;left:8px;background:var(--pink-main);color:white;font-size:.65rem;font-weight:800;padding:3px 8px;border-radius:50px;}
+.product-wishlist{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:white;border:none;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:all var(--transition);}
+.product-wishlist:hover{background:var(--pink-soft);}
+.product-info{padding:12px;}
+.vendor-tag{font-size:.68rem;color:var(--gray);margin-bottom:4px;}
+.product-name{font-size:.82rem;font-weight:600;color:var(--dark);margin-bottom:6px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.product-price{display:flex;align-items:baseline;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
+.price-current{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;color:var(--pink-deep);}
+.price-original{font-size:.75rem;color:var(--gray);text-decoration:line-through;}
+.product-add-btn{width:100%;padding:7px;background:linear-gradient(90deg,var(--pink-main),var(--pink-deep));color:white;border:none;border-radius:8px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all var(--transition);}
+.product-add-btn:hover{background:linear-gradient(90deg,var(--pink-deep),var(--blue-main));}
+
+/* Empty state */
+.empty-products{grid-column:1/-1;text-align:center;padding:60px 20px;}
+.empty-products .ep-icon{font-size:4rem;margin-bottom:14px;}
+.empty-products h3{font-family:'Sora',sans-serif;font-size:1.3rem;color:var(--dark);margin-bottom:8px;}
+.empty-products p{color:var(--gray);font-size:.9rem;margin-bottom:20px;}
+.btn-browse{display:inline-block;padding:11px 24px;background:linear-gradient(90deg,var(--pink-main),var(--pink-deep));color:white;border-radius:10px;text-decoration:none;font-weight:700;font-size:.9rem;}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:24px;flex-wrap:wrap;}
+.page-link{padding:7px 13px;border:1.5px solid #f0e6ef;border-radius:8px;font-size:.8rem;font-weight:600;text-decoration:none;color:var(--dark);transition:all var(--transition);background:white;}
+.page-link:hover,.page-link.active{background:var(--pink-main);color:white;border-color:var(--pink-main);}
+.page-link.disabled{opacity:.4;pointer-events:none;}
+.page-ellipsis{padding:7px 4px;color:var(--gray);font-size:.8rem;}
+.pagination-summary{text-align:center;font-size:.78rem;color:var(--gray);margin-top:20px;margin-bottom:8px;}
+
+/* extracted inline styles */
+.shop-container{padding-top:20px;}
+.sort-radio{display:flex;align-items:center;gap:6px;margin-bottom:7px;cursor:pointer;font-size:.8rem;}
+.sort-radio input{accent-color:var(--pink-main);}
+.filter-reset{display:block;text-align:center;margin-top:8px;font-size:.78rem;color:var(--gray);}
+.sort-right{display:flex;align-items:center;gap:8px;}
+.sort-form{display:inline;}
+.product-img .ph-lg{font-size:3rem;}
+.tax-tag{font-size:.62rem;color:var(--gray);font-weight:600;white-space:nowrap;}
