@@ -40,24 +40,41 @@ if (!$vendorId) {
     echo "Using existing demo vendor (id=$vendorId)\n";
 }
 
-// ── 2. Category id lookup ───────────────────────────────────────
+// ── 2. Demo customer ──────────────────────────────────────────────
+$customerEmail = 'customer.demo@mycart.com';
+$existing = $pdo->prepare("SELECT id FROM mc_users WHERE email = ?");
+$existing->execute([$customerEmail]);
+$customerId = $existing->fetchColumn();
+
+if (!$customerId) {
+    $pdo->prepare("INSERT INTO mc_users (name, email, phone, password, role, is_active, is_verified, email_verified_at)
+                   VALUES (?, ?, ?, ?, 'customer', 1, 1, NOW())")
+        ->execute(['Demo Customer', $customerEmail, '9876500000', password_hash('Customer@123', PASSWORD_BCRYPT)]);
+    $customerId = $pdo->lastInsertId();
+    echo "Created demo customer (id=$customerId, login: $customerEmail / Customer@123)\n";
+} else {
+    echo "Using existing demo customer (id=$customerId)\n";
+}
+
+// ── 3. Category id lookup ───────────────────────────────────────
 $catRows = $pdo->query("SELECT id, slug FROM mc_categories")->fetchAll(PDO::FETCH_KEY_PAIR);
 $catIds = array_flip($catRows); // slug => id
 
-// ── 3. Demo products ─────────────────────────────────────────────
+// ── 4. Demo products ─────────────────────────────────────────────
+// [category, name, price, sale_price, stock, image search keyword, featured]
 $products = [
-    ['electronics', 'Wireless Bluetooth Headphones', 1999.00, 1599.00, 40, '3a86ff', true],
-    ['electronics', 'Smart Fitness Band', 1499.00, null, 60, '2563eb', false],
-    ['fashion', "Men's Casual Denim Jacket", 2199.00, 1799.00, 25, 'ef476f', true],
-    ['fashion', "Women's Floral Summer Dress", 1299.00, null, 30, 'f72585', false],
-    ['home-kitchen', 'Stainless Steel Cookware Set (5 Pcs)', 3499.00, 2999.00, 15, 'fb8500', true],
-    ['home-kitchen', 'Electric Kettle 1.8L', 899.00, null, 50, 'ffb703', false],
-    ['sports', 'Yoga Mat with Carry Strap', 699.00, 549.00, 80, '06d6a0', false],
-    ['sports', 'Adjustable Dumbbell Set 10kg', 2499.00, null, 20, '118ab2', false],
-    ['books', 'The Art of Clean Code (Paperback)', 499.00, 399.00, 100, '8338ec', false],
-    ['beauty', 'Herbal Face Wash Combo Pack', 399.00, null, 70, 'ff6b6b', false],
-    ['grocery', 'Organic Assorted Dry Fruits Box 500g', 649.00, 599.00, 45, '9b5de5', true],
-    ['gaming', 'Wireless Gaming Mouse RGB', 1199.00, 999.00, 35, '073b4c', false],
+    ['electronics', 'Wireless Bluetooth Headphones', 1999.00, 1599.00, 40, 'headphones', true],
+    ['electronics', 'Smart Fitness Band', 1499.00, null, 60, 'fitness-band,smartwatch', false],
+    ['fashion', "Men's Casual Denim Jacket", 2199.00, 1799.00, 25, 'denim-jacket,mensfashion', true],
+    ['fashion', "Women's Floral Summer Dress", 1299.00, null, 30, 'summerdress,womensfashion', false],
+    ['home-kitchen', 'Stainless Steel Cookware Set (5 Pcs)', 3499.00, 2999.00, 15, 'cookware,kitchenware', true],
+    ['home-kitchen', 'Electric Kettle 1.8L', 899.00, null, 50, 'electrickettle', false],
+    ['sports', 'Yoga Mat with Carry Strap', 699.00, 549.00, 80, 'yogamat', false],
+    ['sports', 'Adjustable Dumbbell Set 10kg', 2499.00, null, 20, 'dumbbell,gym', false],
+    ['books', 'The Art of Clean Code (Paperback)', 499.00, 399.00, 100, 'books,bookstack', false],
+    ['beauty', 'Herbal Face Wash Combo Pack', 399.00, null, 70, 'skincare,facewash', false],
+    ['grocery', 'Organic Assorted Dry Fruits Box 500g', 649.00, 599.00, 45, 'dryfruits,nuts', true],
+    ['gaming', 'Wireless Gaming Mouse RGB', 1199.00, 999.00, 35, 'gamingmouse', false],
 ];
 
 function slugify(string $s): string {
@@ -66,50 +83,24 @@ function slugify(string $s): string {
     return trim($s, '-');
 }
 
-function makePlaceholderImage(string $path, string $hexColor, string $title, string $priceLabel): void {
-    $w = 800; $h = 800;
-    $im = imagecreatetruecolor($w, $h);
+// Downloads a real photo matched to $keywords (comma-separated Flickr tags)
+// via LoremFlickr. Falls back to a plain colored placeholder if offline.
+function downloadProductImage(string $path, string $keywords, string $title): void {
+    $url = 'https://loremflickr.com/800/800/' . rawurlencode($keywords);
+    $ctx = stream_context_create(['http' => ['timeout' => 12]]);
+    $data = @file_get_contents($url, false, $ctx);
 
-    [$r, $g, $b] = sscanf($hexColor, "%02x%02x%02x");
-    $bg = imagecolorallocate($im, $r, $g, $b);
+    if ($data !== false && strlen($data) > 1000) {
+        file_put_contents($path, $data);
+        return;
+    }
+
+    // offline fallback: simple gray placeholder so the seed never hard-fails
+    $im = imagecreatetruecolor(800, 800);
+    $bg = imagecolorallocate($im, 200, 200, 200);
     imagefill($im, 0, 0, $bg);
-
-    // subtle darker banner at the bottom for text
-    $bandColor = imagecolorallocate($im, max(0, $r - 30), max(0, $g - 30), max(0, $b - 30));
-    imagefilledrectangle($im, 0, $h - 160, $w, $h, $bandColor);
-
     $white = imagecolorallocate($im, 255, 255, 255);
-
-    // wrap title text across a few lines using the built-in bitmap font
-    $font = 5; // largest built-in font
-    $charW = imagefontwidth($font);
-    $maxCharsPerLine = intdiv($w - 60, $charW);
-    $words = explode(' ', $title);
-    $lines = [];
-    $line = '';
-    foreach ($words as $word) {
-        $test = $line === '' ? $word : $line . ' ' . $word;
-        if (strlen($test) > $maxCharsPerLine) {
-            $lines[] = $line;
-            $line = $word;
-        } else {
-            $line = $test;
-        }
-    }
-    if ($line !== '') $lines[] = $line;
-
-    $lineHeight = imagefontheight($font) + 6;
-    $startY = $h - 150;
-    foreach ($lines as $i => $l) {
-        $textW = $charW * strlen($l);
-        $x = intdiv($w - $textW, 2);
-        imagestring($im, $font, $x, $startY + $i * $lineHeight, $l, $white);
-    }
-
-    $priceY = $h - 45;
-    $textW = $charW * strlen($priceLabel);
-    imagestring($im, $font, intdiv($w - $textW, 2), $priceY, $priceLabel, $white);
-
+    imagestring($im, 5, 20, 380, substr($title, 0, 40), $white);
     imagepng($im, $path, 6);
     imagedestroy($im);
 }
@@ -126,7 +117,7 @@ $insertImage = $pdo->prepare(
 );
 
 $created = 0;
-foreach ($products as [$catSlug, $name, $price, $salePrice, $stock, $color, $featured]) {
+foreach ($products as [$catSlug, $name, $price, $salePrice, $stock, $keywords, $featured]) {
     $slug = slugify($name);
 
     $exists = $pdo->prepare("SELECT id FROM mc_products WHERE slug = ?");
@@ -139,10 +130,10 @@ foreach ($products as [$catSlug, $name, $price, $salePrice, $stock, $color, $fea
     $categoryId = $catIds[$catSlug] ?? null;
     $sku = 'DEMO-' . strtoupper(substr(preg_replace('/[^A-Z0-9]/', '', strtoupper($slug)), 0, 6)) . '-' . rand(100, 999);
 
-    $priceLabel = 'Rs. ' . number_format($salePrice ?: $price, 0);
-    $imgFile = $slug . '.png';
+    $imgFile = $slug . '.jpg';
     $imgPath = 'products/' . $imgFile;
-    makePlaceholderImage($uploadDir . '/' . $imgFile, $color, $name, $priceLabel);
+    echo "Downloading image for: $name ($keywords)\n";
+    downloadProductImage($uploadDir . '/' . $imgFile, $keywords, $name);
 
     $shortDesc = "Great quality $name, perfect for everyday use. Demo product for showcase purposes.";
     $desc = "$name\n\nThis is a demo product added to showcase the Namma E Store marketplace catalog. "

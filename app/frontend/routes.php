@@ -15,12 +15,16 @@ use App\Frontend\Controllers\SeoController;
 use App\Frontend\Controllers\PageController;
 use App\Frontend\Controllers\PwaController;
 use App\Frontend\Controllers\PaymentController;
+use App\Frontend\Controllers\SellController;
 
 $router = new Router();
 
 // ── Home ─────────────────────────────────────────────────────
 $router->get('/',                                   HomeController::class . '@index');
 $router->post('/subscribe',                         HomeController::class . '@subscribe');
+
+// ── Become a Seller (marketing page — links out to VENDOR_URL) ─
+$router->get('/sell',                               SellController::class . '@index');
 
 // ── Auth ─────────────────────────────────────────────────────
 $router->get('/login',                              AuthController::class . '@loginForm');

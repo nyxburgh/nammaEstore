@@ -54,12 +54,12 @@ $cartCnt  = $cartCount ?? 0;
   <div class="flash-ticker" id="ticker">
     <span>Free delivery on orders above ₹499</span>
     <span>Upto 70% off on Fashion</span>
-    <span>New vendors joining daily – Sell on <?= e($siteName) ?></span>
+    <span><a href="<?= APP_URL ?>/sell">New vendors joining daily – Sell on <?= e($siteName) ?></a></span>
     <span>EMI available on products above ₹3000</span>
     <span>Flash Sale: Extra 15% off with code BAZAR15</span>
     <span>Free delivery on orders above ₹499</span>
     <span>Upto 70% off on Fashion</span>
-    <span>New vendors joining daily – Sell on <?= e($siteName) ?></span>
+    <span><a href="<?= APP_URL ?>/sell">New vendors joining daily – Sell on <?= e($siteName) ?></a></span>
     <span>EMI available on products above ₹3000</span>
     <span>Flash Sale: Extra 15% off with code BAZAR15</span>
   </div>
@@ -77,6 +77,7 @@ $cartCnt  = $cartCount ?? 0;
       </form>
     </div>
     <div class="header-actions">
+      <a href="<?= APP_URL ?>/sell" class="header-btn sell-header-btn"><span class="icon">🏪</span><span class="label">Sell on <?= e($siteName) ?></span></a>
       <div class="desk-account-wrap">
         <button class="header-btn" data-action="toggle-desk-account"><span class="icon">👤</span><span class="label"><?= $isLogged?e($user['name']):'Account' ?></span></button>
         <div class="desk-account-dropdown" id="deskAccDropdown">
@@ -163,12 +164,14 @@ $cartCnt  = $cartCount ?? 0;
     <li><a href="<?= APP_URL ?>/account/wishlist" data-action="close-all-popups"><span class="da-icon">❤️</span> Wishlist</a></li>
     <li><a href="<?= APP_URL ?>/track" data-action="close-all-popups"><span class="da-icon">🔍</span> Track Order</a></li>
     <li><a href="<?= APP_URL ?>/info" data-action="close-all-popups"><span class="da-icon">ℹ️</span> Info Center</a></li>
+    <li><a href="<?= APP_URL ?>/sell" data-action="close-all-popups"><span class="da-icon">🏪</span> Sell on <?= e($siteName) ?></a></li>
     <li><a href="<?= APP_URL ?>/logout" data-action="close-all-popups"><span class="da-icon">🚪</span> Logout</a></li>
     <?php else: ?>
     <li><a href="<?= APP_URL ?>/login" data-action="close-all-popups"><span class="da-icon">🔐</span> Login</a></li>
     <li><a href="<?= APP_URL ?>/register" data-action="close-all-popups"><span class="da-icon">✏️</span> Register</a></li>
     <li><a href="<?= APP_URL ?>/track" data-action="close-all-popups"><span class="da-icon">🔍</span> Track Order</a></li>
     <li><a href="<?= APP_URL ?>/info" data-action="close-all-popups"><span class="da-icon">ℹ️</span> Info Center</a></li>
+    <li><a href="<?= APP_URL ?>/sell" data-action="close-all-popups"><span class="da-icon">🏪</span> Sell on <?= e($siteName) ?></a></li>
     <?php endif; ?>
   </ul>
 </div>
@@ -205,12 +208,15 @@ $cartCnt  = $cartCount ?? 0;
     <a href="<?= APP_URL ?>/products" data-action="close-all-popups"><span class="mmd-ic">🛍️</span> All Products</a>
     <a href="<?= APP_URL ?>/track" data-action="close-all-popups"><span class="mmd-ic">📦</span> Track Order</a>
     <a href="<?= APP_URL ?>/info" data-action="close-all-popups"><span class="mmd-ic">ℹ️</span> Info Center</a>
+    <div class="mmd-sec">Sellers</div>
+    <a href="<?= APP_URL ?>/sell" data-action="close-all-popups"><span class="mmd-ic">🏪</span> Sell on <?= e($siteName) ?></a>
   </nav>
 </div>
 
 <!-- FOOTER -->
 <footer class="footer">
   <nav class="footer-links">
+    <a href="<?= APP_URL ?>/sell">Sell on <?= e($siteName) ?></a>
     <?php foreach (\App\Frontend\Services\PageService::all() as $pgSlug => $pg): ?>
     <a href="<?= APP_URL ?>/info/<?= e($pgSlug) ?>"><?= e($pg[1]) ?></a>
     <?php endforeach; ?>
