@@ -24,27 +24,6 @@ class VendorService
     }
     public function approve(int $uid, int $byAdmin): array { $this->users->updateVendorStatus($uid,'active',$byAdmin); (new ActivityService())->log('admin',$byAdmin,'approve_vendor','vendors',"Approved #$uid"); return ['success'=>true,'message'=>'Vendor approved.']; }
 
-    public function update(int $uid, array $d): array {
-        if (empty(trim($d['name'] ?? '')))      return ['success'=>false,'message'=>'Name is required.'];
-        if (empty(trim($d['shop_name'] ?? ''))) return ['success'=>false,'message'=>'Shop name is required.'];
-        $existing = $this->users->findByEmail($d['email']);
-        if ($existing && (int)$existing['id'] !== $uid) return ['success'=>false,'message'=>'Email already in use by another account.'];
-
-        $this->users->update($uid, [
-            'name'  => $d['name'],
-            'email' => $d['email'],
-            'phone' => $d['phone'] ?? null,
-        ]);
-        $this->db->execute(
-            "UPDATE `".DB_PREFIX."vendor_profiles` SET shop_name=?, gst_number=?, description=?, vendor_type=? WHERE user_id=?",
-            [$d['shop_name'], $d['gst_number'] ?? null, $d['description'] ?? null, $d['vendor_type'] ?? 'commission', $uid]
-        );
-        if (!empty($d['password'])) {
-            if (strlen($d['password']) < 8) return ['success'=>false,'message'=>'Password must be at least 8 characters.'];
-            $this->users->update($uid, ['password' => password_hash($d['password'], PASSWORD_DEFAULT)]);
-        }
-        return ['success' => true];
-    }
     public function reject(int $uid, int $byAdmin, string $note): array { $this->users->updateVendorStatus($uid,'rejected',$byAdmin,$note); (new ActivityService())->log('admin',$byAdmin,'reject_vendor','vendors',"Rejected #$uid"); return ['success'=>true,'message'=>'Vendor rejected.']; }
     public function suspend(int $uid, int $byAdmin): array { $this->users->updateVendorStatus($uid,'suspended',$byAdmin); $this->users->update($uid,['is_active'=>0]); (new ActivityService())->log('admin',$byAdmin,'suspend_vendor','vendors',"Suspended #$uid"); return ['success'=>true,'message'=>'Vendor suspended.']; }
 

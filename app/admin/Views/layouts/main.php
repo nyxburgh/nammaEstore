@@ -20,35 +20,65 @@
   --radius:14px;--radius-sm:9px;
 }
 *{box-sizing:border-box;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;}
+html{overflow-x:hidden;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;overflow-x:hidden;}
 /* SIDEBAR */
-#sidebar{position:fixed;top:0;left:0;width:var(--sb-w);height:100vh;background:var(--sb-bg);display:flex;flex-direction:column;z-index:1000;overflow-y:auto;transition:transform .25s;}
+:root{--sb-w-collapsed:76px;}
+#sidebar{position:fixed;top:0;left:0;width:var(--sb-w);height:100vh;background:var(--sb-bg);display:flex;flex-direction:column;z-index:1000;overflow-y:auto;overflow-x:hidden;transition:width .22s ease,transform .25s ease;}
 #sidebar::-webkit-scrollbar{width:3px;}
 #sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);}
 .sb-brand{padding:18px 20px 14px;background:rgba(0,0,0,.2);border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0;}
 .sb-brand a{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .sb-logo{width:38px;height:38px;border-radius:11px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;}
-.sb-name{font-size:17px;font-weight:800;color:#fff;}
-.sb-tag{font-size:9px;font-weight:700;color:#ff5cb8;background:rgba(233,30,140,.15);border-radius:4px;padding:1px 7px;letter-spacing:.5px;text-transform:uppercase;margin-left:4px;}
+.sb-name{font-size:17px;font-weight:800;color:#fff;white-space:nowrap;}
+.sb-tag{font-size:9px;font-weight:700;color:#ff5cb8;background:rgba(233,30,140,.15);border-radius:4px;padding:1px 7px;letter-spacing:.5px;text-transform:uppercase;margin-left:4px;white-space:nowrap;}
 .sb-user{padding:13px 18px;background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .sb-av{width:34px;height:34px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
-.sb-uname{font-size:13px;font-weight:600;color:#fff;}
-.sb-urole{font-size:11px;color:#ff5cb8;text-transform:capitalize;}
+.sb-uname{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;}
+.sb-urole{font-size:11px;color:#ff5cb8;text-transform:capitalize;white-space:nowrap;}
 .sb-nav{padding:10px 0;flex:1;}
-.sb-sec{padding:10px 20px 3px;font-size:10px;font-weight:700;color:rgba(255,255,255,.2);letter-spacing:1.8px;text-transform:uppercase;}
-.sb-nav a{display:flex;align-items:center;gap:10px;padding:9px 18px;margin:1px 8px;border-radius:9px;text-decoration:none;color:var(--sb-text);font-size:13.5px;font-weight:500;transition:all .16s;}
+.sb-sec{padding:10px 20px 3px;font-size:10px;font-weight:700;color:rgba(255,255,255,.2);letter-spacing:1.8px;text-transform:uppercase;white-space:nowrap;overflow:hidden;}
+.sb-nav a{display:flex;align-items:center;gap:10px;padding:9px 18px;margin:1px 8px;border-radius:9px;text-decoration:none;color:var(--sb-text);font-size:13.5px;font-weight:500;transition:all .16s;white-space:nowrap;overflow:hidden;}
 .sb-nav a i{font-size:15px;width:18px;flex-shrink:0;opacity:.75;}
 .sb-nav a:hover{background:rgba(255,255,255,.07);color:#fff;}
 .sb-nav a.active{background:linear-gradient(135deg,rgba(109,40,217,.45),rgba(233,30,140,.28));color:#fff;font-weight:600;}
 .sb-nav a.active i{opacity:1;}
 .sb-badge{margin-left:auto;background:var(--pink);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;}
 .sb-footer{padding:14px 18px;border-top:1px solid rgba(255,255,255,.05);flex-shrink:0;}
-.sb-footer a{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.35);font-size:13px;text-decoration:none;transition:color .16s;}
+.sb-footer a{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.35);font-size:13px;text-decoration:none;transition:color .16s;white-space:nowrap;overflow:hidden;}
 .sb-footer a:hover{color:rgba(255,255,255,.75);}
+/* COLLAPSED STATE (desktop only) */
+body.sb-collapsed #sidebar{width:var(--sb-w-collapsed);}
+body.sb-collapsed #main{margin-left:var(--sb-w-collapsed);}
+body.sb-collapsed .sb-brand a{justify-content:center;}
+body.sb-collapsed .sb-brand .sb-name,
+body.sb-collapsed .sb-brand .sb-tag,
+body.sb-collapsed .sb-user > div:not(.sb-av),
+body.sb-collapsed .sb-sec,
+body.sb-collapsed .sb-badge,
+body.sb-collapsed .sb-nav a span,
+body.sb-collapsed .sb-footer a span{display:none;}
+body.sb-collapsed .sb-user{justify-content:center;}
+body.sb-collapsed .sb-nav a{justify-content:center;padding:9px;margin:1px 10px;}
+body.sb-collapsed .sb-nav a i{width:auto;font-size:18px;opacity:1;}
+body.sb-collapsed .sb-footer a{justify-content:center;}
+body.sb-collapsed #sidebar:hover{width:var(--sb-w);}
+body.sb-collapsed #sidebar:hover .sb-brand a{justify-content:flex-start;}
+body.sb-collapsed #sidebar:hover .sb-brand .sb-name,
+body.sb-collapsed #sidebar:hover .sb-brand .sb-tag,
+body.sb-collapsed #sidebar:hover .sb-user > div:not(.sb-av),
+body.sb-collapsed #sidebar:hover .sb-sec,
+body.sb-collapsed #sidebar:hover .sb-nav a span,
+body.sb-collapsed #sidebar:hover .sb-footer a span{display:inline;}
+body.sb-collapsed #sidebar:hover .sb-user{justify-content:flex-start;}
+body.sb-collapsed #sidebar:hover .sb-nav a{justify-content:flex-start;padding:9px 18px;margin:1px 8px;}
+body.sb-collapsed #sidebar:hover .sb-nav a i{width:18px;font-size:15px;opacity:.75;}
+body.sb-collapsed #sidebar:hover .sb-footer a{justify-content:flex-start;}
+body:not(.sb-ready) #sidebar,body:not(.sb-ready) #main{transition:none!important;}
 /* MAIN */
-#main{margin-left:var(--sb-w);min-height:100vh;display:flex;flex-direction:column;}
+#main{margin-left:var(--sb-w);min-height:100vh;display:flex;flex-direction:column;transition:margin-left .22s ease;min-width:0;}
 /* TOPBAR */
-.topbar{position:sticky;top:0;z-index:900;background:#fff;border-bottom:1px solid var(--border);padding:0 26px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.topbar{position:sticky;top:0;z-index:900;background:#fff;border-bottom:1px solid var(--border);padding:0 26px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .tb-left{display:flex;align-items:center;gap:12px;}
 .tb-title{font-size:16px;font-weight:800;}
 .tb-right{display:flex;align-items:center;gap:10px;}
@@ -134,8 +164,28 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .filter-bar{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
 .form-switch .form-check-input{width:34px;height:18px;cursor:pointer;}
 .form-check-input:checked{background-color:var(--purple);border-color:var(--purple);}
-@media(max-width:992px){#sidebar{transform:translateX(-100%);}#sidebar.show{transform:translateX(0);}#main{margin-left:0;}.page-body{padding:14px;}}
+/* OVERLAY (mobile) */
+#sb-overlay{display:none;position:fixed;inset:0;background:rgba(15,5,30,.4);z-index:999;}
+#sb-overlay.show{display:block;}
+@media(max-width:992px){
+  #sidebar{transform:translateX(-100%);width:var(--sb-w)!important;}
+  #sidebar.show{transform:translateX(0);}
+  #main{margin-left:0!important;}
+  body.sb-collapsed #sidebar:hover{width:var(--sb-w)!important;}
+  .page-body{padding:14px;}
+  .topbar{padding:0 14px;}
+}
+@media(max-width:576px){
+  .page-body{padding:10px;}
+  .tb-title{font-size:14px;}
+  .stat-card{padding:14px;}
+}
+.table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.page-body,.card,.filter-bar{max-width:100%;}
+img,.card,.table-responsive{max-width:100%;}
 </style>
+<script>if(localStorage.getItem('admin_sb_collapsed')==='1')document.documentElement.classList.add('sb-pre-collapsed');</script>
+<style>html.sb-pre-collapsed body{visibility:hidden;}</style>
 </head>
 <body>
 
@@ -158,80 +208,81 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
   <div class="sb-nav">
     <div class="sb-sec">Main</div>
-    <a href="<?= ADMIN_URL ?>/dashboard" class="<?= adminActive('dashboard') ?>"><i class="bi bi-grid-fill"></i> Dashboard</a>
+    <a href="<?= ADMIN_URL ?>/dashboard" class="<?= adminActive('dashboard') ?>" title="Dashboard"><i class="bi bi-grid-fill"></i> <span>Dashboard</span></a>
 
     <div class="sb-sec">Users</div>
-    <a href="<?= ADMIN_URL ?>/vendors" class="<?= adminActive('vendors') ?>">
-      <i class="bi bi-shop"></i> Vendors
+    <a href="<?= ADMIN_URL ?>/vendors" class="<?= adminActive('vendors') ?>" title="Vendors">
+      <i class="bi bi-shop"></i> <span>Vendors</span>
       <?php if(!empty($stats['pending_vendors'] ?? $sidebarStats['pending_vendors'] ?? 0 ?? $sidebarStats['pending_vendors'] ?? null)): ?><span class="sb-badge"><?= $stats['pending_vendors'] ?? $sidebarStats['pending_vendors'] ?? 0 ?></span><?php endif; ?>
     </a>
-    <a href="<?= ADMIN_URL ?>/customers" class="<?= adminActive('customers') ?>"><i class="bi bi-people-fill"></i> Customers</a>
+    <a href="<?= ADMIN_URL ?>/customers" class="<?= adminActive('customers') ?>" title="Customers"><i class="bi bi-people-fill"></i> <span>Customers</span></a>
     <?php if(\App\Core\Auth::isSuperAdmin()): ?>
-    <a href="<?= ADMIN_URL ?>/sub-admins" class="<?= adminActive('sub-admins') ?>"><i class="bi bi-person-badge-fill"></i> Sub-Admins</a>
+    <a href="<?= ADMIN_URL ?>/sub-admins" class="<?= adminActive('sub-admins') ?>" title="Sub-Admins"><i class="bi bi-person-badge-fill"></i> <span>Sub-Admins</span></a>
     <?php endif; ?>
 
     <?php if(\App\Core\Auth::can('products')): ?>
     <div class="sb-sec">Catalogue</div>
-    <a href="<?= ADMIN_URL ?>/products" class="<?= adminActive('products') ?>"><i class="bi bi-box-seam-fill"></i> Products</a>
-    <a href="<?= ADMIN_URL ?>/categories" class="<?= adminActive('categories') ?>"><i class="bi bi-tags-fill"></i> Categories</a>
-    <a href="<?= ADMIN_URL ?>/reviews" class="<?= adminActive('reviews') ?>">
-      <i class="bi bi-star-fill"></i> Reviews
+    <a href="<?= ADMIN_URL ?>/products" class="<?= adminActive('products') ?>" title="Products"><i class="bi bi-box-seam-fill"></i> <span>Products</span></a>
+    <a href="<?= ADMIN_URL ?>/categories" class="<?= adminActive('categories') ?>" title="Categories"><i class="bi bi-tags-fill"></i> <span>Categories</span></a>
+    <a href="<?= ADMIN_URL ?>/reviews" class="<?= adminActive('reviews') ?>" title="Reviews">
+      <i class="bi bi-star-fill"></i> <span>Reviews</span>
       <?php if(!empty($stats['pending_reviews'] ?? $sidebarStats['pending_reviews'] ?? 0 ?? $sidebarStats['pending_reviews'] ?? null)): ?><span class="sb-badge"><?= $stats['pending_reviews'] ?? $sidebarStats['pending_reviews'] ?? 0 ?></span><?php endif; ?>
     </a>
     <?php endif; ?>
 
     <div class="sb-sec">Commerce</div>
-    <a href="<?= ADMIN_URL ?>/orders" class="<?= adminActive('orders') ?>"><i class="bi bi-bag-check-fill"></i> Orders</a>
-    <a href="<?= ADMIN_URL ?>/shipments" class="<?= adminActive('shipments') ?>"><i class="bi bi-truck"></i> Shipments</a>
-    <a href="<?= ADMIN_URL ?>/returns" class="<?= adminActive('returns') ?>"><i class="bi bi-arrow-return-left"></i> Returns</a>
-    <a href="<?= ADMIN_URL ?>/disputes" class="<?= adminActive('disputes') ?>"><i class="bi bi-exclamation-triangle-fill"></i> Disputes</a>
+    <a href="<?= ADMIN_URL ?>/orders" class="<?= adminActive('orders') ?>" title="Orders"><i class="bi bi-bag-check-fill"></i> <span>Orders</span></a>
+    <a href="<?= ADMIN_URL ?>/shipments" class="<?= adminActive('shipments') ?>" title="Shipments"><i class="bi bi-truck"></i> <span>Shipments</span></a>
+    <a href="<?= ADMIN_URL ?>/returns" class="<?= adminActive('returns') ?>" title="Returns"><i class="bi bi-arrow-return-left"></i> <span>Returns</span></a>
+    <a href="<?= ADMIN_URL ?>/disputes" class="<?= adminActive('disputes') ?>" title="Disputes"><i class="bi bi-exclamation-triangle-fill"></i> <span>Disputes</span></a>
     <?php if(\App\Core\Auth::can('payments')): ?>
-    <a href="<?= ADMIN_URL ?>/payments" class="<?= adminActive('payments') ?>"><i class="bi bi-credit-card-fill"></i> Payments</a>
-    <a href="<?= ADMIN_URL ?>/settlements" class="<?= adminActive('settlements') ?>"><i class="bi bi-wallet2"></i> Settlements</a>
+    <a href="<?= ADMIN_URL ?>/payments" class="<?= adminActive('payments') ?>" title="Payments"><i class="bi bi-credit-card-fill"></i> <span>Payments</span></a>
+    <a href="<?= ADMIN_URL ?>/settlements" class="<?= adminActive('settlements') ?>" title="Settlements"><i class="bi bi-wallet2"></i> <span>Settlements</span></a>
     <?php endif; ?>
 
     <?php if(\App\Core\Auth::can('reports')): ?>
     <div class="sb-sec">Analytics</div>
-    <a href="<?= ADMIN_URL ?>/reports" class="<?= adminActive('reports') ?>"><i class="bi bi-bar-chart-fill"></i> Reports</a>
-    <a href="<?= ADMIN_URL ?>/invoices" class="<?= adminActive('invoices') ?>"><i class="bi bi-receipt"></i> GST Invoices</a>
+    <a href="<?= ADMIN_URL ?>/reports" class="<?= adminActive('reports') ?>" title="Reports"><i class="bi bi-bar-chart-fill"></i> <span>Reports</span></a>
+    <a href="<?= ADMIN_URL ?>/invoices" class="<?= adminActive('invoices') ?>" title="GST Invoices"><i class="bi bi-receipt"></i> <span>GST Invoices</span></a>
     <?php endif; ?>
 
     <?php if(\App\Core\Auth::can('coupons')): ?>
     <div class="sb-sec">Marketing</div>
-    <a href="<?= ADMIN_URL ?>/coupons" class="<?= adminActive('coupons') ?>"><i class="bi bi-ticket-perforated"></i> Coupons</a>
-    <a href="<?= ADMIN_URL ?>/gift-cards" class="<?= adminActive('gift-cards') ?>"><i class="bi bi-gift"></i> Gift Vouchers</a>
-    <a href="<?= ADMIN_URL ?>/brands" class="<?= adminActive('brands') ?>"><i class="bi bi-award"></i> Brands</a>
+    <a href="<?= ADMIN_URL ?>/coupons" class="<?= adminActive('coupons') ?>" title="Coupons"><i class="bi bi-ticket-perforated"></i> <span>Coupons</span></a>
+    <a href="<?= ADMIN_URL ?>/gift-cards" class="<?= adminActive('gift-cards') ?>" title="Gift Vouchers"><i class="bi bi-gift"></i> <span>Gift Vouchers</span></a>
+    <a href="<?= ADMIN_URL ?>/brands" class="<?= adminActive('brands') ?>" title="Brands"><i class="bi bi-award"></i> <span>Brands</span></a>
     <?php endif; ?>
 
     <?php if(\App\Core\Auth::can('banners') || \App\Core\Auth::can('pages')): ?>
     <div class="sb-sec">Content</div>
     <?php endif; ?>
     <?php if(\App\Core\Auth::can('banners')): ?>
-    <a href="<?= ADMIN_URL ?>/banners" class="<?= adminActive('banners') ?>"><i class="bi bi-images"></i> Banners</a>
+    <a href="<?= ADMIN_URL ?>/banners" class="<?= adminActive('banners') ?>" title="Banners"><i class="bi bi-images"></i> <span>Banners</span></a>
     <?php endif; ?>
     <?php if(\App\Core\Auth::can('pages')): ?>
-    <a href="<?= ADMIN_URL ?>/pages" class="<?= adminActive('pages') ?>"><i class="bi bi-file-earmark-text"></i> Info Pages</a>
+    <a href="<?= ADMIN_URL ?>/pages" class="<?= adminActive('pages') ?>" title="Info Pages"><i class="bi bi-file-earmark-text"></i> <span>Info Pages</span></a>
     <?php endif; ?>
 
     <?php if(\App\Core\Auth::can('activity')): ?>
-    <a href="<?= ADMIN_URL ?>/activity" class="<?= adminActive('activity') ?>"><i class="bi bi-clock-history"></i> Activity Logs</a>
+    <a href="<?= ADMIN_URL ?>/activity" class="<?= adminActive('activity') ?>" title="Activity Logs"><i class="bi bi-clock-history"></i> <span>Activity Logs</span></a>
     <?php endif; ?>
 
     <?php if(\App\Core\Auth::isSuperAdmin()): ?>
     <div class="sb-sec">System</div>
-    <a href="<?= ADMIN_URL ?>/settings" class="<?= adminActive('settings') ?>"><i class="bi bi-gear-fill"></i> Settings</a>
+    <a href="<?= ADMIN_URL ?>/settings" class="<?= adminActive('settings') ?>" title="Settings"><i class="bi bi-gear-fill"></i> <span>Settings</span></a>
     <?php endif; ?>
   </div>
   <div class="sb-footer">
-    <a href="<?= ADMIN_URL ?>/logout"><i class="bi bi-box-arrow-left"></i> Sign Out</a>
+    <a href="<?= ADMIN_URL ?>/logout" title="Sign Out"><i class="bi bi-box-arrow-left"></i> <span>Sign Out</span></a>
   </div>
 </nav>
+<div id="sb-overlay" onclick="document.getElementById('sidebar').classList.remove('show');this.classList.remove('show');"></div>
 
 <!-- MAIN -->
 <div id="main">
   <div class="topbar">
     <div class="tb-left">
-      <button class="tb-btn d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('show')"><i class="bi bi-list"></i></button>
+      <button class="tb-btn" id="sb-toggle" title="Toggle sidebar"><i class="bi bi-list"></i></button>
       <div>
         <div class="tb-title"><?= e($title??'Dashboard') ?></div>
         <nav><ol class="breadcrumb"><li class="breadcrumb-item"><a href="<?= ADMIN_URL ?>/dashboard">Home</a></li><li class="breadcrumb-item active"><?= e($title??'Dashboard') ?></li></ol></nav>
@@ -281,6 +332,33 @@ document.querySelectorAll('.toggle-status').forEach(el=>{
 document.querySelectorAll('[data-confirm]').forEach(el=>{
   el.addEventListener('click',function(e){if(!confirm(this.dataset.confirm||'Are you sure?'))e.preventDefault();});
 });
+
+(function(){
+  const SB_KEY='admin_sb_collapsed';
+  const body=document.body;
+  const overlay=document.getElementById('sb-overlay');
+  const sidebar=document.getElementById('sidebar');
+  const isDesktop=()=>window.innerWidth>992;
+
+  if(isDesktop() && localStorage.getItem(SB_KEY)==='1') body.classList.add('sb-collapsed');
+  document.documentElement.classList.remove('sb-pre-collapsed');
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>body.classList.add('sb-ready')));
+
+  document.getElementById('sb-toggle').addEventListener('click',function(){
+    if(isDesktop()){
+      body.classList.toggle('sb-collapsed');
+      localStorage.setItem(SB_KEY, body.classList.contains('sb-collapsed') ? '1' : '0');
+    } else {
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('show');
+    }
+  });
+
+  window.addEventListener('resize',function(){
+    if(isDesktop()){ sidebar.classList.remove('show'); overlay.classList.remove('show'); }
+  });
+})();
 </script>
 <?= $scripts ?? '' ?>
 </body>

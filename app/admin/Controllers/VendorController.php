@@ -28,20 +28,6 @@ class VendorController extends AdminController
         $this->setFlash('success','Vendor created successfully.');
         $this->redirect(ADMIN_URL.'/vendors');
     }
-    public function edit(string $id): void {
-        Middleware::superAdmin();
-        $v = $this->service->find((int)$id);
-        if (!$v) { $this->redirect(ADMIN_URL.'/vendors'); return; }
-        $this->view('vendors.edit', ['title' => 'Edit: ' . e($v['shop_name'] ?? $v['name']), 'vendor' => $v]);
-    }
-    public function update(string $id): void {
-        csrf_check();
-        Middleware::superAdmin();
-        $r = $this->service->update((int)$id, $this->inputs());
-        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->back(); return; }
-        $this->setFlash('success','Vendor updated successfully.');
-        $this->redirect(ADMIN_URL.'/vendors/'.$id);
-    }
     public function show(string $id): void {
         Middleware::adminAuth();
         $v = $this->service->find((int)$id);
