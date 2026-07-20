@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title><?= e($title??'Login') ?> — Namma E Store Admin</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="<?= admin_asset('vendor/bootstrap-icons/bootstrap-icons.min.css') ?>" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;background:linear-gradient(135deg,#0f0224 0%,#1e0845 55%,#2d0a1f 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;min-height:100vh;background:linear-gradient(135deg,#0f0224 0%,#1e0845 55%,#2d0a1f 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
 body::before{content:'';position:fixed;top:-150px;right:-150px;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(233,30,140,.2),transparent 70%);pointer-events:none;}
 body::after{content:'';position:fixed;bottom:-150px;left:-150px;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(109,40,217,.25),transparent 70%);pointer-events:none;}
 .card{width:100%;max-width:420px;background:rgba(255,255,255,.07);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:44px 40px;position:relative;z-index:1;}
@@ -20,12 +18,12 @@ body::after{content:'';position:fixed;bottom:-150px;left:-150px;width:450px;heig
 label{display:block;font-size:12px;font-weight:700;color:rgba(255,255,255,.55);margin-bottom:8px;letter-spacing:.4px;text-transform:uppercase;}
 .input-wrap{position:relative;}
 .input-wrap i.icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.28);font-size:15px;}
-input[type=email],input[type=password]{width:100%;padding:12px 14px 12px 42px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:11px;color:#fff;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;}
+input[type=email],input[type=password]{width:100%;padding:12px 14px 12px 42px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:11px;color:#fff;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;}
 input::placeholder{color:rgba(255,255,255,.22);}
 input:focus{border-color:rgba(139,92,246,.7);box-shadow:0 0 0 3px rgba(109,40,217,.2);}
 .eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:15px;padding:4px;}
 .eye-btn:hover{color:rgba(255,255,255,.7);}
-.btn-submit{width:100%;padding:14px;margin-top:4px;background:linear-gradient(135deg,#6d28d9,#e91e8c);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;box-shadow:0 6px 22px rgba(233,30,140,.35);transition:filter .2s,transform .15s;}
+.btn-submit{width:100%;padding:14px;margin-top:4px;background:linear-gradient(135deg,#6d28d9,#e91e8c);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;cursor:pointer;box-shadow:0 6px 22px rgba(233,30,140,.35);transition:filter .2s,transform .15s;}
 .btn-submit:hover{filter:brightness(1.08);transform:translateY(-1px);}
 .alert{display:flex;align-items:center;gap:10px;background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.25);border-radius:10px;padding:11px 14px;margin-bottom:20px;color:#fca5a5;font-size:13px;}
 .alert.success{background:rgba(22,163,74,.15);border-color:rgba(22,163,74,.25);color:#86efac;}

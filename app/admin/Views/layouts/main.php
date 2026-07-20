@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title><?= e($title??'Dashboard') ?> — Namma E Store Admin</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="<?= admin_asset('vendor/bootstrap/bootstrap.min.css') ?>" rel="stylesheet">
+<link href="<?= admin_asset('vendor/bootstrap-icons/bootstrap-icons.min.css') ?>" rel="stylesheet">
 <style>
 :root{
   --pink:#e91e8c;--pink-soft:#fde8f4;
@@ -21,7 +19,7 @@
 }
 *{box-sizing:border-box;}
 html{overflow-x:hidden;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;overflow-x:hidden;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;overflow-x:hidden;}
 /* SIDEBAR */
 :root{--sb-w-collapsed:76px;}
 #sidebar{position:fixed;top:0;left:0;width:var(--sb-w);height:100vh;background:var(--sb-bg);display:flex;flex-direction:column;z-index:1000;overflow-y:auto;overflow-x:hidden;transition:width .22s ease,transform .25s ease;}
@@ -140,7 +138,7 @@ body:not(.sb-ready) #sidebar,body:not(.sb-ready) #main{transition:none!important
 .btn-sm{padding:5px 12px;font-size:12px;border-radius:7px;}
 .btn-icon{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;}
 /* FORMS */
-.form-control,.form-select{border:1px solid var(--border);border-radius:9px;padding:9px 13px;font-size:13.5px;font-family:'Plus Jakarta Sans',sans-serif;}
+.form-control,.form-select{border:1px solid var(--border);border-radius:9px;padding:9px 13px;font-size:13.5px;font-family:inherit;}
 .form-control:focus,.form-select:focus{border-color:var(--purple-light);box-shadow:0 0 0 3px rgba(109,40,217,.1);outline:none;}
 .form-label{font-size:13px;font-weight:600;margin-bottom:5px;}
 .input-group-text{background:var(--bg);border-color:var(--border);font-size:13px;color:var(--muted);}
@@ -324,8 +322,8 @@ setTimeout(()=>{const t=document.getElementById('flash-toast');if(t){t.style.ani
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="<?= admin_asset('vendor/bootstrap/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= admin_asset('vendor/chartjs/chart.umd.min.js') ?>"></script>
 <script>
 document.querySelectorAll('.toggle-status').forEach(el=>{
   el.addEventListener('change',function(){
