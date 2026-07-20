@@ -9,14 +9,14 @@
 <!-- Row 2: Order status mini chips -->
 <div class="row g-2 mb-3">
   <?php if(!empty($stats['pending_reviews'])): ?>
-<div class="col"><div class="card" style="padding:10px 12px;display:flex;flex-direction:row;align-items:center;gap:9px;border-color:#fde68a!important;">
-  <div class="si orange" style="width:34px;height:34px;font-size:13px;border-radius:9px;flex-shrink:0;"><i class="bi bi-star-fill"></i></div>
-  <div><div class="stat-label" style="font-size:10px;">Pending Reviews</div><div class="stat-val" style="font-size:17px;"><?= $stats['pending_reviews'] ?></div></div>
+<div class="col-6 col-sm-4 col-lg-2"><div class="card mini-stat" style="border-color:#fde68a!important;">
+  <div class="si orange"><i class="bi bi-star-fill"></i></div>
+  <div><div class="stat-label">Pending Reviews</div><div class="stat-val"><?= $stats['pending_reviews'] ?></div></div>
   <a href="<?= $p ?>/reviews?status=pending" class="btn btn-sm btn-warning ms-auto" style="font-size:11px;padding:3px 10px;">Review</a>
 </div></div>
 <?php endif; ?>
 <?php foreach([['Placed',$stats['orders_placed'],'orange','hourglass-split'],['Processing',$stats['orders_processing'],'purple','gear'],['Shipped',$stats['orders_shipped'],'blue','truck'],['Delivered',$stats['orders_delivered'],'green','check-circle'],['Cancelled',$stats['orders_cancelled'],'red','x-circle'],['Products',$stats['active_products'],'teal','box-seam']] as [$l,$v,$c,$i]): ?>
-  <div class="col"><div class="card" style="padding:10px 12px;display:flex;flex-direction:row;align-items:center;gap:9px;"><div class="si <?= $c ?>" style="width:34px;height:34px;font-size:13px;border-radius:9px;flex-shrink:0;"><i class="bi bi-<?= $i ?>"></i></div><div><div class="stat-label" style="font-size:10px;"><?= $l ?></div><div class="stat-val" style="font-size:17px;"><?= number_format($v) ?></div></div></div></div>
+  <div class="col-6 col-sm-4 col-lg-2"><div class="card mini-stat"><div class="si <?= $c ?>"><i class="bi bi-<?= $i ?>"></i></div><div><div class="stat-label"><?= $l ?></div><div class="stat-val"><?= number_format($v) ?></div></div></div></div>
   <?php endforeach; ?>
 </div>
 <!-- Row 3: Chart + Commission -->

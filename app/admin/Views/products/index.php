@@ -2,7 +2,7 @@
 <div class="d-flex align-items-center justify-content-between mb-3"><div><h5 style="font-weight:800;margin:0;">Products</h5><small class="text-muted"><?= number_format($products['total']) ?> total</small></div></div>
 <div class="row g-2 mb-3">
   <?php foreach([['Total',$stats['total'],'purple','box-seam'],['Active',$stats['active'],'green','check-circle'],['Draft',$stats['draft'],'orange','pencil'],['Inactive',$stats['inactive'],'blue','dash-circle'],['Low Stock',$stats['low_stock'],'red','exclamation-triangle']] as [$l,$v,$c,$i]): ?>
-  <div class="col"><div class="card" style="padding:10px 14px;display:flex;flex-direction:row;align-items:center;gap:10px;"><div class="si <?= $c ?>" style="width:34px;height:34px;font-size:13px;border-radius:9px;flex-shrink:0;"><i class="bi bi-<?= $i ?>"></i></div><div><div class="stat-label" style="font-size:10.5px;"><?= $l ?></div><div class="stat-val" style="font-size:17px;"><?= number_format($v) ?></div></div></div></div>
+  <div class="col-6 col-sm-4 col-lg-2"><div class="card mini-stat"><div class="si <?= $c ?>"><i class="bi bi-<?= $i ?>"></i></div><div><div class="stat-label"><?= $l ?></div><div class="stat-val"><?= number_format($v) ?></div></div></div></div>
   <?php endforeach; ?>
 </div>
 <div class="filter-bar mb-3"><form method="get" class="row g-2 align-items-end">

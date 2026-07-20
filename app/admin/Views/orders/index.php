@@ -2,7 +2,7 @@
 <div class="d-flex align-items-center justify-content-between mb-3"><div><h5 style="font-weight:800;margin:0;">Orders</h5><small class="text-muted"><?= number_format($orders['total']) ?> total</small></div></div>
 <div class="row g-2 mb-3">
   <?php foreach([['Revenue',currency((float)$stats['revenue']),'purple','currency-rupee'],['Today',$stats['today'],'pink','calendar-check'],['Pending',$stats['placed'],'orange','hourglass-split'],['Shipped',$stats['shipped'],'blue','truck'],['Delivered',$stats['delivered'],'green','check-circle'],['Cancelled',$stats['cancelled'],'red','x-circle']] as [$l,$v,$c,$i]): ?>
-  <div class="col"><div class="card" style="padding:10px 12px;display:flex;flex-direction:row;align-items:center;gap:9px;"><div class="si <?= $c ?>" style="width:32px;height:32px;font-size:12px;border-radius:8px;flex-shrink:0;"><i class="bi bi-<?= $i ?>"></i></div><div><div class="stat-label" style="font-size:10px;"><?= $l ?></div><div class="stat-val" style="font-size:15px;"><?= $v ?></div></div></div></div>
+  <div class="col-6 col-sm-4 col-lg-2"><div class="card mini-stat"><div class="si <?= $c ?>"><i class="bi bi-<?= $i ?>"></i></div><div><div class="stat-label"><?= $l ?></div><div class="stat-val"><?= $v ?></div></div></div></div>
   <?php endforeach; ?>
 </div>
 <div class="filter-bar mb-3"><form method="get" class="row g-2 align-items-end">
@@ -16,9 +16,10 @@
 <div class="card"><div class="table-responsive"><table class="table mb-0">
   <thead><tr><th><?= sortHeader('#','id',$p.'/orders') ?></th><th><?= sortHeader('Order #','order_number',$p.'/orders') ?></th><th>Customer</th><th>Items</th><th><?= sortHeader('Total','total',$p.'/orders') ?></th><th>Payment</th><th>Status</th><th><?= sortHeader('Date','placed_at',$p.'/orders') ?></th><th></th></tr></thead>
   <tbody>
-  <?php if(empty($orders['data'])): ?><tr><td colspan="8"><div class="empty-state"><i class="bi bi-bag-x"></i><h6>No orders</h6></div></td></tr>
+  <?php if(empty($orders['data'])): ?><tr><td colspan="9"><div class="empty-state"><i class="bi bi-bag-x"></i><h6>No orders</h6></div></td></tr>
   <?php else: foreach($orders['data'] as $o): ?>
   <tr>
+    <td style="color:var(--muted);font-size:12px;"><?= $o['id'] ?></td>
     <td><a href="<?= $p ?>/orders/<?= $o['id'] ?>" style="font-weight:700;color:var(--purple);text-decoration:none;"><?= e($o['order_number']) ?></a></td>
     <td><div style="font-weight:600;font-size:13px;"><?= e($o['customer_name']) ?></div><div style="font-size:11px;color:var(--muted);"><?= e($o['customer_email']) ?></div></td>
     <td><?= $o['item_count'] ?> item<?= $o['item_count']!=1?'s':'' ?></td>

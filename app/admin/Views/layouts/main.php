@@ -115,6 +115,11 @@ body:not(.sb-ready) #sidebar,body:not(.sb-ready) #main{transition:none!important
 .stat-val{font-size:22px;font-weight:800;line-height:1.1;}
 .stat-sub{font-size:11px;color:var(--muted);margin-top:3px;}
 .stat-sub .up{color:#16a34a;} .stat-sub .dn{color:#dc2626;}
+/* MINI STAT CHIPS (dashboard/orders/products summary rows) */
+.mini-stat{height:100%;padding:10px 12px;display:flex;flex-direction:row;align-items:center;gap:10px;}
+.mini-stat .si{width:34px;height:34px;font-size:13px;border-radius:9px;flex-shrink:0;}
+.mini-stat .stat-label{font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mini-stat .stat-val{font-size:16px;white-space:nowrap;}
 /* TABLE */
 .table{font-size:13px;margin:0;}
 .table thead th{font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);background:var(--bg);border-bottom:1px solid var(--border);padding:9px 14px;}
