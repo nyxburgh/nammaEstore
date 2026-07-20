@@ -39,6 +39,27 @@ class CartController extends FrontendController
     public function count(): void {
         $this->json(['count' => (new CartService())->getCount()]);
     }
+    public function mini(): void {
+        $summary = (new CartService())->getSummary();
+        $items = array_map(function ($item) {
+            $price = (float)($item['sale_price'] ?: $item['price']) + (float)($item['price_modifier'] ?? 0);
+            $qty   = (int)$item['quantity'];
+            return [
+                'id'        => (int)$item['id'],
+                'name'      => $item['name'],
+                'vendor'    => $item['shop_name'] ?: $item['vendor_name'],
+                'image'     => !empty($item['image']) ? UPLOAD_URL . '/' . $item['image'] : null,
+                'variant'   => !empty($item['variant_value']) ? ($item['variant_name'] . ': ' . $item['variant_value']) : null,
+                'qty'       => $qty,
+                'lineTotal' => $price * $qty,
+            ];
+        }, $summary['items']);
+        $this->json([
+            'count' => array_sum(array_column($items, 'qty')),
+            'items' => $items,
+            'total' => $summary['total'],
+        ]);
+    }
     public function clear(): void {
         csrf_check();
         (new CartService())->clear();

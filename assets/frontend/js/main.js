@@ -28,18 +28,53 @@ function closeCart() {
   document.body.classList.remove('no-scroll');
 }
 
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : String(s);
+  return d.innerHTML;
+}
+
+function cartItemRow(item) {
+  const img = item.image
+    ? '<img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.name) + '">'
+    : '🛍️';
+  const variant = item.variant ? '<div class="vendor">' + escapeHtml(item.variant) + '</div>' : '';
+  return '<div class="cart-item">' +
+    '<div class="cart-item-img">' + img + '</div>' +
+    '<div class="cart-item-info">' +
+      '<h5>' + escapeHtml(item.name) + '</h5>' +
+      '<div class="vendor">🏪 ' + escapeHtml(item.vendor || 'Shop') + '</div>' +
+      variant +
+      '<div class="cart-item-controls">' +
+        '<button class="qty-btn" data-action="drawer-qty" data-item-id="' + item.id + '" data-delta="-1">−</button>' +
+        '<span class="qty-val">' + item.qty + '</span>' +
+        '<button class="qty-btn" data-action="drawer-qty" data-item-id="' + item.id + '" data-delta="1">+</button>' +
+        '<button class="btn-rm" data-action="drawer-remove" data-item-id="' + item.id + '">🗑️ Remove</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="cart-item-price">' + currencyFmt(item.lineTotal) + '</div>' +
+  '</div>';
+}
+
+function currencyFmt(n) {
+  return '₹' + Number(n).toFixed(2);
+}
+
 function fetchCartItems() {
-  fetch(APP_URL + '/cart/count').then(r => r.json()).then(d => {
+  fetch(APP_URL + '/cart/mini').then(r => r.json()).then(d => {
     const footer = document.getElementById('cartFooter');
-    if (d.count === 0) {
-      document.getElementById('cartBody').innerHTML =
+    const body   = document.getElementById('cartBody');
+    if (d.count === 0 || !d.items.length) {
+      body.innerHTML =
         '<div class="cart-empty"><div class="ce-icon">🛒</div><p>Your cart is empty</p>' +
         '<a href="' + APP_URL + '/products" class="btn-shop" data-action="close-cart">Start Shopping →</a></div>';
       footer.classList.add('is-hidden');
     } else {
+      body.innerHTML = d.items.map(cartItemRow).join('');
+      document.getElementById('cartTotal').textContent = currencyFmt(d.total);
       footer.classList.remove('is-hidden');
-      document.getElementById('cartCount').textContent = d.count;
     }
+    updateCartBadge(d.count);
   });
 }
 
@@ -65,6 +100,26 @@ function removeCartItem(itemId) {
 function updateCartQty(itemId, qty) {
   const fd = new FormData(); fd.append('item_id', itemId); fd.append('qty', qty);
   fetch(APP_URL + '/cart/update', { method: 'POST', body: fd }).then(r => r.json()).then(d => updateCartBadge(d.count));
+}
+
+function drawerQty(itemId, delta) {
+  const row  = document.querySelector('.cart-item [data-item-id="' + itemId + '"]').closest('.cart-item');
+  const span = row.querySelector('.qty-val');
+  const qty  = Math.max(1, parseInt(span.textContent, 10) + delta);
+  const fd = new FormData();
+  fd.append('item_id', itemId);
+  fd.append('qty', qty);
+  fd.append('_csrf_token', CSRF_TOKEN);
+  fetch(APP_URL + '/cart/update', { method: 'POST', body: fd })
+    .then(r => r.json()).then(() => fetchCartItems());
+}
+
+function drawerRemove(itemId) {
+  const fd = new FormData();
+  fd.append('item_id', itemId);
+  fd.append('_csrf_token', CSRF_TOKEN);
+  fetch(APP_URL + '/cart/remove', { method: 'POST', body: fd })
+    .then(r => r.json()).then(() => fetchCartItems());
 }
 
 function toggleWishlist(productId, btn) {
@@ -171,6 +226,8 @@ document.addEventListener('click', function (e) {
     case 'scroll-top':          window.scrollTo({ top: 0, behavior: 'smooth' }); break;
     case 'remove-cart-item':    removeCartItem(el.dataset.itemId); break;
     case 'update-cart-qty':     updateCartQty(el.dataset.itemId, el.dataset.qty); break;
+    case 'drawer-qty':          drawerQty(el.dataset.itemId, parseInt(el.dataset.delta, 10)); break;
+    case 'drawer-remove':       drawerRemove(el.dataset.itemId); break;
     case 'add-to-cart':         addToCart(el.dataset.productId, el.dataset.qty || 1, el.dataset.variantId || null); break;
     case 'toggle-wishlist':     toggleWishlist(el.dataset.productId, el); break;
     // Navigate a whole card acting as a link — ignore clicks on real controls inside it

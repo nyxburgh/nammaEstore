@@ -53,6 +53,7 @@ $router->post('/cart/add',                          CartController::class . '@ad
 $router->post('/cart/remove',                       CartController::class . '@remove');
 $router->post('/cart/update',                       CartController::class . '@update');
 $router->get('/cart/count',                         CartController::class . '@count');
+$router->get('/cart/mini',                          CartController::class . '@mini');
 $router->post('/cart/clear',                        CartController::class . '@clear');
 $router->post('/wishlist/toggle',                   CartController::class . '@toggleWishlist');
 
