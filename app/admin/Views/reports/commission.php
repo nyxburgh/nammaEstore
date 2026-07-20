@@ -1,8 +1,8 @@
 <?php $p=ADMIN_URL; $tc=array_sum(array_column($data??[],'total_commission')); $te=array_sum(array_column($data??[],'total_earning')); $tg=array_sum(array_column($data??[],'gross_amount')); ?>
 <div class="d-flex align-items-center gap-3 mb-4"><a href="<?= $p ?>/reports" class="btn btn-sm btn-outline-secondary btn-icon"><i class="bi bi-arrow-left"></i></a><div><h5 style="font-weight:800;margin:0;">Commission Report</h5><small class="text-muted"><?= formatDate($from) ?> — <?= formatDate($to) ?></small></div></div>
-<div class="filter-bar mb-4"><form method="get" class="row g-2 align-items-end">
-  <div class="col-md-3"><label class="form-label">From</label><input type="date" name="date_from" class="form-control" value="<?= e($from) ?>"></div>
-  <div class="col-md-3"><label class="form-label">To</label><input type="date" name="date_to" class="form-control" value="<?= e($to) ?>"></div>
+<div class="filter-bar mb-4"><form method="get" class="row g-2 align-items-end" onsubmit="return validateForm(this)">
+  <div class="col-md-3"><label class="form-label">From</label><input type="date" name="date_from" id="commDateFrom" class="form-control" value="<?= e($from) ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+  <div class="col-md-3"><label class="form-label">To</label><input type="date" name="date_to" class="form-control" data-gte-field="#commDateFrom" value="<?= e($to) ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
   <div class="col-md-2"><button class="btn btn-primary mt-4">Generate</button></div>
 </form></div>
 <div class="row g-3 mb-4">

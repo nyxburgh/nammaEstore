@@ -1,26 +1,26 @@
 <h2 class="auth-title">Create Account ✨</h2>
 <p class="auth-sub">Join millions of shoppers on Namma E Store</p>
-<form method="POST" action="<?= APP_URL ?>/register">
+<form method="POST" action="<?= APP_URL ?>/register" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
   <div class="form-group">
     <label class="form-label">Full Name</label>
-    <input type="text" name="name" class="form-control" required placeholder="Rahul Sharma" value="<?= e($_POST['name'] ?? '') ?>">
+    <input type="text" name="name" class="form-control" required placeholder="Rahul Sharma" value="<?= e($_POST['name'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)">
   </div>
   <div class="form-group">
     <label class="form-label">Email Address</label>
-    <input type="email" name="email" class="form-control" required placeholder="you@email.com" value="<?= e($_POST['email'] ?? '') ?>">
+    <input type="email" name="email" class="form-control" required placeholder="you@email.com" value="<?= e($_POST['email'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)">
   </div>
   <div class="form-group">
     <label class="form-label">Phone (optional)</label>
-    <input type="tel" name="phone" class="form-control" placeholder="+91 98765 43210" value="<?= e($_POST['phone'] ?? '') ?>">
+    <input type="tel" name="phone" class="form-control" placeholder="+91 98765 43210" value="<?= e($_POST['phone'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)">
   </div>
   <div class="form-group">
     <label class="form-label">Password</label>
-    <input type="password" name="password" class="form-control" required placeholder="Minimum 8 characters">
+    <input type="password" name="password" id="reg_password" class="form-control" required minlength="8" placeholder="Minimum 8 characters" oninput="validateField(this)" onblur="validateField(this)">
   </div>
   <div class="form-group">
     <label class="form-label">Confirm Password</label>
-    <input type="password" name="confirm_password" class="form-control" required placeholder="Repeat password">
+    <input type="password" name="confirm_password" class="form-control" required placeholder="Repeat password" data-equal-to="#reg_password" oninput="validateField(this)" onblur="validateField(this)">
   </div>
   <div class="form-group"><?= \App\Core\Captcha::field() ?></div>
   <button type="submit" class="btn-auth">Create Account →</button>

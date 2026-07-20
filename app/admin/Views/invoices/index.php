@@ -4,10 +4,10 @@
   <a href="<?= $p ?>/invoices/export?date_from=<?= $filters['date_from'] ?>&date_to=<?= $filters['date_to'] ?>" class="btn btn-outline-primary btn-sm"><i class="bi bi-download"></i> Export CSV</a>
 </div>
 
-<div class="filter-bar mb-3"><form method="get" class="row g-2 align-items-end">
+<div class="filter-bar mb-3"><form method="get" class="row g-2 align-items-end" onsubmit="return validateForm(this)">
   <div class="col-md-3"><input type="text" name="search" class="form-control" placeholder="Invoice or order #..." value="<?= e($filters['search'] ?? '') ?>"></div>
-  <div class="col-md-2"><label class="form-label" style="font-size:11px;">From</label><input type="date" name="date_from" class="form-control" value="<?= e($filters['date_from']) ?>"></div>
-  <div class="col-md-2"><label class="form-label" style="font-size:11px;">To</label><input type="date" name="date_to" class="form-control" value="<?= e($filters['date_to']) ?>"></div>
+  <div class="col-md-2"><label class="form-label" style="font-size:11px;">From</label><input type="date" name="date_from" id="invDateFrom" class="form-control" value="<?= e($filters['date_from']) ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+  <div class="col-md-2"><label class="form-label" style="font-size:11px;">To</label><input type="date" name="date_to" class="form-control" data-gte-field="#invDateFrom" value="<?= e($filters['date_to']) ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
   <div class="col-md-2"><button class="btn btn-outline-secondary w-100">Filter</button></div>
 </form></div>
 

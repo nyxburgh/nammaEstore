@@ -4,13 +4,13 @@
   <a href="<?= $p ?>/coupons" class="btn btn-outline-secondary btn-sm">← Back to Coupons</a>
 </div>
 
-<form method="POST" action="<?= $isEdit ? $p.'/coupons/'.$c['id'].'/edit' : $p.'/coupons/create' ?>">
+<form method="POST" action="<?= $isEdit ? $p.'/coupons/'.$c['id'].'/edit' : $p.'/coupons/create' ?>" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
   <div class="card"><div class="card-body">
     <div class="row g-3">
       <div class="col-md-4">
         <label class="form-label">Coupon Code *</label>
-        <input type="text" name="code" class="form-control text-uppercase" value="<?= e($c['code'] ?? '') ?>" <?= $isEdit?'readonly':'required' ?> placeholder="SAVE20">
+        <input type="text" name="code" class="form-control text-uppercase" value="<?= e($c['code'] ?? '') ?>" <?= $isEdit?'readonly':'required' ?> pattern="[A-Za-z0-9_-]+" data-pattern-message="Letters, numbers, hyphens and underscores only." placeholder="SAVE20" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-8">
         <label class="form-label">Label (internal note)</label>
@@ -19,27 +19,27 @@
 
       <div class="col-md-3">
         <label class="form-label">Value Type *</label>
-        <select name="value_type" class="form-select" required>
+        <select name="value_type" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
           <option value="fixed" <?= ($c['value_type']??'')==='fixed'?'selected':'' ?>>Fixed Amount (₹)</option>
           <option value="percentage" <?= ($c['value_type']??'')==='percentage'?'selected':'' ?>>Percentage (%)</option>
         </select>
       </div>
       <div class="col-md-3">
         <label class="form-label">Value *</label>
-        <input type="number" step="0.01" name="value" class="form-control" value="<?= e($c['value'] ?? '') ?>" required>
+        <input type="number" step="0.01" min="0" name="value" class="form-control" value="<?= e($c['value'] ?? '') ?>" required oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-3">
         <label class="form-label">Max Discount Cap (₹)</label>
-        <input type="number" step="0.01" name="max_discount_amount" class="form-control" value="<?= e($c['max_discount_amount'] ?? '') ?>" placeholder="For % coupons">
+        <input type="number" step="0.01" min="0" name="max_discount_amount" class="form-control" value="<?= e($c['max_discount_amount'] ?? '') ?>" placeholder="For % coupons" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-3">
         <label class="form-label">Min Order Amount (₹)</label>
-        <input type="number" step="0.01" name="min_order_amount" class="form-control" value="<?= e($c['min_order_amount'] ?? 0) ?>">
+        <input type="number" step="0.01" min="0" name="min_order_amount" class="form-control" value="<?= e($c['min_order_amount'] ?? 0) ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
 
       <div class="col-md-4">
         <label class="form-label">Scope *</label>
-        <select name="scope" id="scopeSelect" class="form-select" onchange="toggleScopeTarget()" required>
+        <select name="scope" id="scopeSelect" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
           <?php foreach(['platform'=>'Platform-wide','vendor'=>'Vendor-specific','category'=>'Category-specific','brand'=>'Brand-specific','product'=>'Product-specific','user'=>'Single User','first_order'=>'First Order Only','festival'=>'Festival (platform-wide)'] as $val=>$label): ?>
           <option value="<?= $val ?>" <?= ($c['scope']??'platform')===$val?'selected':'' ?>><?= $label ?></option>
           <?php endforeach; ?>
@@ -57,24 +57,24 @@
       </div>
       <div class="col-md-4">
         <label class="form-label">Or User ID (for Single User scope)</label>
-        <input type="number" name="scope_id_user" onchange="document.querySelector('[name=scope_id]').value=this.value" class="form-control" placeholder="e.g. 42">
+        <input type="number" name="scope_id_user" id="scopeIdUser" class="form-control" placeholder="e.g. 42">
       </div>
 
       <div class="col-md-3">
         <label class="form-label">Total Usage Limit</label>
-        <input type="number" name="usage_limit_total" class="form-control" value="<?= e($c['usage_limit_total'] ?? '') ?>" placeholder="Unlimited">
+        <input type="number" min="0" name="usage_limit_total" class="form-control" value="<?= e($c['usage_limit_total'] ?? '') ?>" placeholder="Unlimited" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-3">
         <label class="form-label">Per-User Limit</label>
-        <input type="number" name="usage_limit_per_user" class="form-control" value="<?= e($c['usage_limit_per_user'] ?? 1) ?>">
+        <input type="number" min="0" name="usage_limit_per_user" class="form-control" value="<?= e($c['usage_limit_per_user'] ?? 1) ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-3">
         <label class="form-label">Starts</label>
-        <input type="datetime-local" name="starts_at" class="form-control" value="<?= isset($c['starts_at']) ? date('Y-m-d\TH:i',strtotime($c['starts_at'])) : '' ?>">
+        <input type="datetime-local" name="starts_at" id="startsAt" class="form-control" value="<?= isset($c['starts_at']) ? date('Y-m-d\TH:i',strtotime($c['starts_at'])) : '' ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-3">
         <label class="form-label">Expires</label>
-        <input type="datetime-local" name="expires_at" class="form-control" value="<?= isset($c['expires_at']) ? date('Y-m-d\TH:i',strtotime($c['expires_at'])) : '' ?>">
+        <input type="datetime-local" name="expires_at" class="form-control" data-gte-field="#startsAt" value="<?= isset($c['expires_at']) ? date('Y-m-d\TH:i',strtotime($c['expires_at'])) : '' ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
 
       <div class="col-12">
@@ -92,14 +92,4 @@
   </div>
 </form>
 
-<script>
-function toggleScopeTarget(){
-  const scope = document.getElementById('scopeSelect').value;
-  document.querySelectorAll('#scopeTargetWrap option[data-scope]').forEach(o=>{
-    o.style.display = o.dataset.scope === scope ? '' : 'none';
-  });
-  document.getElementById('scopeTargetWrap').style.display =
-    ['vendor','category','brand'].includes(scope) ? '' : 'none';
-}
-toggleScopeTarget();
-</script>
+<?php $scripts = '<script src="'.admin_asset('js/coupons-form.js').'"></script>'; ?>

@@ -35,6 +35,23 @@ don't copy it, and clean it up if you're already editing that block.
 `assets/{admin,frontend,vendor-panel}/js/` and wire it up with an event
 listener keyed off a class or `data-*` attribute, not an inline handler.
 
+**Exception — form field validation.** Real-time client-side validation
+triggers (`oninput="validateField(this)"`, `onblur="validateField(this)"`,
+`onsubmit="return validateForm(this)"`) may be written inline directly on
+the form/field in the view. This is the one allowed use of inline JS
+attributes. The actual validation logic must NOT live inline — it stays in
+the shared `assets/{admin,frontend}/js/form-validation.js` file as reusable
+functions (`validateField`, `validateForm`, etc.) that the inline attributes
+call into. Any other inline handler (image preview, toggling a field based
+on a select, etc.) is not validation and must follow the normal no-inline-JS
+rule — external file, `data-*`/class-keyed listener.
+
+**Never clear field values on a failed validation.** On both client-side
+validation failure and server-side redirect-back-with-errors, every field
+must keep exactly what the user typed. Never call `form.reset()` or blank a
+field as part of error handling — only an explicit user click on a reset/clear
+control may empty the form.
+
 **Every `<img>` needs a real `alt`.** Not empty, not the filename — describe
 what the image is (product name, banner purpose, brand name). Decorative-only
 images (rare) get `alt=""` explicitly, never an omitted attribute.

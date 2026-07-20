@@ -21,15 +21,15 @@
         <div class="oi-qty">Qty: <?= $item['quantity'] ?> × <?= currency($item['unit_price']) ?></div>
         <?php if($order['order_status']==='delivered'): ?>
         <button type="button" class="return-toggle-btn" data-action="show-return-form" data-item-id="<?= $item['id'] ?>">↩️ Return / Replace</button>
-        <form id="ret-<?= $item['id'] ?>" class="return-form" method="POST" action="<?= APP_URL ?>/account/orders/return">
+        <form id="ret-<?= $item['id'] ?>" class="return-form" method="POST" action="<?= APP_URL ?>/account/orders/return" onsubmit="return validateForm(this)">
           <?= csrf_field() ?>
           <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
           <input type="hidden" name="order_item_id" value="<?= $item['id'] ?>">
-          <select name="type">
+          <select name="type" oninput="validateField(this)" onblur="validateField(this)">
             <option value="return">Return for Refund</option>
             <option value="replacement">Replacement</option>
           </select>
-          <select name="reason" required>
+          <select name="reason" required oninput="validateField(this)" onblur="validateField(this)">
             <option value="">Select a reason...</option>
             <option value="Damaged item">Damaged item</option>
             <option value="Wrong item received">Wrong item received</option>
@@ -38,7 +38,7 @@
             <option value="Changed my mind">Changed my mind</option>
             <option value="Other">Other</option>
           </select>
-          <textarea name="note" placeholder="Additional details (optional)"></textarea>
+          <textarea name="note" placeholder="Additional details (optional)" oninput="validateField(this)" onblur="validateField(this)"></textarea>
           <button type="submit" class="btn-save">Submit Request</button>
         </form>
         <?php endif; ?>

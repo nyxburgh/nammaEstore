@@ -53,10 +53,10 @@
       </div>
     </div></div>
     <div class="card"><div class="card-header"><span class="card-title"><i class="bi bi-shield-check me-1"></i>Admin Override — Update Status</span></div><div class="card-body">
-      <form method="POST" action="<?= $p ?>/orders/<?= $order['id'] ?>/status" class="row g-3">
+      <form method="POST" action="<?= $p ?>/orders/<?= $order['id'] ?>/status" class="row g-3" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
-        <div class="col-md-4"><label class="form-label">New Status</label><select name="status" class="form-select"><?php foreach(['placed','confirmed','processing','shipped','delivered','cancelled','returned'] as $s): ?><option value="<?= $s ?>" <?= $order['order_status']===$s?'selected':'' ?>><?= ucfirst($s) ?></option><?php endforeach; ?></select></div>
-        <div class="col-md-6"><label class="form-label">Note (optional)</label><input type="text" name="note" class="form-control" placeholder="Reason..."></div>
+        <div class="col-md-4"><label class="form-label">New Status</label><select name="status" class="form-select" oninput="validateField(this)" onblur="validateField(this)"><?php foreach(['placed','confirmed','processing','shipped','delivered','cancelled','returned'] as $s): ?><option value="<?= $s ?>" <?= $order['order_status']===$s?'selected':'' ?>><?= ucfirst($s) ?></option><?php endforeach; ?></select></div>
+        <div class="col-md-6"><label class="form-label">Note (optional)</label><input type="text" name="note" class="form-control" placeholder="Reason..." oninput="validateField(this)" onblur="validateField(this)"></div>
         <div class="col-md-2 d-flex align-items-end"><button class="btn btn-primary w-100">Update</button></div>
       </form>
     </div></div>

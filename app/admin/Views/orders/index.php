@@ -5,12 +5,12 @@
   <div class="col-6 col-sm-4 col-lg-2"><div class="card mini-stat"><div class="si <?= $c ?>"><i class="bi bi-<?= $i ?>"></i></div><div><div class="stat-label"><?= $l ?></div><div class="stat-val"><?= $v ?></div></div></div></div>
   <?php endforeach; ?>
 </div>
-<div class="filter-bar mb-3"><form method="get" class="row g-2 align-items-end">
+<div class="filter-bar mb-3"><form method="get" class="row g-2 align-items-end" onsubmit="return validateForm(this)">
   <div class="col-md-3"><div class="input-group"><span class="input-group-text"><i class="bi bi-search"></i></span><input type="text" name="search" class="form-control" placeholder="Order # or customer..." value="<?= e($filters['search']??'') ?>"></div></div>
   <div class="col-md-2"><select name="status" class="form-select"><option value="">All Status</option><?php foreach(['placed','confirmed','processing','shipped','delivered','cancelled','returned'] as $s): ?><option value="<?= $s ?>" <?= ($filters['status']??'')===$s?'selected':'' ?>><?= ucfirst($s) ?></option><?php endforeach; ?></select></div>
   <div class="col-md-2"><select name="payment_status" class="form-select"><option value="">All Payments</option><?php foreach(['pending','paid','failed','refunded'] as $s): ?><option value="<?= $s ?>" <?= ($filters['payment_status']??'')===$s?'selected':'' ?>><?= ucfirst($s) ?></option><?php endforeach; ?></select></div>
-  <div class="col-md-2"><input type="date" name="date_from" class="form-control" value="<?= e($filters['date_from']??'') ?>"></div>
-  <div class="col-md-2"><input type="date" name="date_to" class="form-control" value="<?= e($filters['date_to']??'') ?>"></div>
+  <div class="col-md-2"><input type="date" name="date_from" id="ordersDateFrom" class="form-control" value="<?= e($filters['date_from']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+  <div class="col-md-2"><input type="date" name="date_to" class="form-control" data-gte-field="#ordersDateFrom" value="<?= e($filters['date_to']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
   <div class="col-md-1"><button class="btn btn-primary w-100">Go</button></div>
 </form></div>
 <div class="card"><div class="table-responsive"><table class="table mb-0">

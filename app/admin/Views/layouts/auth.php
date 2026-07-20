@@ -28,6 +28,9 @@ input:focus{border-color:rgba(139,92,246,.7);box-shadow:0 0 0 3px rgba(109,40,21
 .alert{display:flex;align-items:center;gap:10px;background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.25);border-radius:10px;padding:11px 14px;margin-bottom:20px;color:#fca5a5;font-size:13px;}
 .alert.success{background:rgba(22,163,74,.15);border-color:rgba(22,163,74,.25);color:#86efac;}
 .footer{text-align:center;margin-top:28px;font-size:12px;color:rgba(255,255,255,.2);}
+input.is-invalid{border-color:rgba(220,38,38,.6)!important;box-shadow:0 0 0 3px rgba(220,38,38,.15)!important;}
+.invalid-feedback{display:none;color:#fca5a5;font-size:12px;margin-top:6px;}
+.is-invalid ~ .invalid-feedback{display:block;}
 </style>
 </head>
 <body>
@@ -46,6 +49,7 @@ input:focus{border-color:rgba(139,92,246,.7);box-shadow:0 0 0 3px rgba(109,40,21
   <?= $content ?>
   <div class="footer">&copy; <?= date('Y') ?> Namma E Store Marketplace</div>
 </div>
+<script src="<?= admin_asset('js/form-validation.js') ?>"></script>
 <script>
 function togglePwd(btn){const i=btn.closest('.input-wrap').querySelector('input'),ic=btn.querySelector('i');i.type=i.type==='password'?'text':'password';ic.className=i.type==='password'?'bi bi-eye':'bi bi-eye-slash';}
 </script>

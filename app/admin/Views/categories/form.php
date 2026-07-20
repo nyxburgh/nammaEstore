@@ -9,11 +9,11 @@
     <div class="card">
       <div class="card-header"><span class="card-title"><?= $isEdit ? 'Edit' : 'New' ?> Category</span></div>
       <div class="card-body">
-        <form method="POST" action="<?= $isEdit ? "$p/categories/{$category['id']}" : "$p/categories" ?>">
+        <form method="POST" action="<?= $isEdit ? "$p/categories/{$category['id']}" : "$p/categories" ?>" onsubmit="return validateForm(this)">
           <?= csrf_field() ?>
           <div class="mb-3">
             <label class="form-label fw-600">Category Name *</label>
-            <input type="text" name="name" class="form-control" required placeholder="e.g. Electronics" value="<?= e($category['name'] ?? $_POST['name'] ?? '') ?>">
+            <input type="text" name="name" class="form-control" required placeholder="e.g. Electronics" value="<?= e($category['name'] ?? $_POST['name'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)">
           </div>
           <div class="mb-3">
             <label class="form-label fw-600">Parent Category</label>
@@ -31,7 +31,7 @@
           <div class="row g-3 mb-3">
             <div class="col-md-6">
               <label class="form-label fw-600">Sort Order</label>
-              <input type="number" name="sort_order" class="form-control" value="<?= $category['sort_order'] ?? 0 ?>" min="0">
+              <input type="number" name="sort_order" class="form-control" value="<?= $category['sort_order'] ?? 0 ?>" min="0" oninput="validateField(this)" onblur="validateField(this)">
               <div class="form-text">Lower number = appears first</div>
             </div>
             <div class="col-md-6 d-flex align-items-end pb-2">

@@ -4,13 +4,13 @@
   <a href="<?= $p ?>/brands" class="btn btn-outline-secondary btn-sm">← Back</a>
 </div>
 
-<form method="POST" action="<?= $isEdit ? $p.'/brands/'.$b['id'].'/edit' : $p.'/brands/create' ?>" enctype="multipart/form-data">
+<form method="POST" action="<?= $isEdit ? $p.'/brands/'.$b['id'].'/edit' : $p.'/brands/create' ?>" enctype="multipart/form-data" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
   <div class="card"><div class="card-body">
     <div class="row g-3">
       <div class="col-md-8">
         <label class="form-label">Brand Name *</label>
-        <input type="text" name="name" class="form-control" value="<?= e($b['name'] ?? '') ?>" required>
+        <input type="text" name="name" class="form-control" value="<?= e($b['name'] ?? '') ?>" required oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-4">
         <label class="form-label">Logo</label>

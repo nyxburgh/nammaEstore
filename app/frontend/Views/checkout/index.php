@@ -12,7 +12,8 @@
   <form method="POST" action="<?= APP_URL ?>/checkout" id="checkoutForm"
         data-subtotal="<?= $summary['subtotal'] ?>" data-shipping="<?= $summary['shipping'] ?>"
         data-wallet-max="<?= (float)($walletBalance ?? 0) ?>"
-        data-loyalty-points="<?= (int)($loyaltyBalance ?? 0) ?>" data-loyalty-value="<?= (float)($loyaltyRupeeValue ?? 0) ?>">
+        data-loyalty-points="<?= (int)($loyaltyBalance ?? 0) ?>" data-loyalty-value="<?= (float)($loyaltyRupeeValue ?? 0) ?>"
+        onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
     <div class="checkout-layout">
       <!-- LEFT: Address + Payment -->
@@ -43,12 +44,12 @@
           <div class="card-head"><span class="card-title">🏠 Delivery Address</span></div>
           <div class="card-body">
             <div class="form-grid">
-              <div class="form-group"><label class="form-label">Full Name *</label><input type="text" name="shipping_name" id="f_name" class="form-control" required placeholder="Recipient name"></div>
-              <div class="form-group"><label class="form-label">Phone *</label><input type="tel" name="shipping_phone" id="f_phone" class="form-control" required placeholder="+91 98765 43210"></div>
-              <div class="form-group full"><label class="form-label">Address *</label><input type="text" name="shipping_address" id="f_addr" class="form-control" required placeholder="House/Flat No., Street, Area"></div>
-              <div class="form-group"><label class="form-label">City *</label><input type="text" name="shipping_city" id="f_city" class="form-control" required placeholder="City"></div>
-              <div class="form-group"><label class="form-label">State *</label><input type="text" name="shipping_state" id="f_state" class="form-control" required placeholder="State"></div>
-              <div class="form-group"><label class="form-label">Pincode *</label><input type="text" name="shipping_pincode" id="f_pin" class="form-control" required placeholder="600001" maxlength="6"></div>
+              <div class="form-group"><label class="form-label">Full Name *</label><input type="text" name="shipping_name" id="f_name" class="form-control" required placeholder="Recipient name" oninput="validateField(this)" onblur="validateField(this)"></div>
+              <div class="form-group"><label class="form-label">Phone *</label><input type="tel" name="shipping_phone" id="f_phone" class="form-control" required placeholder="+91 98765 43210" oninput="validateField(this)" onblur="validateField(this)"></div>
+              <div class="form-group full"><label class="form-label">Address *</label><input type="text" name="shipping_address" id="f_addr" class="form-control" required placeholder="House/Flat No., Street, Area" oninput="validateField(this)" onblur="validateField(this)"></div>
+              <div class="form-group"><label class="form-label">City *</label><input type="text" name="shipping_city" id="f_city" class="form-control" required placeholder="City" oninput="validateField(this)" onblur="validateField(this)"></div>
+              <div class="form-group"><label class="form-label">State *</label><input type="text" name="shipping_state" id="f_state" class="form-control" required placeholder="State" oninput="validateField(this)" onblur="validateField(this)"></div>
+              <div class="form-group"><label class="form-label">Pincode *</label><input type="text" name="shipping_pincode" id="f_pin" class="form-control" required placeholder="600001" maxlength="6" pattern="\d{6}" data-pattern-message="Enter a valid 6-digit pincode." oninput="validateField(this)" onblur="validateField(this)"></div>
             </div>
           </div>
         </div>

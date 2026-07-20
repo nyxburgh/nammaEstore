@@ -2,16 +2,16 @@
 <div class="d-flex align-items-center gap-3 mb-4"><a href="<?= $p ?>/vendors/<?= $v['id'] ?>" class="btn btn-sm btn-outline-secondary btn-icon"><i class="bi bi-arrow-left"></i></a><div><h5 style="font-weight:800;margin:0;">Edit Vendor: <?= e($v['shop_name'] ?? $v['name']) ?></h5></div></div>
 <div class="row g-3">
   <div class="col-lg-8">
-    <form method="POST" action="<?= $p ?>/vendors/<?= $v['id'] ?>/edit">
+    <form method="POST" action="<?= $p ?>/vendors/<?= $v['id'] ?>/edit" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
       <div class="card mb-3"><div class="card-header"><span class="card-title"><i class="bi bi-person me-2"></i>Account Details</span></div><div class="card-body"><div class="row g-3">
-        <div class="col-md-6"><label class="form-label">Full Name *</label><input type="text" name="name" class="form-control" required value="<?= e($v['name']) ?>"></div>
-        <div class="col-md-6"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" required value="<?= e($v['email']) ?>"></div>
-        <div class="col-md-6"><label class="form-label">Phone</label><input type="text" name="phone" class="form-control" value="<?= e($v['phone'] ?? '') ?>"></div>
-        <div class="col-md-6"><label class="form-label">Reset Password</label><input type="password" name="password" class="form-control" placeholder="Leave blank to keep current"></div>
+        <div class="col-md-6"><label class="form-label">Full Name *</label><input type="text" name="name" class="form-control" required value="<?= e($v['name']) ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+        <div class="col-md-6"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" required value="<?= e($v['email']) ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+        <div class="col-md-6"><label class="form-label">Phone</label><input type="tel" name="phone" class="form-control" value="<?= e($v['phone'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+        <div class="col-md-6"><label class="form-label">Reset Password</label><input type="password" name="password" class="form-control" minlength="8" placeholder="Leave blank to keep current" oninput="validateField(this)" onblur="validateField(this)"></div>
       </div></div></div>
       <div class="card mb-3"><div class="card-header"><span class="card-title"><i class="bi bi-shop me-2"></i>Shop Details</span></div><div class="card-body"><div class="row g-3">
-        <div class="col-md-6"><label class="form-label">Shop Name *</label><input type="text" name="shop_name" class="form-control" required value="<?= e($v['shop_name'] ?? '') ?>"></div>
+        <div class="col-md-6"><label class="form-label">Shop Name *</label><input type="text" name="shop_name" class="form-control" required value="<?= e($v['shop_name'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
         <div class="col-md-6"><label class="form-label">GST Number</label><input type="text" name="gst_number" class="form-control" value="<?= e($v['gst_number'] ?? '') ?>"></div>
         <div class="col-md-6">
           <label class="form-label">Vendor Type</label>

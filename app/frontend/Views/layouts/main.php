@@ -224,6 +224,7 @@ $cartCnt  = $cartCount ?? 0;
   <div class="footer-bottom"><span>&copy; <?= date('Y') ?> <?= e($siteName) ?>. All rights reserved.</span></div>
 </footer>
 
+<script src="<?= asset('frontend/js/form-validation.js') ?>"></script>
 <script src="<?= asset('frontend/js/main.js') ?>"></script>
 <?= $scripts ?? '' ?>
 </body>

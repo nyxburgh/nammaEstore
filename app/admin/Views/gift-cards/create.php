@@ -4,13 +4,13 @@
   <a href="<?= $p ?>/gift-cards" class="btn btn-outline-secondary btn-sm">← Back</a>
 </div>
 
-<form method="POST" action="<?= $p ?>/gift-cards/create">
+<form method="POST" action="<?= $p ?>/gift-cards/create" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
   <div class="card"><div class="card-body">
     <div class="row g-3">
       <div class="col-md-4">
         <label class="form-label">Type *</label>
-        <select name="type" id="typeSelect" class="form-select" onchange="document.getElementById('vendorWrap').style.display=this.value==='vendor'?'':'none'" required>
+        <select name="type" id="typeSelect" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
           <option value="company">Company Gift Card</option>
           <option value="vendor">Vendor Gift Card</option>
           <option value="recharge">Recharge Gift Card</option>
@@ -27,15 +27,15 @@
       </div>
       <div class="col-md-4">
         <label class="form-label">Amount (₹) *</label>
-        <input type="number" step="0.01" name="amount" class="form-control" required>
+        <input type="number" step="0.01" min="0" name="amount" class="form-control" required oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-6">
         <label class="form-label">Issue to (email, optional)</label>
-        <input type="email" name="issued_to_email" class="form-control" placeholder="customer@example.com">
+        <input type="email" name="issued_to_email" class="form-control" placeholder="customer@example.com" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-6">
         <label class="form-label">Expires</label>
-        <input type="datetime-local" name="expires_at" class="form-control">
+        <input type="datetime-local" name="expires_at" class="form-control" oninput="validateField(this)" onblur="validateField(this)">
       </div>
     </div>
   </div></div>
@@ -44,3 +44,4 @@
     <a href="<?= $p ?>/gift-cards" class="btn btn-outline-secondary">Cancel</a>
   </div>
 </form>
+<?php $scripts = '<script src="'.admin_asset('js/gift-cards-form.js').'"></script>'; ?>

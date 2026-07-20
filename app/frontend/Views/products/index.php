@@ -19,7 +19,7 @@
     <!-- FILTER SIDEBAR -->
     <aside class="filter-sidebar">
       <div class="fs-title">🔍 Filters</div>
-      <form method="GET" action="">
+      <form method="GET" action="" onsubmit="return validateForm(this)">
         <?php if(isset($searchQ)): ?><input type="hidden" name="q" value="<?= e($searchQ) ?>"><?php endif; ?>
         <div class="filter-group">
           <h4>Categories</h4>
@@ -30,9 +30,9 @@
         <div class="filter-group">
           <h4>Price Range</h4>
           <div class="price-inputs">
-            <input type="number" name="min_price" placeholder="₹ Min" value="<?= e($filters['min_price']??'') ?>">
+            <input type="number" name="min_price" id="minPrice" placeholder="₹ Min" value="<?= e($filters['min_price']??'') ?>" min="0" oninput="validateField(this)" onblur="validateField(this)">
             <span>to</span>
-            <input type="number" name="max_price" placeholder="₹ Max" value="<?= e($filters['max_price']??'') ?>">
+            <input type="number" name="max_price" id="maxPrice" placeholder="₹ Max" value="<?= e($filters['max_price']??'') ?>" min="0" data-gte-field="#minPrice" oninput="validateField(this)" onblur="validateField(this)">
           </div>
         </div>
         <div class="filter-group">

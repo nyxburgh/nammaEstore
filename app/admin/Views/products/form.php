@@ -4,7 +4,7 @@
   <div class="flex-fill"><h5 style="font-weight:800;margin:0;"><?= e($title) ?></h5></div>
 </div>
 
-<form method="POST" action="<?= $isEdit ? "$p/products/{$product['id']}/edit" : "$p/products" ?>" enctype="multipart/form-data">
+<form method="POST" action="<?= $isEdit ? "$p/products/{$product['id']}/edit" : "$p/products" ?>" enctype="multipart/form-data" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
   <div class="row g-3">
 
@@ -17,12 +17,12 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label fw-600">Product Name *</label>
-            <input type="text" name="name" class="form-control" required placeholder="e.g. Samsung 55-inch 4K Smart TV" value="<?= e($product['name'] ?? '') ?>">
+            <input type="text" name="name" class="form-control" required placeholder="e.g. Samsung 55-inch 4K Smart TV" value="<?= e($product['name'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)">
           </div>
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label fw-600">Vendor *</label>
-              <select name="vendor_id" class="form-select" required>
+              <select name="vendor_id" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
                 <option value="">Select vendor</option>
                 <?php foreach($vendors as $v): ?>
                 <option value="<?= $v['id'] ?>" <?= ($product['vendor_id']??'') == $v['id'] ? 'selected' : '' ?>>
@@ -33,7 +33,7 @@
             </div>
             <div class="col-md-6">
               <label class="form-label fw-600">Category *</label>
-              <select name="category_id" class="form-select" required>
+              <select name="category_id" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
                 <option value="">Select category</option>
                 <?php foreach($categories as $cat): ?>
                 <option value="<?= $cat['id'] ?>" <?= ($product['category_id']??'') == $cat['id'] ? 'selected' : '' ?>><?= e($cat['name']) ?></option>
@@ -68,7 +68,7 @@
             </div>
             <div class="col-md-6">
               <label class="form-label fw-600">GST Rate (%) *</label>
-              <select name="gst_rate" class="form-select" required>
+              <select name="gst_rate" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
                 <?php foreach([0,5,12,18,28] as $rate): ?>
                 <option value="<?= $rate ?>" <?= (float)($product['gst_rate'] ?? 18) === (float)$rate ? 'selected' : '' ?>><?= $rate ?>%</option>
                 <?php endforeach; ?>
@@ -90,16 +90,16 @@
             <div class="col-md-4">
               <label class="form-label fw-600">Price (MRP) *</label>
               <div class="input-group"><span class="input-group-text">₹</span>
-              <input type="number" name="price" class="form-control" required step="0.01" min="0" placeholder="0.00" value="<?= e($product['price'] ?? '') ?>"></div>
+              <input type="number" name="price" id="price" class="form-control" required step="0.01" min="0" placeholder="0.00" value="<?= e($product['price'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
             </div>
             <div class="col-md-4">
               <label class="form-label fw-600">Sale Price</label>
               <div class="input-group"><span class="input-group-text">₹</span>
-              <input type="number" name="sale_price" class="form-control" step="0.01" min="0" placeholder="0.00 (optional)" value="<?= e($product['sale_price'] ?? '') ?>"></div>
+              <input type="number" name="sale_price" class="form-control" step="0.01" min="0" placeholder="0.00 (optional)" value="<?= e($product['sale_price'] ?? '') ?>" data-lte-field="#price" oninput="validateField(this)" onblur="validateField(this)"></div>
             </div>
             <div class="col-md-4">
               <label class="form-label fw-600">Stock Quantity *</label>
-              <input type="number" name="stock" class="form-control" required min="0" placeholder="0" value="<?= e($product['stock'] ?? '0') ?>">
+              <input type="number" name="stock" class="form-control" required min="0" placeholder="0" value="<?= e($product['stock'] ?? '0') ?>" oninput="validateField(this)" onblur="validateField(this)">
             </div>
           </div>
         </div>
@@ -144,7 +144,7 @@
               <div class="col"><input type="text" class="form-control form-control-sm" name="variants[<?= $i ?>][name]" placeholder="Attribute (Size)" value="<?= e($v['variant_name']) ?>"></div>
               <div class="col"><input type="text" class="form-control form-control-sm" name="variants[<?= $i ?>][value]" placeholder="Value (XL)" value="<?= e($v['variant_value']) ?>"></div>
               <div class="col"><div class="input-group input-group-sm"><span class="input-group-text">±₹</span><input type="number" class="form-control" name="variants[<?= $i ?>][price_modifier]" step="0.01" placeholder="0" value="<?= e($v['price_modifier']) ?>"></div></div>
-              <div class="col"><input type="number" class="form-control form-control-sm" name="variants[<?= $i ?>][stock]" placeholder="Stock" min="0" value="<?= e($v['stock']) ?>"></div>
+              <div class="col"><input type="number" class="form-control form-control-sm" name="variants[<?= $i ?>][stock]" placeholder="Stock" min="0" value="<?= e($v['stock']) ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
               <div class="col-auto"><button type="button" class="btn btn-sm btn-outline-danger btn-icon" onclick="this.closest('.variant-row').remove()"><i class="bi bi-x"></i></button></div>
             </div>
             <?php endforeach; ?>
@@ -193,7 +193,7 @@ function addVariant() {
     <div class="col"><input type="text" class="form-control form-control-sm" name="variants[\${varIdx}][name]" placeholder="Attribute (Size)"></div>
     <div class="col"><input type="text" class="form-control form-control-sm" name="variants[\${varIdx}][value]" placeholder="Value (XL)"></div>
     <div class="col"><div class="input-group input-group-sm"><span class="input-group-text">±₹</span><input type="number" class="form-control" name="variants[\${varIdx}][price_modifier]" step="0.01" placeholder="0"></div></div>
-    <div class="col"><input type="number" class="form-control form-control-sm" name="variants[\${varIdx}][stock]" placeholder="Stock" min="0" value="0"></div>
+    <div class="col"><input type="number" class="form-control form-control-sm" name="variants[\${varIdx}][stock]" placeholder="Stock" min="0" value="0" oninput="validateField(this)" onblur="validateField(this)"></div>
     <div class="col-auto"><button type="button" class="btn btn-sm btn-outline-danger btn-icon" onclick="this.closest('.variant-row').remove()"><i class="bi bi-x"></i></button></div>
   </div>`;
   document.getElementById('variantRows').insertAdjacentHTML('beforeend', row);

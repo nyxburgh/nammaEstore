@@ -37,7 +37,7 @@ $storeBase = VENDOR_STORE_MODE === 'path'
     <!-- SIDEBAR FILTERS -->
     <aside class="filter-sidebar">
       <div class="fs-title">🔍 Filter Products</div>
-      <form method="GET">
+      <form method="GET" onsubmit="return validateForm(this)">
         <div class="filter-group">
           <h4>Category</h4>
           <a href="<?= $storeBase ?>" class="filter-chip <?= empty($filters['category']) ? 'active' : '' ?>">All</a>
@@ -48,9 +48,9 @@ $storeBase = VENDOR_STORE_MODE === 'path'
         <div class="filter-group">
           <h4>Price Range</h4>
           <div class="price-row">
-            <input type="number" name="min_price" placeholder="₹ Min" value="<?= e($filters['min_price'] ?? '') ?>">
+            <input type="number" name="min_price" id="minPrice" placeholder="₹ Min" value="<?= e($filters['min_price'] ?? '') ?>" min="0" oninput="validateField(this)" onblur="validateField(this)">
             <span>to</span>
-            <input type="number" name="max_price" placeholder="₹ Max" value="<?= e($filters['max_price'] ?? '') ?>">
+            <input type="number" name="max_price" id="maxPrice" placeholder="₹ Max" value="<?= e($filters['max_price'] ?? '') ?>" min="0" data-gte-field="#minPrice" oninput="validateField(this)" onblur="validateField(this)">
           </div>
         </div>
         <div class="filter-group">

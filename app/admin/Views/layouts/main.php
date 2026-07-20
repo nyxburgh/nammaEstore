@@ -324,6 +324,7 @@ setTimeout(()=>{const t=document.getElementById('flash-toast');if(t){t.style.ani
 
 <script src="<?= admin_asset('vendor/bootstrap/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= admin_asset('vendor/chartjs/chart.umd.min.js') ?>"></script>
+<script src="<?= admin_asset('js/form-validation.js') ?>"></script>
 <script>
 document.querySelectorAll('.toggle-status').forEach(el=>{
   el.addEventListener('change',function(){

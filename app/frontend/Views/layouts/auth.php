@@ -44,5 +44,6 @@
   </nav>
   <div class="af-copy">&copy; <?= date('Y') ?> <?= e(\App\Frontend\Services\SettingsService::get('site_name','Namma E Store')) ?>. All rights reserved.</div>
 </footer>
+<script src="<?= asset('frontend/js/form-validation.js') ?>"></script>
 </body>
 </html>
