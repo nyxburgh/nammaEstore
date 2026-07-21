@@ -1,7 +1,6 @@
 <?php $p=ADMIN_URL; ?>
 <div class="d-flex align-items-center justify-content-between mb-3">
   <div><h5 style="font-weight:800;margin:0;">Customers</h5><small class="text-muted"><?= number_format($customers['total']) ?> total</small></div>
-  <?php if(\App\Core\Auth::isSuperAdmin()): ?><a href="<?= $p ?>/customers/create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Add Customer</a><?php endif; ?>
 </div>
 <div class="filter-bar mb-3"><form method="get" class="row g-2 align-items-end">
   <div class="col-md-5"><div class="input-group"><span class="input-group-text"><i class="bi bi-search"></i></span><input type="text" name="search" class="form-control" placeholder="Name, email, phone..." value="<?= e($filters['search']??'') ?>"></div></div>

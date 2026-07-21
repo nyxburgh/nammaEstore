@@ -8,7 +8,7 @@
   <div class="col-md-4"><input type="text" name="search" class="form-control" placeholder="Voucher code..." value="<?= e($filters['search']??'') ?>"></div>
   <div class="col-md-3"><select name="type" class="form-select" onchange="this.form.submit()">
     <option value="">All Types</option>
-    <?php foreach(['company','vendor','recharge'] as $t): ?>
+    <?php foreach(['company','seller','recharge'] as $t): ?>
     <option value="<?= $t ?>" <?= ($filters['type']??'')===$t?'selected':'' ?>><?= ucfirst($t) ?></option>
     <?php endforeach; ?>
   </select></div>
@@ -16,7 +16,7 @@
 </form></div>
 
 <div class="card"><div class="table-responsive"><table class="table mb-0">
-  <thead><tr><th><?= sortHeader('#','id',$p.'/gift-cards') ?></th><th><?= sortHeader('Code','code',$p.'/gift-cards') ?></th><th>Type</th><th>Vendor</th><th>Initial</th><th><?= sortHeader('Balance','current_balance',$p.'/gift-cards') ?></th><th>Status</th><th>Expires</th><th></th></tr></thead>
+  <thead><tr><th><?= sortHeader('#','id',$p.'/gift-cards') ?></th><th><?= sortHeader('Code','code',$p.'/gift-cards') ?></th><th>Type</th><th>Seller</th><th>Initial</th><th><?= sortHeader('Balance','current_balance',$p.'/gift-cards') ?></th><th>Status</th><th>Expires</th><th></th></tr></thead>
   <tbody>
   <?php if(empty($giftCards['data'])): ?>
     <tr><td colspan="9"><div class="empty-state"><i class="bi bi-gift"></i><h6>No gift vouchers issued yet</h6></div></td></tr>
@@ -25,7 +25,7 @@
     <td style="color:var(--muted);font-size:12px;">#<?= $gc['id'] ?></td>
     <td><code style="font-weight:700;"><?= e($gc['code']) ?></code></td>
     <td><?= ucfirst($gc['type']) ?></td>
-    <td><?= e($gc['vendor_name'] ?? '—') ?></td>
+    <td><?= e($gc['seller_name'] ?? '—') ?></td>
     <td><?= currency($gc['initial_balance']) ?></td>
     <td style="font-weight:700;"><?= currency($gc['current_balance']) ?></td>
     <td><?= statusBadge($gc['status']) ?></td>

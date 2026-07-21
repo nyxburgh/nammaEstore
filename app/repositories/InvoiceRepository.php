@@ -9,19 +9,19 @@ class InvoiceRepository extends Repository
 
     public function findBySplitId(int $splitId): ?array
     {
-        return $this->db->fetchOne("SELECT * FROM `{$this->t()}` WHERE order_vendor_split_id=?", [$splitId]);
+        return $this->db->fetchOne("SELECT * FROM `{$this->t()}` WHERE order_seller_split_id=?", [$splitId]);
     }
 
     public function findWithItems(int $id): ?array
     {
         $inv = $this->db->fetchOne(
-            "SELECT i.*, u.name as vendor_name, vp.shop_name, vp.gst_number as vendor_gst, vp.address as vendor_address,
-                    vp.city as vendor_city, vp.state as vendor_state, vp.pincode as vendor_pincode,
+            "SELECT i.*, u.name as seller_name, vp.shop_name, vp.gst_number as seller_gst, vp.address as seller_address,
+                    vp.city as seller_city, vp.state as seller_state, vp.pincode as seller_pincode,
                     cu.name as customer_name, cu.email as customer_email,
                     o.order_number, o.shipping_name, o.shipping_address, o.shipping_city, o.shipping_state, o.shipping_pincode
              FROM `{$this->t()}` i
-             JOIN `{$this->t('users')}` u ON u.id=i.vendor_id
-             LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=i.vendor_id
+             JOIN `{$this->t('users')}` u ON u.id=i.seller_id
+             LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=i.seller_id
              JOIN `{$this->t('users')}` cu ON cu.id=i.user_id
              JOIN `{$this->t('orders')}` o ON o.id=i.order_id
              WHERE i.id=?", [$id]
@@ -62,18 +62,18 @@ class InvoiceRepository extends Repository
 
     public function getForCustomer(int $userId, int $page = 1): array
     {
-        $sql = "SELECT i.*, o.order_number, u.name as vendor_name, vp.shop_name
+        $sql = "SELECT i.*, o.order_number, u.name as seller_name, vp.shop_name
                 FROM `{$this->t()}` i
                 JOIN `{$this->t('orders')}` o ON o.id=i.order_id
-                JOIN `{$this->t('users')}` u ON u.id=i.vendor_id
-                LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=i.vendor_id
+                JOIN `{$this->t('users')}` u ON u.id=i.seller_id
+                LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=i.seller_id
                 WHERE i.user_id=? ORDER BY i.created_at DESC";
         return $this->paginate($sql, [$userId], $page);
     }
 
-    public function getForVendor(int $vendorId, int $page = 1, array $f = []): array
+    public function getForSeller(int $sellerId, int $page = 1, array $f = []): array
     {
-        $where = 'i.vendor_id=?'; $params = [$vendorId];
+        $where = 'i.seller_id=?'; $params = [$sellerId];
         if (!empty($f['date_from'])) { $where .= ' AND i.invoice_date>=?'; $params[] = $f['date_from']; }
         if (!empty($f['date_to']))   { $where .= ' AND i.invoice_date<=?'; $params[] = $f['date_to']; }
 
@@ -93,11 +93,11 @@ class InvoiceRepository extends Repository
         $sortCol = safeSortField($f['sort'] ?? null, ['id', 'invoice_number', 'invoice_date', 'grand_total'], 'created_at');
         $sortDir = safeSortDir($f['dir'] ?? null);
 
-        $sql = "SELECT i.*, o.order_number, u.name as vendor_name, vp.shop_name
+        $sql = "SELECT i.*, o.order_number, u.name as seller_name, vp.shop_name
                 FROM `{$this->t()}` i
                 JOIN `{$this->t('orders')}` o ON o.id=i.order_id
-                JOIN `{$this->t('users')}` u ON u.id=i.vendor_id
-                LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=i.vendor_id
+                JOIN `{$this->t('users')}` u ON u.id=i.seller_id
+                LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=i.seller_id
                 WHERE $where ORDER BY i.{$sortCol} {$sortDir}";
         return $this->paginate($sql, $params, $page);
     }
@@ -123,11 +123,11 @@ class InvoiceRepository extends Repository
     public function getForExport(string $from, string $to): array
     {
         return $this->db->fetchAll(
-            "SELECT i.invoice_number, i.invoice_date, o.order_number, vp.shop_name, vp.gst_number as vendor_gst,
+            "SELECT i.invoice_number, i.invoice_date, o.order_number, vp.shop_name, vp.gst_number as seller_gst,
                     i.place_of_supply, i.is_interstate, i.taxable_amount, i.cgst_amount, i.sgst_amount, i.igst_amount, i.grand_total
              FROM `{$this->t()}` i
              JOIN `{$this->t('orders')}` o ON o.id=i.order_id
-             LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=i.vendor_id
+             LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=i.seller_id
              WHERE i.invoice_date BETWEEN ? AND ?
              ORDER BY i.invoice_date, i.invoice_number",
             [$from, $to]

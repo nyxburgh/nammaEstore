@@ -14,7 +14,7 @@
 .cart-item:last-child{border-bottom:none;}
 .ci-img{width:80px;height:80px;border-radius:12px;background:var(--pink-pale);border:1.5px solid #f0e6ef;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:2.2rem;}
 .ci-img img{width:100%;height:100%;object-fit:cover;}
-.ci-vendor{font-size:.7rem;color:var(--gray);margin-bottom:3px;}
+.ci-seller{font-size:.7rem;color:var(--gray);margin-bottom:3px;}
 .ci-name{font-size:.88rem;font-weight:700;color:var(--dark);margin-bottom:4px;line-height:1.3;}
 .ci-variant{font-size:.72rem;color:var(--gray);margin-bottom:8px;}
 .ci-controls{display:flex;align-items:center;gap:8px;}

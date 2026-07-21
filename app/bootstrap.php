@@ -70,10 +70,10 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // ── Security headers ──────────────────────────────────────────
 // Applied to every response. CSP allows 'unsafe-inline' for both
-// style and script because the admin/vendor panels still rely
+// style and script because the admin/seller panels still rely
 // heavily on inline onclick= handlers and <style> blocks by design
 // (frontend was cleaned up to external CSS/JS in Phase 6; admin/
-// vendor panels were explicitly left as-is). Once those panels are
+// seller panels were explicitly left as-is). Once those panels are
 // eventually externalized too, tighten script-src to drop
 // 'unsafe-inline' and rely on the external <script src> files only.
 header('X-Content-Type-Options: nosniff');
@@ -85,7 +85,7 @@ if (HTTPS) {
 }
 
 // ── Panel resolution ─────────────────────────────────────────
-// Works out which of the three routers (admin / vendor / frontend)
+// Works out which of the three routers (admin / seller / frontend)
 // should handle this request, based on ROUTING_MODE.
 use App\Core\Router;
 
@@ -106,15 +106,15 @@ $panel = 'frontend';
 if (ROUTING_MODE === 'subdomain') {
     $host = $_SERVER['HTTP_HOST'] ?? '';
     if (ADMIN_HOST && $host === ADMIN_HOST)   $panel = 'admin';
-    if (VENDOR_HOST && $host === VENDOR_HOST) $panel = 'vendor';
+    if (SELLER_HOST && $host === SELLER_HOST) $panel = 'seller';
 } else {
     if (str_starts_with($uri, '/' . ADMIN_PREFIX))  $panel = 'admin';
-    if (str_starts_with($uri, '/' . VENDOR_PREFIX)) $panel = 'vendor';
+    if (str_starts_with($uri, '/' . SELLER_PREFIX)) $panel = 'seller';
 }
 
 $routesFile = match ($panel) {
     'admin'  => BASE_PATH . '/app/admin/routes.php',
-    'vendor' => BASE_PATH . '/app/vendor-panel/routes.php',
+    'seller' => BASE_PATH . '/app/seller-panel/routes.php',
     default  => BASE_PATH . '/app/frontend/routes.php',
 };
 

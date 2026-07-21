@@ -20,7 +20,7 @@
 </form></div>
 
 <div class="card"><div class="table-responsive"><table class="table mb-0">
-  <thead><tr><th><?= sortHeader('#','id',$p.'/returns') ?></th><th>Order</th><th>Product</th><th>Customer</th><th>Vendor</th><th><?= sortHeader('Type','type',$p.'/returns') ?></th><th>Reason</th><th><?= sortHeader('Status','status',$p.'/returns') ?></th><th><?= sortHeader('Requested','requested_at',$p.'/returns') ?></th><th></th></tr></thead>
+  <thead><tr><th><?= sortHeader('#','id',$p.'/returns') ?></th><th>Order</th><th>Product</th><th>Customer</th><th>Seller</th><th><?= sortHeader('Type','type',$p.'/returns') ?></th><th>Reason</th><th><?= sortHeader('Status','status',$p.'/returns') ?></th><th><?= sortHeader('Requested','requested_at',$p.'/returns') ?></th><th></th></tr></thead>
   <tbody>
   <?php if(empty($returns['data'])): ?>
     <tr><td colspan="10"><div class="empty-state"><i class="bi bi-arrow-return-left"></i><h6>No return requests</h6></div></td></tr>
@@ -30,7 +30,7 @@
     <td><?= e($r['order_number']) ?></td>
     <td><?= e($r['product_name']) ?></td>
     <td><?= e($r['customer_name']) ?></td>
-    <td><?= e($r['vendor_name']) ?></td>
+    <td><?= e($r['seller_name']) ?></td>
     <td><?= ucfirst($r['type']) ?></td>
     <td style="max-width:180px;font-size:12px;"><?= e($r['reason']) ?></td>
     <td><?= statusBadge($r['status']) ?></td>

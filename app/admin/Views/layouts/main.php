@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title><?= e($title??'Dashboard') ?> — Namma E Store Admin</title>
-<link href="<?= admin_asset('vendor/bootstrap/bootstrap.min.css') ?>" rel="stylesheet">
-<link href="<?= admin_asset('vendor/bootstrap-icons/bootstrap-icons.min.css') ?>" rel="stylesheet">
+<link href="<?= admin_asset('seller/bootstrap/bootstrap.min.css') ?>" rel="stylesheet">
+<link href="<?= admin_asset('seller/bootstrap-icons/bootstrap-icons.min.css') ?>" rel="stylesheet">
 <style>
 :root{
   --pink:#e91e8c;--pink-soft:#fde8f4;
@@ -214,9 +214,9 @@ img,.card,.table-responsive{max-width:100%;}
     <a href="<?= ADMIN_URL ?>/dashboard" class="<?= adminActive('dashboard') ?>" title="Dashboard"><i class="bi bi-grid-fill"></i> <span>Dashboard</span></a>
 
     <div class="sb-sec">Users</div>
-    <a href="<?= ADMIN_URL ?>/vendors" class="<?= adminActive('vendors') ?>" title="Vendors">
-      <i class="bi bi-shop"></i> <span>Vendors</span>
-      <?php if(!empty($stats['pending_vendors'] ?? $sidebarStats['pending_vendors'] ?? 0 ?? $sidebarStats['pending_vendors'] ?? null)): ?><span class="sb-badge"><?= $stats['pending_vendors'] ?? $sidebarStats['pending_vendors'] ?? 0 ?></span><?php endif; ?>
+    <a href="<?= ADMIN_URL ?>/sellers" class="<?= adminActive('sellers') ?>" title="Sellers">
+      <i class="bi bi-shop"></i> <span>Sellers</span>
+      <?php if(!empty($stats['pending_sellers'] ?? $sidebarStats['pending_sellers'] ?? 0 ?? $sidebarStats['pending_sellers'] ?? null)): ?><span class="sb-badge"><?= $stats['pending_sellers'] ?? $sidebarStats['pending_sellers'] ?? 0 ?></span><?php endif; ?>
     </a>
     <a href="<?= ADMIN_URL ?>/customers" class="<?= adminActive('customers') ?>" title="Customers"><i class="bi bi-people-fill"></i> <span>Customers</span></a>
     <?php if(\App\Core\Auth::isSuperAdmin()): ?>
@@ -322,8 +322,8 @@ setTimeout(()=>{const t=document.getElementById('flash-toast');if(t){t.style.ani
   </div>
 </div>
 
-<script src="<?= admin_asset('vendor/bootstrap/bootstrap.bundle.min.js') ?>"></script>
-<script src="<?= admin_asset('vendor/chartjs/chart.umd.min.js') ?>"></script>
+<script src="<?= admin_asset('seller/bootstrap/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= admin_asset('seller/chartjs/chart.umd.min.js') ?>"></script>
 <script src="<?= admin_asset('js/form-validation.js') ?>"></script>
 <script>
 document.querySelectorAll('.toggle-status').forEach(el=>{

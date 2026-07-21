@@ -8,8 +8,8 @@ function url(string $path = ''): string {
 function admin_url(string $path = ''): string {
     return ADMIN_URL . '/' . ltrim($path, '/');
 }
-function vendor_url(string $path = ''): string {
-    return VENDOR_URL . '/' . ltrim($path, '/');
+function seller_url(string $path = ''): string {
+    return SELLER_URL . '/' . ltrim($path, '/');
 }
 function admin_asset(string $path): string {
     return ADMIN_ASSETS . '/' . ltrim($path, '/');
@@ -17,8 +17,8 @@ function admin_asset(string $path): string {
 function frontend_asset(string $path): string {
     return FRONTEND_ASSETS . '/' . ltrim($path, '/');
 }
-function vendor_asset(string $path): string {
-    return VENDOR_ASSETS . '/' . ltrim($path, '/');
+function seller_asset(string $path): string {
+    return SELLER_ASSETS . '/' . ltrim($path, '/');
 }
 
 // ── Output helpers ────────────────────────────────────────────
@@ -200,8 +200,8 @@ function isActive(string $segment, string $prefix = ''): string {
 function adminActive(string $segment): string {
     return isActive($segment, ADMIN_PREFIX);
 }
-function vendorActive(string $segment): string {
-    return isActive($segment, VENDOR_PREFIX);
+function sellerActive(string $segment): string {
+    return isActive($segment, SELLER_PREFIX);
 }
 
 // ── Utility ───────────────────────────────────────────────────
@@ -222,7 +222,7 @@ function slugify(string $t): string {
  *
  * $context selects the allowed type set:
  *   'image'    → jpg/jpeg/png/gif/webp (products, banners, brand logos, avatars)
- *   'document' → pdf/jpg/jpeg/png (vendor KYC documents)
+ *   'document' → pdf/jpg/jpeg/png (seller KYC documents)
  */
 function uploadFile(array $file, string $folder = 'general', string $context = 'image'): ?string {
     if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) return null;

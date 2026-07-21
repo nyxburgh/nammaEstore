@@ -68,7 +68,7 @@ class CouponService
             return 'Percentage value cannot exceed 100.';
         }
         $scope = $d['scope'] ?? 'platform';
-        $needsTarget = in_array($scope, ['vendor', 'category', 'brand', 'product', 'user'], true);
+        $needsTarget = in_array($scope, ['seller', 'category', 'brand', 'product', 'user'], true);
         if ($needsTarget && empty($d['scope_id'])) {
             return ucfirst($scope) . ' coupon requires a target ' . $scope . ' to be selected.';
         }

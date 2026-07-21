@@ -26,14 +26,14 @@ class CartRepository extends Repository
     public function getItems(int $cartId): array
     {
         return $this->db->fetchAll(
-            "SELECT ci.*, p.id as product_id_check, p.vendor_id, p.category_id, p.brand_id, p.name, p.slug, p.price, p.sale_price, p.stock, p.gst_rate,
+            "SELECT ci.*, p.id as product_id_check, p.seller_id, p.category_id, p.brand_id, p.name, p.slug, p.price, p.sale_price, p.stock, p.gst_rate,
                     (SELECT image_path FROM `{$this->t('product_images')}` WHERE product_id=p.id AND is_primary=1 LIMIT 1) as image,
-                    u.name as vendor_name, vp.shop_name,
+                    u.name as seller_name, vp.shop_name,
                     pv.variant_name, pv.variant_value, pv.price_modifier
              FROM `{$this->t('cart_items')}` ci
              JOIN `{$this->t('products')}` p ON p.id=ci.product_id
-             JOIN `{$this->t('users')}` u ON u.id=p.vendor_id
-             LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=p.vendor_id
+             JOIN `{$this->t('users')}` u ON u.id=p.seller_id
+             LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=p.seller_id
              LEFT JOIN `{$this->t('product_variants')}` pv ON pv.id=ci.variant_id
              WHERE ci.cart_id=? AND p.status='active'
              ORDER BY ci.id DESC", [$cartId]

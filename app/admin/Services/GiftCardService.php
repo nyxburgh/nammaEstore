@@ -26,13 +26,13 @@ class GiftCardService
 
     public function issue(array $d): array
     {
-        $type = in_array($d['type'] ?? '', ['company', 'vendor', 'recharge'], true) ? $d['type'] : 'company';
+        $type = in_array($d['type'] ?? '', ['company', 'seller', 'recharge'], true) ? $d['type'] : 'company';
         $amount = (float) ($d['amount'] ?? 0);
         if ($amount <= 0) {
             return ['success' => false, 'message' => 'Amount must be greater than zero.'];
         }
-        if ($type === 'vendor' && empty($d['vendor_id'])) {
-            return ['success' => false, 'message' => 'Vendor gift cards require a vendor to be selected.'];
+        if ($type === 'seller' && empty($d['seller_id'])) {
+            return ['success' => false, 'message' => 'Seller gift cards require a seller to be selected.'];
         }
 
         $code = $this->generateCode();
@@ -40,7 +40,7 @@ class GiftCardService
         $id = $this->giftCards->insert([
             'code'              => $code,
             'type'              => $type,
-            'vendor_id'         => $type === 'vendor' ? (int) $d['vendor_id'] : null,
+            'seller_id'         => $type === 'seller' ? (int) $d['seller_id'] : null,
             'initial_balance'   => $amount,
             'current_balance'   => $amount,
             'issued_to_email'   => $d['issued_to_email'] ?? null,

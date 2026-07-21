@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     var wrap = document.getElementById('scopeTargetWrap');
     if (wrap) {
-      wrap.style.display = ['vendor', 'category', 'brand'].indexOf(scope) !== -1 ? '' : 'none';
+      wrap.style.display = ['seller', 'category', 'brand'].indexOf(scope) !== -1 ? '' : 'none';
     }
   }
 

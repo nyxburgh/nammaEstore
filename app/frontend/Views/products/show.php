@@ -38,7 +38,7 @@
 
     <!-- PRODUCT INFO -->
     <div>
-      <div class="product-vendor">Sold by: <?php if(!empty($product['shop_slug'])): ?><a href="<?= APP_URL ?>/shop/<?= e($product['shop_slug']) ?>"><?= e($product['shop_name']??$product['vendor_name']) ?></a><?php else: ?><strong><?= e($product['shop_name']??$product['vendor_name']) ?></strong><?php endif; ?></div>
+      <div class="product-seller">Sold by: <?php if(!empty($product['shop_slug'])): ?><a href="<?= APP_URL ?>/shop/<?= e($product['shop_slug']) ?>"><?= e($product['shop_name']??$product['seller_name']) ?></a><?php else: ?><strong><?= e($product['shop_name']??$product['seller_name']) ?></strong><?php endif; ?></div>
       <h1 class="product-main-title"><?= e($product['name']) ?></h1>
 
       <?php if(!empty($reviewStats['total'])): $avg=round($reviewStats['avg_rating'],1); ?>
@@ -120,7 +120,7 @@
       <div class="desc-text"><?= nl2br(e($product['description']??'No description available.')) ?></div>
     </div>
     <div class="tab-content" id="tab-spec">
-      <?php $specs=[['Category',$product['category_name']??'—'],['SKU',$product['sku']??'—'],['HSN Code',$product['hsn_code']?:'—'],['GST Rate',rtrim(rtrim(number_format((float)($product['gst_rate']??18),2,'.',''),'0'),'.').'% (included in price)'],['Weight',$product['weight']?$product['weight'].' kg':'—'],['Stock',$product['stock'].' units'],['Vendor',$product['shop_name']??$product['vendor_name']]]; ?>
+      <?php $specs=[['Category',$product['category_name']??'—'],['SKU',$product['sku']??'—'],['HSN Code',$product['hsn_code']?:'—'],['GST Rate',rtrim(rtrim(number_format((float)($product['gst_rate']??18),2,'.',''),'0'),'.').'% (included in price)'],['Weight',$product['weight']?$product['weight'].' kg':'—'],['Stock',$product['stock'].' units'],['Seller',$product['shop_name']??$product['seller_name']]]; ?>
       <div class="spec-grid">
         <?php foreach($specs as [$k,$v]): ?><div class="spec-row"><span class="spec-key"><?= $k ?></span><span class="spec-val"><?= e($v) ?></span></div><?php endforeach; ?>
       </div>
@@ -187,7 +187,7 @@
       <div class="product-card" data-action="go" data-href="<?= APP_URL ?>/product/<?= e($rp['slug']) ?>">
         <div class="product-img"><?= $rImg ?><?php if($rDisc): ?><span class="product-discount-badge"><?= $rDisc ?></span><?php endif; ?>
         <button class="product-wishlist" data-action="toggle-wishlist" data-product-id="<?= (int)$rp['id'] ?>">🤍</button></div>
-        <div class="product-info"><div class="vendor-tag">🏪 <?= e($rp['shop_name']??'Shop') ?></div><div class="product-name"><?= e($rp['name']) ?></div>
+        <div class="product-info"><div class="seller-tag">🏪 <?= e($rp['shop_name']??'Shop') ?></div><div class="product-name"><?= e($rp['name']) ?></div>
         <div class="product-price"><span class="price-current"><?= currency($rPrice) ?></span><?php if($rDisc): ?><span class="price-original"><?= currency($rOrig) ?></span><?php endif; ?><span class="tax-tag">incl. taxes</span></div>
         <button class="product-add-btn" data-action="add-to-cart" data-product-id="<?= (int)$rp['id'] ?>">+ Add to Cart</button></div>
       </div>

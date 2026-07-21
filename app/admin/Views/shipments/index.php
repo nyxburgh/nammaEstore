@@ -14,7 +14,7 @@
 </form></div>
 
 <div class="card"><div class="table-responsive"><table class="table mb-0">
-  <thead><tr><th><?= sortHeader('#','id',$p.'/shipments') ?></th><th>Order</th><th>Vendor</th><th>Courier</th><th>Tracking #</th><th><?= sortHeader('Status','status',$p.'/shipments') ?></th><th><?= sortHeader('Created','created_at',$p.'/shipments') ?></th><th></th></tr></thead>
+  <thead><tr><th><?= sortHeader('#','id',$p.'/shipments') ?></th><th>Order</th><th>Seller</th><th>Courier</th><th>Tracking #</th><th><?= sortHeader('Status','status',$p.'/shipments') ?></th><th><?= sortHeader('Created','created_at',$p.'/shipments') ?></th><th></th></tr></thead>
   <tbody>
   <?php if(empty($shipments['data'])): ?>
     <tr><td colspan="8"><div class="empty-state"><i class="bi bi-truck"></i><h6>No shipments yet</h6></div></td></tr>
@@ -22,7 +22,7 @@
   <tr>
     <td style="color:var(--muted);font-size:12px;">#<?= $sh['id'] ?></td>
     <td><?= e($sh['order_number']) ?></td>
-    <td><?= e($sh['shop_name'] ?? $sh['vendor_name']) ?></td>
+    <td><?= e($sh['shop_name'] ?? $sh['seller_name']) ?></td>
     <td><?= e($sh['courier_name']) ?></td>
     <td><code><?= e($sh['tracking_number']) ?></code></td>
     <td><?= statusBadge($sh['status']) ?></td>

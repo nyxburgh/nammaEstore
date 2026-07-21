@@ -33,21 +33,21 @@ class Auth
             || in_array("{$module}.*", $perms, true);
     }
 
-    // ── Vendor ────────────────────────────────────────────────
-    public static function loginVendor(array $user): void
+    // ── Seller ────────────────────────────────────────────────
+    public static function loginSeller(array $user): void
     {
-        $_SESSION['vendor'] = [
+        $_SESSION['seller'] = [
             'id'    => $user['id'],
             'name'  => $user['name'],
             'email' => $user['email'],
             'phone' => $user['phone'] ?? null,
-            'role'  => $user['role'] ?? 'vendor',
+            'role'  => $user['role'] ?? 'seller',
         ];
     }
-    public static function vendor(): ?array         { return $_SESSION['vendor'] ?? null; }
-    public static function isVendorLoggedIn(): bool  { return isset($_SESSION['vendor']); }
-    public static function vendorId(): ?int          { return isset($_SESSION['vendor']) ? (int) $_SESSION['vendor']['id'] : null; }
-    public static function logoutVendor(): void      { unset($_SESSION['vendor']); }
+    public static function seller(): ?array         { return $_SESSION['seller'] ?? null; }
+    public static function isSellerLoggedIn(): bool  { return isset($_SESSION['seller']); }
+    public static function sellerId(): ?int          { return isset($_SESSION['seller']) ? (int) $_SESSION['seller']['id'] : null; }
+    public static function logoutSeller(): void      { unset($_SESSION['seller']); }
 
     // ── Customer ──────────────────────────────────────────────
     public static function loginUser(array $user): void

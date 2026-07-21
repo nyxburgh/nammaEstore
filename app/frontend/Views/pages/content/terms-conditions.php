@@ -2,7 +2,7 @@
 <p>Welcome to <?= $siteName ?>. By accessing or purchasing on this website, you agree to the terms below. Please read them carefully.</p>
 
 <h2>1. About the marketplace</h2>
-<p><?= $siteName ?> is a multi-vendor marketplace. Products are listed and sold by independent vendors; <?= $siteName ?> facilitates the transaction, payment and dispute resolution between you and the vendor.</p>
+<p><?= $siteName ?> is a multi-seller marketplace. Products are listed and sold by independent sellers; <?= $siteName ?> facilitates the transaction, payment and dispute resolution between you and the seller.</p>
 
 <h2>2. Your account</h2>
 <ul>
@@ -28,7 +28,7 @@
 <p>Reviews must be genuine and respectful. We may remove content that is abusive, misleading, or violates any law. By posting a review you grant us the right to display it on the platform.</p>
 
 <h2>7. Intellectual property</h2>
-<p>All site content — logo, design, text and images (except vendor product images) — belongs to <?= $siteName ?> and may not be copied without permission.</p>
+<p>All site content — logo, design, text and images (except seller product images) — belongs to <?= $siteName ?> and may not be copied without permission.</p>
 
 <h2>8. Limitation of liability</h2>
 <p>To the maximum extent permitted by law, our liability for any claim related to an order is limited to the amount you paid for that order.</p>

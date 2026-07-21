@@ -9,7 +9,7 @@ class PwaService
         $manifest = [
             'name'             => $siteName,
             'short_name'       => $siteName,
-            'description'      => 'Shop from thousands of trusted vendors on ' . $siteName . '.',
+            'description'      => 'Shop from thousands of trusted sellers on ' . $siteName . '.',
             'start_url'        => APP_URL . '/',
             'scope'            => APP_URL . '/',
             'display'          => 'standalone',

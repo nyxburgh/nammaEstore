@@ -22,7 +22,7 @@
   <div class="auth-wrap">
     <div class="auth-brand">
       <a href="<?= APP_URL ?>" class="auth-logo">Namma <span>E</span> Store</a>
-      <div class="auth-tagline"><?= e(\App\Frontend\Services\SettingsService::get('site_name','Namma E Store')) ?> — Multi-Vendor Marketplace</div>
+      <div class="auth-tagline"><?= e(\App\Frontend\Services\SettingsService::get('site_name','Namma E Store')) ?> — Multi-Seller Marketplace</div>
     </div>
     <div class="auth-card">
       <?php if(!empty($_SESSION['flash'])): $fl=$_SESSION['flash']; unset($_SESSION['flash']); ?>

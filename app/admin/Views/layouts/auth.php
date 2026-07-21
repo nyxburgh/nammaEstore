@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title><?= e($title??'Login') ?> — Namma E Store Admin</title>
-<link href="<?= admin_asset('vendor/bootstrap-icons/bootstrap-icons.min.css') ?>" rel="stylesheet">
+<link href="<?= admin_asset('seller/bootstrap-icons/bootstrap-icons.min.css') ?>" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;min-height:100vh;background:linear-gradient(135deg,#0f0224 0%,#1e0845 55%,#2d0a1f 100%);display:flex;align-items:center;justify-content:center;padding:20px;}

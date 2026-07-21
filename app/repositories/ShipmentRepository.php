@@ -9,7 +9,7 @@ class ShipmentRepository extends Repository
 
     public function findBySplitId(int $splitId): ?array
     {
-        return $this->db->fetchOne("SELECT * FROM `{$this->t()}` WHERE order_vendor_split_id=?", [$splitId]);
+        return $this->db->fetchOne("SELECT * FROM `{$this->t()}` WHERE order_seller_split_id=?", [$splitId]);
     }
 
     public function findWithTracking(int $id): ?array
@@ -28,9 +28,9 @@ class ShipmentRepository extends Repository
     public function findByOrderId(int $orderId): array
     {
         return $this->db->fetchAll(
-            "SELECT sh.*, u.name as vendor_name, vp.shop_name FROM `{$this->t()}` sh
-             JOIN `{$this->t('users')}` u ON u.id=sh.vendor_id
-             LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=sh.vendor_id
+            "SELECT sh.*, u.name as seller_name, vp.shop_name FROM `{$this->t()}` sh
+             JOIN `{$this->t('users')}` u ON u.id=sh.seller_id
+             LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=sh.seller_id
              WHERE sh.order_id=?", [$orderId]
         );
     }
@@ -76,9 +76,9 @@ class ShipmentRepository extends Repository
         }
     }
 
-    public function getForVendor(int $vendorId, int $page = 1, array $f = []): array
+    public function getForSeller(int $sellerId, int $page = 1, array $f = []): array
     {
-        $where = 'sh.vendor_id=?'; $params = [$vendorId];
+        $where = 'sh.seller_id=?'; $params = [$sellerId];
         if (!empty($f['status'])) { $where .= ' AND sh.status=?'; $params[] = $f['status']; }
 
         $sql = "SELECT sh.*, o.order_number FROM `{$this->t()}` sh
@@ -96,11 +96,11 @@ class ShipmentRepository extends Repository
         $sortCol = safeSortField($f['sort'] ?? null, ['id', 'status', 'created_at'], 'created_at');
         $sortDir = safeSortDir($f['dir'] ?? null);
 
-        $sql = "SELECT sh.*, o.order_number, u.name as vendor_name, vp.shop_name
+        $sql = "SELECT sh.*, o.order_number, u.name as seller_name, vp.shop_name
                 FROM `{$this->t()}` sh
                 JOIN `{$this->t('orders')}` o ON o.id=sh.order_id
-                JOIN `{$this->t('users')}` u ON u.id=sh.vendor_id
-                LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=sh.vendor_id
+                JOIN `{$this->t('users')}` u ON u.id=sh.seller_id
+                LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=sh.seller_id
                 WHERE $where ORDER BY sh.{$sortCol} {$sortDir}";
         return $this->paginate($sql, $params, $page);
     }

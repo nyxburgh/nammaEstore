@@ -5,7 +5,7 @@ use App\Core\ProviderFactory;
 use App\Repositories\NotificationRepository;
 
 /**
- * Single entry point for notifying a customer, vendor, or admin.
+ * Single entry point for notifying a customer, seller, or admin.
  * Always writes an in-app notification; optionally also sends an
  * email/SMS through the Phase 0 provider interfaces for the events
  * that matter most (order confirmation, shipment, delivery).

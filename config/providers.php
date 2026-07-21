@@ -55,7 +55,7 @@ return [
     'shipping' => [
         'active' => 'manual', // manual | shiprocket | delhivery
 
-        'manual' => [], // no credentials needed — vendor/admin enters tracking info directly
+        'manual' => [], // no credentials needed — seller/admin enters tracking info directly
     ],
 
 ];

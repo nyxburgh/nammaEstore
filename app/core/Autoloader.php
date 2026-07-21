@@ -21,9 +21,9 @@ class Autoloader
         'App\\Frontend\\Controllers\\'   => 'app/frontend/Controllers/',
         'App\\Frontend\\Services\\'      => 'app/frontend/Services/',
 
-        // ── Vendor dashboard ──────────────────────────────────
-        'App\\VendorPanel\\Controllers\\' => 'app/vendor-panel/Controllers/',
-        'App\\VendorPanel\\Services\\'    => 'app/vendor-panel/Services/',
+        // ── Seller dashboard ──────────────────────────────────
+        'App\\SellerPanel\\Controllers\\' => 'app/seller-panel/Controllers/',
+        'App\\SellerPanel\\Services\\'    => 'app/seller-panel/Services/',
     ];
 
     public static function register(): void

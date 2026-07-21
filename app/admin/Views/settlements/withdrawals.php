@@ -14,13 +14,13 @@
 </form></div>
 
 <div class="card"><div class="table-responsive"><table class="table mb-0">
-  <thead><tr><th>Vendor</th><th>Amount</th><th>Method</th><th>Status</th><th>Requested</th><th></th></tr></thead>
+  <thead><tr><th>Seller</th><th>Amount</th><th>Method</th><th>Status</th><th>Requested</th><th></th></tr></thead>
   <tbody>
   <?php if(empty($withdrawals['data'])): ?>
     <tr><td colspan="6"><div class="empty-state"><i class="bi bi-wallet2"></i><h6>No withdrawal requests</h6></div></td></tr>
   <?php else: foreach($withdrawals['data'] as $w): ?>
   <tr>
-    <td><div style="font-weight:600;font-size:13px;"><?= e($w['shop_name'] ?? $w['vendor_name']) ?></div><div style="font-size:11px;color:var(--muted);"><?= e($w['vendor_name']) ?></div></td>
+    <td><div style="font-weight:600;font-size:13px;"><?= e($w['shop_name'] ?? $w['seller_name']) ?></div><div style="font-size:11px;color:var(--muted);"><?= e($w['seller_name']) ?></div></td>
     <td style="font-weight:700;"><?= currency($w['amount']) ?></td>
     <td><?= ucwords(str_replace('_',' ',$w['method'])) ?><?php if($w['method_details']): ?><div style="font-size:11px;color:var(--muted);"><?= e($w['method_details']) ?></div><?php endif; ?></td>
     <td><?= statusBadge($w['status']) ?></td>

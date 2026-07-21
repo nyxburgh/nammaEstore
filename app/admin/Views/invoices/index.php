@@ -25,7 +25,7 @@
 </div>
 
 <div class="card"><div class="table-responsive"><table class="table mb-0">
-  <thead><tr><th><?= sortHeader('Invoice #','invoice_number',$p.'/invoices') ?></th><th>Order</th><th>Vendor</th><th>Place of Supply</th><th>Tax Type</th><th>Taxable</th><th>Tax</th><th><?= sortHeader('Total','grand_total',$p.'/invoices') ?></th><th><?= sortHeader('Date','invoice_date',$p.'/invoices') ?></th><th></th></tr></thead>
+  <thead><tr><th><?= sortHeader('Invoice #','invoice_number',$p.'/invoices') ?></th><th>Order</th><th>Seller</th><th>Place of Supply</th><th>Tax Type</th><th>Taxable</th><th>Tax</th><th><?= sortHeader('Total','grand_total',$p.'/invoices') ?></th><th><?= sortHeader('Date','invoice_date',$p.'/invoices') ?></th><th></th></tr></thead>
   <tbody>
   <?php if(empty($invoices['data'])): ?>
     <tr><td colspan="10"><div class="empty-state"><i class="bi bi-receipt"></i><h6>No invoices in this period</h6></div></td></tr>
@@ -33,7 +33,7 @@
   <tr>
     <td><code><?= e($inv['invoice_number']) ?></code></td>
     <td><?= e($inv['order_number']) ?></td>
-    <td><?= e($inv['shop_name'] ?? $inv['vendor_name']) ?></td>
+    <td><?= e($inv['shop_name'] ?? $inv['seller_name']) ?></td>
     <td><?= e($inv['place_of_supply']) ?></td>
     <td><?= $inv['is_interstate'] ? 'IGST' : 'CGST+SGST' ?></td>
     <td><?= currency($inv['taxable_amount']) ?></td>

@@ -1,7 +1,7 @@
 <?php $p=ADMIN_URL; ?>
 <div class="d-flex align-items-center gap-3 mb-4">
   <a href="<?= $p ?>/products" class="btn btn-sm btn-outline-secondary btn-icon"><i class="bi bi-arrow-left"></i></a>
-  <div class="flex-fill"><h5 style="font-weight:800;margin:0;"><?= e($product['name']) ?></h5><small class="text-muted">SKU: <?= e($product['sku']??'—') ?> &bull; <?= e($product['shop_name']??$product['vendor_name']) ?></small></div>
+  <div class="flex-fill"><h5 style="font-weight:800;margin:0;"><?= e($product['name']) ?></h5><small class="text-muted">SKU: <?= e($product['sku']??'—') ?> &bull; <?= e($product['shop_name']??$product['seller_name']) ?></small></div>
   <?php if(\App\Core\Auth::can('products','edit')): ?>
   <div class="d-flex gap-2">
     <form method="post" action="<?= $p ?>/products/<?= $product['id'] ?>/status">

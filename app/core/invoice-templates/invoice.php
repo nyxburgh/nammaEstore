@@ -53,10 +53,10 @@ $fmt = fn($n) => number_format((float) $n, 2);
 <div class="addr-box">
   <div class="col">
     <div class="section-title">Sold By</div>
-    <div><strong><?= e($invoice['shop_name'] ?? $invoice['vendor_name']) ?></strong></div>
-    <div><?= e($invoice['vendor_address'] ?? '') ?></div>
-    <div><?= e($invoice['vendor_city'] ?? '') ?><?= $invoice['vendor_city'] ? ',' : '' ?> <?= e($invoice['vendor_state'] ?? '') ?> <?= e($invoice['vendor_pincode'] ?? '') ?></div>
-    <div>GSTIN: <?= e($invoice['vendor_gst'] ?? 'Unregistered') ?></div>
+    <div><strong><?= e($invoice['shop_name'] ?? $invoice['seller_name']) ?></strong></div>
+    <div><?= e($invoice['seller_address'] ?? '') ?></div>
+    <div><?= e($invoice['seller_city'] ?? '') ?><?= $invoice['seller_city'] ? ',' : '' ?> <?= e($invoice['seller_state'] ?? '') ?> <?= e($invoice['seller_pincode'] ?? '') ?></div>
+    <div>GSTIN: <?= e($invoice['seller_gst'] ?? 'Unregistered') ?></div>
   </div>
   <div class="col">
     <div class="section-title">Billed To</div>

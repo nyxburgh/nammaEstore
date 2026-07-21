@@ -16,6 +16,6 @@ $pg = $pg ?? null;
 </div>
 <div class="mb-4" style="font-size:12.5px;color:var(--muted);">
   Allowed tokens (replaced automatically on the storefront):
-  <code>{{site_name}}</code> <code>{{app_url}}</code> <code>{{vendor_url}}</code> <code>{{site_email}}</code> <code>{{site_phone}}</code>.
+  <code>{{site_name}}</code> <code>{{app_url}}</code> <code>{{seller_url}}</code> <code>{{site_email}}</code> <code>{{site_phone}}</code>.
   Use headings as <code>&lt;h2&gt;</code>, paragraphs as <code>&lt;p&gt;</code>, lists as <code>&lt;ul&gt;&lt;li&gt;</code>.
 </div>

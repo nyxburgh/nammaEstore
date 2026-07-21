@@ -4,7 +4,7 @@
 use App\Core\Router;
 use App\Admin\Controllers\AuthController;
 use App\Admin\Controllers\DashboardController;
-use App\Admin\Controllers\VendorController;
+use App\Admin\Controllers\SellerController;
 use App\Admin\Controllers\CustomerController;
 use App\Admin\Controllers\ProductController;
 use App\Admin\Controllers\OrderController;
@@ -40,17 +40,17 @@ $router->get("$p/logout", AuthController::class . '@logout');
 // ── Dashboard ─────────────────────────────────────────────────
 $router->get("$p/dashboard", DashboardController::class . '@index');
 
-// ── Vendors ───────────────────────────────────────────────────
-$router->get("$p/vendors",                 VendorController::class . '@index');
-$router->get("$p/vendors/create",          VendorController::class . '@create');
-$router->post("$p/vendors",                VendorController::class . '@store');
-$router->get("$p/vendors/{id}",            VendorController::class . '@show');
-$router->get("$p/vendors/{id}/edit",       VendorController::class . '@edit');
-$router->post("$p/vendors/{id}/edit",      VendorController::class . '@update');
-$router->post("$p/vendors/{id}/approve",   VendorController::class . '@approve');
-$router->post("$p/vendors/{id}/reject",    VendorController::class . '@reject');
-$router->post("$p/vendors/{id}/suspend",   VendorController::class . '@suspend');
-$router->post("$p/vendors/{id}/toggle",    VendorController::class . '@toggleStatus');
+// ── Sellers ───────────────────────────────────────────────────
+$router->get("$p/sellers",                 SellerController::class . '@index');
+$router->get("$p/sellers/create",          SellerController::class . '@create');
+$router->post("$p/sellers",                SellerController::class . '@store');
+$router->get("$p/sellers/{id}",            SellerController::class . '@show');
+$router->get("$p/sellers/{id}/edit",       SellerController::class . '@edit');
+$router->post("$p/sellers/{id}/edit",      SellerController::class . '@update');
+$router->post("$p/sellers/{id}/approve",   SellerController::class . '@approve');
+$router->post("$p/sellers/{id}/reject",    SellerController::class . '@reject');
+$router->post("$p/sellers/{id}/suspend",   SellerController::class . '@suspend');
+$router->post("$p/sellers/{id}/toggle",    SellerController::class . '@toggleStatus');
 
 // ── Customers ─────────────────────────────────────────────────
 $router->get("$p/customers",              CustomerController::class . '@index');
@@ -133,7 +133,7 @@ $router->post("$p/settings", SettingsController::class . '@update');
 $router->get("$p/reports",            ReportController::class . '@index');
 $router->get("$p/reports/sales",      ReportController::class . '@sales');
 $router->get("$p/reports/commission", ReportController::class . '@commission');
-$router->get("$p/reports/vendors",    ReportController::class . '@vendors');
+$router->get("$p/reports/sellers",    ReportController::class . '@sellers');
 
 // ── Settlement Engine ────────────────────────────────────────
 $router->get("$p/settlements",                     SettlementController::class . '@index');

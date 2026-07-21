@@ -13,8 +13,8 @@ class DashboardController extends AdminController
             'stats'          => $svc->getStats(),
             'revenueChart'   => $svc->getRevenueChart(6),
             'recentOrders'   => $svc->getRecentOrders(8),
-            'topVendors'     => $svc->getTopVendors(5),
-            'pendingVendors' => $svc->getPendingVendors(5),
+            'topSellers'     => $svc->getTopSellers(5),
+            'pendingSellers' => $svc->getPendingSellers(5),
             'commission'     => $svc->getCommissionSummary(),
         ]);
     }

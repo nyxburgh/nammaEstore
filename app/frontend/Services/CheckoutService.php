@@ -106,18 +106,18 @@ class CheckoutService
                 ]
             );
 
-            // ── Group by vendor ──────────────────────────────
-            $vendorGroups = [];
+            // ── Group by seller ──────────────────────────────
+            $sellerGroups = [];
             foreach ($items as $item) {
-                $vid = (int)($item['vendor_id']
-                       ?? $this->getProductVendor((int)$item['product_id']));
-                $vendorGroups[$vid][] = $item;
+                $vid = (int)($item['seller_id']
+                       ?? $this->getProductSeller((int)$item['product_id']));
+                $sellerGroups[$vid][] = $item;
             }
 
             $commSvc    = new CommissionService();
 
-            foreach ($vendorGroups as $vendorId => $vItems) {
-                $grossVendor = 0;
+            foreach ($sellerGroups as $sellerId => $vItems) {
+                $grossSeller = 0;
                 $itemIds     = [];
 
                 // Insert order items and collect IDs
@@ -125,7 +125,7 @@ class CheckoutService
                     $unitPrice    = (float)($item['sale_price'] ?: $item['price'])
                                   + (float)($item['price_modifier'] ?? 0);
                     $sub          = round($unitPrice * (int)$item['quantity'], 2);
-                    $grossVendor += $sub;
+                    $grossSeller += $sub;
 
                     $variantLabel = !empty($item['variant_value'])
                         ? (($item['variant_name'] ?? 'Option') . ': ' . $item['variant_value'])
@@ -133,11 +133,11 @@ class CheckoutService
 
                     $itemId = $this->db->insert(
                         "INSERT INTO `".DB_PREFIX."order_items`
-                         (order_id, product_id, vendor_id, variant_id,
+                         (order_id, product_id, seller_id, variant_id,
                           product_name, variant_label, quantity, unit_price, subtotal, status)
                          VALUES (?,?,?,?,?,?,?,?,?,'placed')",
                         [
-                            $orderId, (int)$item['product_id'], $vendorId,
+                            $orderId, (int)$item['product_id'], $sellerId,
                             $item['variant_id'] ?? null,
                             $item['name'], $variantLabel,
                             (int)$item['quantity'], $unitPrice, $sub,
@@ -152,46 +152,46 @@ class CheckoutService
                          SET stock = GREATEST(0, stock - ?) WHERE id = ?",
                         [(int)$item['quantity'], (int)$item['product_id']]
                     );
-                    $this->checkLowStock((int)$item['product_id'], $vendorId, (int)$item['quantity']);
+                    $this->checkLowStock((int)$item['product_id'], $sellerId, (int)$item['quantity']);
                 }
 
-                // ── Vendor commission split ───────────────────
-                $comm = $commSvc->calculate($vendorId, $grossVendor);
+                // ── Seller commission split ───────────────────
+                $comm = $commSvc->calculate($sellerId, $grossSeller);
                 $this->db->insert(
-                    "INSERT INTO `".DB_PREFIX."order_vendor_splits`
-                     (order_id, vendor_id, gross_amount, commission_pct,
-                      commission_amount, vendor_earning, payout_status)
+                    "INSERT INTO `".DB_PREFIX."order_seller_splits`
+                     (order_id, seller_id, gross_amount, commission_pct,
+                      commission_amount, seller_earning, payout_status)
                      VALUES (?,?,?,?,?,?,'pending')",
                     [
-                        $orderId, $vendorId, $grossVendor,
+                        $orderId, $sellerId, $grossSeller,
                         $comm['commission_pct'], $comm['commission_amount'],
-                        $comm['vendor_earning'],
+                        $comm['seller_earning'],
                     ]
                 );
-                $commSvc->addToTurnover($vendorId, $grossVendor);
+                $commSvc->addToTurnover($sellerId, $grossSeller);
 
                 (new \App\Core\Services\NotificationService())->notify(
-                    'vendor', $vendorId, 'order_placed',
+                    'seller', $sellerId, 'order_placed',
                     'New order received',
-                    "Order #{$orderNumber} — " . currency($grossVendor) . " (" . count($vItems) . " item" . (count($vItems) > 1 ? 's' : '') . ")",
-                    VENDOR_URL . '/orders'
+                    "Order #{$orderNumber} — " . currency($grossSeller) . " (" . count($vItems) . " item" . (count($vItems) > 1 ? 's' : '') . ")",
+                    SELLER_URL . '/orders'
                 );
 
                 // ── Per-item commission log ────────────────────
                 foreach ($itemIds as $entry) {
-                    $ic = $commSvc->calculate($vendorId, $entry['sub']);
+                    $ic = $commSvc->calculate($sellerId, $entry['sub']);
                     $this->db->insert(
                         "INSERT INTO `".DB_PREFIX."commissions`
-                         (order_id, order_item_id, vendor_id, product_id,
+                         (order_id, order_item_id, seller_id, product_id,
                           plan_id, plan_name, item_amount, turnover_before,
-                          commission_pct, commission_amount, vendor_earning)
+                          commission_pct, commission_amount, seller_earning)
                          VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                         [
-                            $orderId, $entry['id'], $vendorId,
+                            $orderId, $entry['id'], $sellerId,
                             (int)$entry['item']['product_id'],
                             $ic['plan_id'], $ic['plan_name'], $entry['sub'],
                             $ic['turnover_before'], $ic['commission_pct'],
-                            $ic['commission_amount'], $ic['vendor_earning'],
+                            $ic['commission_amount'], $ic['seller_earning'],
                         ]
                     );
                 }
@@ -256,22 +256,22 @@ class CheckoutService
         }
     }
 
-    private function getProductVendor(int $productId): int
+    private function getProductSeller(int $productId): int
     {
         return (int)($this->db->fetchOne(
-            "SELECT vendor_id FROM `".DB_PREFIX."products` WHERE id = ?",
+            "SELECT seller_id FROM `".DB_PREFIX."products` WHERE id = ?",
             [$productId]
-        )['vendor_id'] ?? 1);
+        )['seller_id'] ?? 1);
     }
 
     /**
-     * Notifies the vendor once when a product's stock crosses at or
+     * Notifies the seller once when a product's stock crosses at or
      * below its low_stock_threshold. Only fires on the order that
      * caused the crossing (stock was above threshold before this
      * order's decrement, at or below it after) — not on every
      * subsequent sale once already low.
      */
-    private function checkLowStock(int $productId, int $vendorId, int $qtyJustDecremented): void
+    private function checkLowStock(int $productId, int $sellerId, int $qtyJustDecremented): void
     {
         if ((new \App\Repositories\SettingsRepository())->get('low_stock_notifications', '1') !== '1') {
             return;
@@ -288,10 +288,10 @@ class CheckoutService
 
         $level = (int) $p['stock'] === 0 ? 'Out of stock' : 'Low stock';
         (new \App\Core\Services\NotificationService())->notify(
-            'vendor', $vendorId, 'low_stock',
+            'seller', $sellerId, 'low_stock',
             "{$level}: {$p['name']}",
             "Only {$p['stock']} unit(s) left.",
-            VENDOR_URL . '/products'
+            SELLER_URL . '/products'
         );
     }
 }

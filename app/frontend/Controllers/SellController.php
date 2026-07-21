@@ -6,13 +6,13 @@ use App\Frontend\Services\{CartService, ProductService, SettingsService};
 
 class SellController extends FrontendController
 {
-    /** "Become a Seller" marketing landing page — links out to the vendor panel at VENDOR_URL. */
+    /** "Become a Seller" marketing landing page — links out to the seller panel at SELLER_URL. */
     public function index(): void
     {
         $db = Database::getInstance();
 
-        $vendorCount = (int) ($db->fetchOne(
-            "SELECT COUNT(*) AS c FROM `mc_vendor_profiles` WHERE status = 'active'"
+        $sellerCount = (int) ($db->fetchOne(
+            "SELECT COUNT(*) AS c FROM `mc_seller_profiles` WHERE status = 'active'"
         )['c'] ?? 0);
 
         $productCount = (int) ($db->fetchOne(
@@ -32,7 +32,7 @@ class SellController extends FrontendController
             'cartCount'       => (new CartService())->getCount(),
             'categories'      => (new ProductService())->getCategories(),
             'settings'        => SettingsService::all(),
-            'vendorCount'     => $vendorCount,
+            'sellerCount'     => $sellerCount,
             'productCount'    => $productCount,
             'plans'           => $plans,
             'siteName'        => $siteName,

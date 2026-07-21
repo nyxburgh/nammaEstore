@@ -5,8 +5,8 @@ use App\Core\Database;
 use App\Repositories\{InvoiceRepository, SettingsRepository};
 
 /**
- * Generates GST invoices — one per (order, vendor) pair, since each
- * vendor is the seller-of-record for their portion of a multi-vendor
+ * Generates GST invoices — one per (order, seller) pair, since each
+ * seller is the seller-of-record for their portion of a multi-seller
  * order and GST law requires the invoice to name the actual seller.
  *
  * Tax logic:
@@ -14,10 +14,10 @@ use App\Repositories\{InvoiceRepository, SettingsRepository};
  *     tax on top), so the taxable value is reverse-calculated from
  *     the line total: taxable = line_total / (1 + gst_rate/100).
  *   - Place of supply = customer's shipping state.
- *   - If vendor's registered state === customer's shipping state:
+ *   - If seller's registered state === customer's shipping state:
  *     CGST + SGST, split evenly (half the rate each).
  *   - Otherwise: IGST at the full rate.
- *   - If the vendor has no registered state on file, the invoice
+ *   - If the seller has no registered state on file, the invoice
  *     still generates (so orders never block on missing KYC) but
  *     defaults to treating the sale as interstate — the safer
  *     assumption, since under-charging IGST is a bigger compliance
@@ -38,7 +38,7 @@ class InvoiceService
 
     /**
      * Generate (or return the existing) invoice for a given
-     * order_vendor_split. Idempotent — safe to call more than once.
+     * order_seller_split. Idempotent — safe to call more than once.
      */
     public function generateForSplit(int $splitId): array
     {
@@ -49,29 +49,29 @@ class InvoiceService
 
         $split = $this->db->fetchOne(
             "SELECT ovs.*, o.order_number, o.user_id, o.shipping_state
-             FROM `" . DB_PREFIX . "order_vendor_splits` ovs
+             FROM `" . DB_PREFIX . "order_seller_splits` ovs
              JOIN `" . DB_PREFIX . "orders` o ON o.id = ovs.order_id
              WHERE ovs.id = ?", [$splitId]
         );
         if (!$split) {
-            return ['success' => false, 'message' => 'Order vendor split not found.'];
+            return ['success' => false, 'message' => 'Order seller split not found.'];
         }
 
-        $vendorState = $this->db->fetchOne(
-            "SELECT state FROM `" . DB_PREFIX . "vendor_profiles` WHERE user_id = ?", [$split['vendor_id']]
+        $sellerState = $this->db->fetchOne(
+            "SELECT state FROM `" . DB_PREFIX . "seller_profiles` WHERE user_id = ?", [$split['seller_id']]
         )['state'] ?? null;
 
-        $isInterstate = !$vendorState || strtolower(trim($vendorState)) !== strtolower(trim($split['shipping_state']));
+        $isInterstate = !$sellerState || strtolower(trim($sellerState)) !== strtolower(trim($split['shipping_state']));
 
         $orderItems = $this->db->fetchAll(
             "SELECT oi.*, p.hsn_code, p.gst_rate
              FROM `" . DB_PREFIX . "order_items` oi
              LEFT JOIN `" . DB_PREFIX . "products` p ON p.id = oi.product_id
-             WHERE oi.order_id = ? AND oi.vendor_id = ?",
-            [$split['order_id'], $split['vendor_id']]
+             WHERE oi.order_id = ? AND oi.seller_id = ?",
+            [$split['order_id'], $split['seller_id']]
         );
         if (empty($orderItems)) {
-            return ['success' => false, 'message' => 'No line items found for this vendor split.'];
+            return ['success' => false, 'message' => 'No line items found for this seller split.'];
         }
 
         $lineItems = [];
@@ -117,8 +117,8 @@ class InvoiceService
         $invoiceId = $this->invoices->insertWithItems([
             'invoice_number'        => $this->nextInvoiceNumber(),
             'order_id'              => $split['order_id'],
-            'order_vendor_split_id' => $splitId,
-            'vendor_id'             => $split['vendor_id'],
+            'order_seller_split_id' => $splitId,
+            'seller_id'             => $split['seller_id'],
             'user_id'               => $split['user_id'],
             'invoice_date'          => date('Y-m-d'),
             'place_of_supply'       => $split['shipping_state'],
@@ -134,11 +134,11 @@ class InvoiceService
         return ['success' => true, 'invoice_id' => $invoiceId, 'already_existed' => false];
     }
 
-    /** Generates invoices for every vendor split on an order (called right after checkout). */
+    /** Generates invoices for every seller split on an order (called right after checkout). */
     public function generateForOrder(int $orderId): array
     {
         $splits = $this->db->fetchAll(
-            "SELECT id FROM `" . DB_PREFIX . "order_vendor_splits` WHERE order_id = ?", [$orderId]
+            "SELECT id FROM `" . DB_PREFIX . "order_seller_splits` WHERE order_id = ?", [$orderId]
         );
         $results = [];
         foreach ($splits as $s) {

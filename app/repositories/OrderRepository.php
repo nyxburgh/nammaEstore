@@ -42,8 +42,8 @@ class OrderRepository extends Repository
             "SELECT o.*, u.name as customer_name, u.email as customer_email, u.phone as customer_phone
              FROM `{$this->t()}` o LEFT JOIN `{$this->t('users')}` u ON u.id=o.user_id WHERE o.id=?", [$id]);
         if (!$o) return null;
-        $o['items']    = $this->db->fetchAll("SELECT oi.*, (SELECT image_path FROM `{$this->t('product_images')}` WHERE product_id=oi.product_id AND is_primary=1 LIMIT 1) as product_image, u.name as vendor_name, vp.shop_name FROM `{$this->t('order_items')}` oi LEFT JOIN `{$this->t('users')}` u ON u.id=oi.vendor_id LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=oi.vendor_id WHERE oi.order_id=?", [$id]);
-        $o['splits']   = $this->db->fetchAll("SELECT ovs.*, u.name as vendor_name, vp.shop_name FROM `{$this->t('order_vendor_splits')}` ovs LEFT JOIN `{$this->t('users')}` u ON u.id=ovs.vendor_id LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=ovs.vendor_id WHERE ovs.order_id=?", [$id]);
+        $o['items']    = $this->db->fetchAll("SELECT oi.*, (SELECT image_path FROM `{$this->t('product_images')}` WHERE product_id=oi.product_id AND is_primary=1 LIMIT 1) as product_image, u.name as seller_name, vp.shop_name FROM `{$this->t('order_items')}` oi LEFT JOIN `{$this->t('users')}` u ON u.id=oi.seller_id LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=oi.seller_id WHERE oi.order_id=?", [$id]);
+        $o['splits']   = $this->db->fetchAll("SELECT ovs.*, u.name as seller_name, vp.shop_name FROM `{$this->t('order_seller_splits')}` ovs LEFT JOIN `{$this->t('users')}` u ON u.id=ovs.seller_id LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=ovs.seller_id WHERE ovs.order_id=?", [$id]);
         $o['timeline'] = $this->db->fetchAll("SELECT * FROM `{$this->t('order_status_timeline')}` WHERE order_id=? ORDER BY created_at ASC", [$id]);
         $o['payment']  = $this->db->fetchOne("SELECT * FROM `{$this->t('payments')}` WHERE order_id=?", [$id]);
         return $o;
@@ -108,18 +108,18 @@ class OrderRepository extends Repository
             "SELECT * FROM `{$this->t('order_status_timeline')}` WHERE order_id=? ORDER BY created_at ASC", [$o['id']]
         );
         $o['shipments'] = $this->db->fetchAll(
-            "SELECT sh.*, u.name as vendor_name, vp.shop_name FROM `{$this->t('shipments')}` sh
-             JOIN `{$this->t('users')}` u ON u.id=sh.vendor_id
-             LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=sh.vendor_id
+            "SELECT sh.*, u.name as seller_name, vp.shop_name FROM `{$this->t('shipments')}` sh
+             JOIN `{$this->t('users')}` u ON u.id=sh.seller_id
+             LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=sh.seller_id
              WHERE sh.order_id=?", [$o['id']]
         );
         return $o;
     }
 
-    // Used by vendor-panel: orders containing at least one item from this vendor
-    public function getOrdersForVendor(int $vendorId, int $page = 1, array $f = []): array
+    // Used by seller-panel: orders containing at least one item from this seller
+    public function getOrdersForSeller(int $sellerId, int $page = 1, array $f = []): array
     {
-        $w = 'oi.vendor_id=?'; $p = [$vendorId];
+        $w = 'oi.seller_id=?'; $p = [$sellerId];
         if (!empty($f['status'])) { $w .= " AND o.order_status=?"; $p[] = $f['status']; }
         if (!empty($f['search'])) { $w .= " AND o.order_number LIKE ?"; $p[] = '%'.$f['search'].'%'; }
         $sql = "SELECT DISTINCT o.*, u.name as customer_name

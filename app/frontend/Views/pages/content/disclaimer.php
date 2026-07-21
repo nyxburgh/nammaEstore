@@ -1,6 +1,6 @@
 <?php $siteName = e(\App\Frontend\Services\SettingsService::get('site_name','Namma E Store')); ?>
 <h2>Marketplace disclaimer</h2>
-<p><?= $siteName ?> is an intermediary platform. Product listings — including descriptions, images, pricing and stock — are provided by independent vendors. While we verify sellers and monitor listings, we do not manufacture the products and cannot guarantee that every description is complete or error-free.</p>
+<p><?= $siteName ?> is an intermediary platform. Product listings — including descriptions, images, pricing and stock — are provided by independent sellers. While we verify sellers and monitor listings, we do not manufacture the products and cannot guarantee that every description is complete or error-free.</p>
 
 <h2>Product information</h2>
 <ul>

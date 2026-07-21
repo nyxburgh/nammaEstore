@@ -15,7 +15,7 @@ class SeoService
 User-agent: *
 Allow: /
 Disallow: {$this->path('/mc-admin/')}
-Disallow: {$this->path('/my-vendor/')}
+Disallow: {$this->path('/my-seller/')}
 Disallow: {$this->path('/account/')}
 Disallow: {$this->path('/checkout/')}
 Disallow: {$this->path('/cart/')}
@@ -25,7 +25,7 @@ Sitemap: {$this->path('/sitemap.xml')}
 TXT;
     }
 
-    /** Products, categories, and vendor stores — the URLs actually worth indexing. */
+    /** Products, categories, and seller stores — the URLs actually worth indexing. */
     public function sitemapXml(): string
     {
         $urls = [
@@ -48,10 +48,10 @@ TXT;
             $urls[] = ['loc' => APP_URL . '/product/' . $p['slug'], 'lastmod' => $p['updated_at'] ?? null, 'priority' => '0.8', 'changefreq' => 'weekly'];
         }
 
-        $vendors = $this->db->fetchAll(
-            "SELECT shop_slug FROM `" . DB_PREFIX . "vendor_profiles` WHERE status='active' AND shop_slug IS NOT NULL"
+        $sellers = $this->db->fetchAll(
+            "SELECT shop_slug FROM `" . DB_PREFIX . "seller_profiles` WHERE status='active' AND shop_slug IS NOT NULL"
         );
-        foreach ($vendors as $v) {
+        foreach ($sellers as $v) {
             $urls[] = ['loc' => APP_URL . '/shop/' . $v['shop_slug'], 'priority' => '0.6', 'changefreq' => 'weekly'];
         }
 

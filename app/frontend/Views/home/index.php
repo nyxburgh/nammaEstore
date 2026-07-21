@@ -13,7 +13,7 @@ function productCard(array $p, string $baseUrl, bool $scroll = false): string {
         .'<button class="product-wishlist" data-action="toggle-wishlist" data-product-id="'.(int)$p['id'].'">🤍</button>'
         .'</div>'
         .'<div class="product-info">'
-        .'<div class="vendor-tag">🏪 '.e($p['shop_name']??'Shop').'</div>'
+        .'<div class="seller-tag">🏪 '.e($p['shop_name']??'Shop').'</div>'
         .'<div class="product-name">'.e($p['name']).'</div>'
         .'<div class="product-price"><span class="price-current">'.currency($price).'</span>'
         .($disc?'<span class="price-original">'.currency($origPrice).'</span>':'')
@@ -93,7 +93,7 @@ function productCard(array $p, string $baseUrl, bool $scroll = false): string {
     <div class="promo-strip">
       <div class="promo-card promo-card-1" data-action="go" data-href="<?= APP_URL ?>/category/fashion"><div class="promo-text"><div class="label">Summer Sale</div><h3>Flat 40% off<br>on Fashion</h3><p>Limited time offer</p></div><div class="promo-emoji">👗</div></div>
       <div class="promo-card promo-card-2" data-action="go" data-href="<?= APP_URL ?>/category/electronics"><div class="promo-text"><div class="label">Tech Week</div><h3>New Gadgets<br>Starting ₹999</h3><p>Top brands, best deals</p></div><div class="promo-emoji">💻</div></div>
-      <div class="promo-card promo-card-3" data-action="go" data-href="<?= APP_URL ?>/products"><div class="promo-text"><div class="label">Vendor Offer</div><h3>Sell & Earn<br>Zero Commission</h3><p>First ₹20,000 free</p></div><div class="promo-emoji">🏪</div></div>
+      <div class="promo-card promo-card-3" data-action="go" data-href="<?= APP_URL ?>/products"><div class="promo-text"><div class="label">Seller Offer</div><h3>Sell & Earn<br>Zero Commission</h3><p>First ₹20,000 free</p></div><div class="promo-emoji">🏪</div></div>
     </div>
   </section>
 

@@ -37,7 +37,7 @@ class AuthService
             return ['success' => false, 'message' => 'Invalid email or password.', 'require_captcha' => $user && (int) $user['failed_login_attempts'] >= 2];
         }
         if (!$user['is_active'])          return ['success' => false, 'message' => 'Account has been deactivated.'];
-        if ($user['role'] !== 'customer') return ['success' => false, 'message' => 'Please use the vendor dashboard to sign in.'];
+        if ($user['role'] !== 'customer') return ['success' => false, 'message' => 'Please use the seller dashboard to sign in.'];
 
         // Unverified accounts (signup abandoned before entering the
         // emailed OTP) must verify before the first login completes.

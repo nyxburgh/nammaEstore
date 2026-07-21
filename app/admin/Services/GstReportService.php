@@ -27,11 +27,11 @@ class GstReportService
     {
         $rows = $this->invoices->getForExport($from, $to);
         $out = fopen('php://temp', 'r+');
-        fputcsv($out, ['Invoice #', 'Date', 'Order #', 'Vendor', 'Vendor GSTIN', 'Place of Supply', 'Interstate', 'Taxable Amount', 'CGST', 'SGST', 'IGST', 'Grand Total']);
+        fputcsv($out, ['Invoice #', 'Date', 'Order #', 'Seller', 'Seller GSTIN', 'Place of Supply', 'Interstate', 'Taxable Amount', 'CGST', 'SGST', 'IGST', 'Grand Total']);
         foreach ($rows as $r) {
             fputcsv($out, [
                 $r['invoice_number'], $r['invoice_date'], $r['order_number'], $r['shop_name'] ?? '',
-                $r['vendor_gst'] ?? '', $r['place_of_supply'], $r['is_interstate'] ? 'Yes' : 'No',
+                $r['seller_gst'] ?? '', $r['place_of_supply'], $r['is_interstate'] ? 'Yes' : 'No',
                 $r['taxable_amount'], $r['cgst_amount'], $r['sgst_amount'], $r['igst_amount'], $r['grand_total'],
             ]);
         }

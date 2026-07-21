@@ -37,30 +37,30 @@ class Middleware
         }
     }
 
-    // ── Vendor guards ─────────────────────────────────────────
-    public static function vendorAuth(): void
+    // ── Seller guards ─────────────────────────────────────────
+    public static function sellerAuth(): void
     {
-        if (!Auth::isVendorLoggedIn()) {
-            header('Location: ' . VENDOR_URL . '/login');
+        if (!Auth::isSellerLoggedIn()) {
+            header('Location: ' . SELLER_URL . '/login');
             exit;
         }
-        // Self-registered vendors must confirm their email OTP before
-        // the dashboard opens up. Admin-created vendors are inserted
+        // Self-registered sellers must confirm their email OTP before
+        // the dashboard opens up. Admin-created sellers are inserted
         // with status='active' directly and never hit this gate.
-        $vendorId = Auth::vendorId();
+        $sellerId = Auth::sellerId();
         $profile  = \App\Core\Database::getInstance()->fetchOne(
-            "SELECT status FROM `" . DB_PREFIX . "vendor_profiles` WHERE user_id=?", [$vendorId]
+            "SELECT status FROM `" . DB_PREFIX . "seller_profiles` WHERE user_id=?", [$sellerId]
         );
         if ($profile && $profile['status'] === 'pending' && !self::isVerifyEmailRoute()) {
-            header('Location: ' . VENDOR_URL . '/verify-email');
+            header('Location: ' . SELLER_URL . '/verify-email');
             exit;
         }
-        // A rejected vendor was never actually blocked from the
+        // A rejected seller was never actually blocked from the
         // dashboard before this check existed — reject() only flipped
         // the profile status, nothing enforced it on subsequent requests.
         if ($profile && $profile['status'] === 'rejected' && !self::isVerifyEmailRoute()) {
-            Auth::logoutVendor();
-            header('Location: ' . VENDOR_URL . '/login?rejected=1');
+            Auth::logoutSeller();
+            header('Location: ' . SELLER_URL . '/login?rejected=1');
             exit;
         }
     }
@@ -71,10 +71,10 @@ class Middleware
         return str_contains($uri, '/verify-email') || str_contains($uri, '/logout');
     }
 
-    public static function vendorGuest(): void
+    public static function sellerGuest(): void
     {
-        if (Auth::isVendorLoggedIn()) {
-            header('Location: ' . VENDOR_URL . '/dashboard');
+        if (Auth::isSellerLoggedIn()) {
+            header('Location: ' . SELLER_URL . '/dashboard');
             exit;
         }
     }

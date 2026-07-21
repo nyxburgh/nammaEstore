@@ -16,8 +16,8 @@
   <li>To prevent fraud and keep the platform secure.</li>
 </ul>
 
-<h2>3. Sharing with vendors and partners</h2>
-<p>When you place an order, the selling vendor receives only the details needed to fulfil it (name, address, phone). Delivery partners receive your shipping details. We never sell your personal data to third parties.</p>
+<h2>3. Sharing with sellers and partners</h2>
+<p>When you place an order, the selling seller receives only the details needed to fulfil it (name, address, phone). Delivery partners receive your shipping details. We never sell your personal data to third parties.</p>
 
 <h2>4. Cookies</h2>
 <p>We use cookies to keep you signed in, remember your cart and understand how the site is used. You can disable cookies in your browser, but some features (like the cart) may stop working.</p>

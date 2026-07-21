@@ -6,13 +6,13 @@
       <span class="bc-current">Sell on <?= e($siteName) ?></span>
     </nav>
     <h1>Grow your business.<br>Sell on <?= e($siteName) ?>.</h1>
-    <p>Join <?= number_format($vendorCount) ?>+ sellers already reaching customers across the country. Set up your store in minutes and start selling today.</p>
+    <p>Join <?= number_format($sellerCount) ?>+ sellers already reaching customers across the country. Set up your store in minutes and start selling today.</p>
     <div class="sell-hero-ctas">
-      <a href="<?= VENDOR_URL ?>/register" class="sell-btn-primary">Start Selling →</a>
-      <a href="<?= VENDOR_URL ?>/login" class="sell-btn-secondary">Already a seller? Sign in</a>
+      <a href="<?= SELLER_URL ?>/register" class="sell-btn-primary">Start Selling →</a>
+      <a href="<?= SELLER_URL ?>/login" class="sell-btn-secondary">Already a seller? Sign in</a>
     </div>
     <div class="sell-hero-stats">
-      <div class="shs-item"><strong><?= number_format($vendorCount) ?>+</strong><span>Active Sellers</span></div>
+      <div class="shs-item"><strong><?= number_format($sellerCount) ?>+</strong><span>Active Sellers</span></div>
       <div class="shs-item"><strong><?= number_format($productCount) ?>+</strong><span>Products Listed</span></div>
       <div class="shs-item"><strong>10%</strong><span>Starting Commission</span></div>
     </div>
@@ -44,7 +44,7 @@
       <div class="sell-benefit-card">
         <span class="sbc-icon">⚡</span>
         <h3>Fast payouts</h3>
-        <p>Vendor wallet with a clear settlement and withdrawal history — no surprises.</p>
+        <p>Seller wallet with a clear settlement and withdrawal history — no surprises.</p>
       </div>
       <div class="sell-benefit-card">
         <span class="sbc-icon">🧾</span>
@@ -116,7 +116,7 @@
   <!-- CTA STRIP -->
   <div class="sell-cta-strip">
     <div class="scs-text"><strong>Ready to get started?</strong> Create your seller account in under 5 minutes.</div>
-    <a href="<?= VENDOR_URL ?>/register" class="scs-btn">Register as a Seller →</a>
+    <a href="<?= SELLER_URL ?>/register" class="scs-btn">Register as a Seller →</a>
   </div>
 
 </div>

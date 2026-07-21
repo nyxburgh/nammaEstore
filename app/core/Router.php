@@ -56,7 +56,7 @@ class Router
         $candidates = [
             ADMIN_VIEWS  . "/errors/{$code}.php",
             FRONTEND_VIEWS . "/errors/{$code}.php",
-            VENDOR_VIEWS . "/errors/{$code}.php",
+            SELLER_VIEWS . "/errors/{$code}.php",
         ];
         foreach ($candidates as $f) {
             if (file_exists($f)) { include $f; exit; }

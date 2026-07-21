@@ -32,7 +32,7 @@
           <div class="cart-item">
             <div class="ci-img"><?= $imgHtml ?></div>
             <div>
-              <div class="ci-vendor">🏪 <?= e($item['shop_name']??$item['vendor_name']??'Shop') ?></div>
+              <div class="ci-seller">🏪 <?= e($item['shop_name']??$item['seller_name']??'Shop') ?></div>
               <div class="ci-name"><?= e($item['name']) ?></div>
               <?php if(!empty($item['variant_value'])): ?><div class="ci-variant"><?= e($item['variant_name'].': '.$item['variant_value']) ?></div><?php endif; ?>
               <div class="ci-controls">

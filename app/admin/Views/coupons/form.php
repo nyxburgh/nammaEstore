@@ -40,7 +40,7 @@
       <div class="col-md-4">
         <label class="form-label">Scope *</label>
         <select name="scope" id="scopeSelect" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
-          <?php foreach(['platform'=>'Platform-wide','vendor'=>'Vendor-specific','category'=>'Category-specific','brand'=>'Brand-specific','product'=>'Product-specific','user'=>'Single User','first_order'=>'First Order Only','festival'=>'Festival (platform-wide)'] as $val=>$label): ?>
+          <?php foreach(['platform'=>'Platform-wide','seller'=>'Seller-specific','category'=>'Category-specific','brand'=>'Brand-specific','product'=>'Product-specific','user'=>'Single User','first_order'=>'First Order Only','festival'=>'Festival (platform-wide)'] as $val=>$label): ?>
           <option value="<?= $val ?>" <?= ($c['scope']??'platform')===$val?'selected':'' ?>><?= $label ?></option>
           <?php endforeach; ?>
         </select>
@@ -49,7 +49,7 @@
         <label class="form-label">Target</label>
         <select name="scope_id" class="form-select">
           <option value="">— select —</option>
-          <?php foreach(($vendors ?? []) as $v): ?><option value="<?= $v['id'] ?>" data-scope="vendor" <?= ($c['scope']??'')==='vendor' && ($c['scope_id']??null)==$v['id']?'selected':'' ?>><?= e($v['shop_name'] ?: $v['name']) ?></option><?php endforeach; ?>
+          <?php foreach(($sellers ?? []) as $v): ?><option value="<?= $v['id'] ?>" data-scope="seller" <?= ($c['scope']??'')==='seller' && ($c['scope_id']??null)==$v['id']?'selected':'' ?>><?= e($v['shop_name'] ?: $v['name']) ?></option><?php endforeach; ?>
           <?php foreach(($categories ?? []) as $cat): ?><option value="<?= $cat['id'] ?>" data-scope="category" <?= ($c['scope']??'')==='category' && ($c['scope_id']??null)==$cat['id']?'selected':'' ?>><?= e($cat['name']) ?></option><?php endforeach; ?>
           <?php foreach(($brands ?? []) as $b): ?><option value="<?= $b['id'] ?>" data-scope="brand" <?= ($c['scope']??'')==='brand' && ($c['scope_id']??null)==$b['id']?'selected':'' ?>><?= e($b['name']) ?></option><?php endforeach; ?>
         </select>

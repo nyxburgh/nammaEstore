@@ -30,9 +30,9 @@ class ReportController extends AdminController
         $this->view('reports.commission', ['data'=>$data,'from'=>$from,'to'=>$to,'title'=>'Commission Report']);
     }
 
-    public function vendors(): void {
+    public function sellers(): void {
         Middleware::can('reports');
-        $data = $this->service->vendors();
-        $this->view('reports.vendors', ['data'=>$data,'title'=>'Vendor Report']);
+        $data = $this->service->sellers();
+        $this->view('reports.sellers', ['data'=>$data,'title'=>'Seller Report']);
     }
 }

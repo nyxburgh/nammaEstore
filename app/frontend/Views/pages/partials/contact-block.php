@@ -9,7 +9,7 @@ $sPhone = e(SettingsService::get('site_phone', '+91 9999999999'));
     <div>📱 <strong>Phone / WhatsApp:</strong> <a href="tel:<?= str_replace(' ','',$sPhone) ?>"><?= $sPhone ?></a></div>
     <div>🕘 <strong>Support hours:</strong> Mon–Sat, 9:00 AM – 8:00 PM IST</div>
     <div>📦 <strong>Order help:</strong> <a href="<?= APP_URL ?>/track">Track your order</a></div>
-    <div>🏪 <strong>Seller support:</strong> <a href="<?= VENDOR_URL ?>">Vendor Panel</a></div>
+    <div>🏪 <strong>Seller support:</strong> <a href="<?= SELLER_URL ?>">Seller Panel</a></div>
   </div>
 
   <form class="contact-form" method="POST" action="<?= APP_URL ?>/info/contact-us" onsubmit="return validateForm(this)">

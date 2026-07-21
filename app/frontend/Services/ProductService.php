@@ -16,7 +16,7 @@ class ProductService
                        vp.shop_name,
                        c.name AS category_name, c.slug AS category_slug
                 FROM `".DB_PREFIX."products` p
-                LEFT JOIN `".DB_PREFIX."vendor_profiles` vp ON vp.user_id = p.vendor_id
+                LEFT JOIN `".DB_PREFIX."seller_profiles` vp ON vp.user_id = p.seller_id
                 LEFT JOIN `".DB_PREFIX."categories` c ON c.id = p.category_id";
     }
 
@@ -93,9 +93,9 @@ class ProductService
             $where   .= " AND p.category_id = ?";
             $params[] = (int)$filters['category'];
         }
-        if (!empty($filters['vendor_id'])) {
-            $where   .= " AND p.vendor_id = ?";
-            $params[] = (int)$filters['vendor_id'];
+        if (!empty($filters['seller_id'])) {
+            $where   .= " AND p.seller_id = ?";
+            $params[] = (int)$filters['seller_id'];
         }
 
         $order = $this->sortClause($filters['sort'] ?? 'popular');
@@ -113,9 +113,9 @@ class ProductService
             $where   .= " AND p.category_id = ?";
             $params[] = (int)$filters['category'];
         }
-        if (!empty($filters['vendor_id'])) {
-            $where   .= " AND p.vendor_id = ?";
-            $params[] = (int)$filters['vendor_id'];
+        if (!empty($filters['seller_id'])) {
+            $where   .= " AND p.seller_id = ?";
+            $params[] = (int)$filters['seller_id'];
         }
         if (!empty($filters['min_price'])) {
             $where   .= " AND COALESCE(p.sale_price, p.price) >= ?";
@@ -137,11 +137,11 @@ class ProductService
         $p = $this->db->fetchOne(
             "SELECT p.*,
                     c.name AS category_name, c.slug AS category_slug,
-                    u.name AS vendor_name, vp.shop_name, vp.shop_slug
+                    u.name AS seller_name, vp.shop_name, vp.shop_slug
              FROM `".DB_PREFIX."products` p
              LEFT JOIN `".DB_PREFIX."categories` c ON c.id = p.category_id
-             LEFT JOIN `".DB_PREFIX."users` u ON u.id = p.vendor_id
-             LEFT JOIN `".DB_PREFIX."vendor_profiles` vp ON vp.user_id = p.vendor_id
+             LEFT JOIN `".DB_PREFIX."users` u ON u.id = p.seller_id
+             LEFT JOIN `".DB_PREFIX."seller_profiles` vp ON vp.user_id = p.seller_id
              WHERE p.slug = ? AND p.status = 'active'",
             [$slug]
         );
@@ -181,11 +181,11 @@ class ProductService
         return $this->db->fetchOne("SELECT * FROM `" . DB_PREFIX . "products` WHERE id=?", [$id]);
     }
 
-    public function getVendorStoreBySlug(string $slug): ?array
+    public function getSellerStoreBySlug(string $slug): ?array
     {
         return $this->db->fetchOne(
             "SELECT vp.*, u.name AS owner_name
-             FROM `" . DB_PREFIX . "vendor_profiles` vp
+             FROM `" . DB_PREFIX . "seller_profiles` vp
              JOIN `" . DB_PREFIX . "users` u ON u.id = vp.user_id
              WHERE vp.shop_slug = ? AND vp.status = 'active'",
             [$slug]

@@ -1,7 +1,7 @@
 <?php
 namespace App\Admin\Controllers;
 use App\Core\Middleware;
-use App\Admin\Services\{GiftCardService, VendorService};
+use App\Admin\Services\{GiftCardService, SellerService};
 
 class GiftCardController extends AdminController
 {
@@ -29,7 +29,7 @@ class GiftCardController extends AdminController
         Middleware::can('gift_cards', 'create');
         $this->view('gift-cards.create', [
             'title'   => 'Issue Gift Voucher',
-            'vendors' => (new VendorService())->options(),
+            'sellers' => (new SellerService())->options(),
         ]);
     }
 

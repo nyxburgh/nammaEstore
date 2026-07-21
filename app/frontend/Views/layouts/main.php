@@ -4,7 +4,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title><?= e($title??'Shop') ?></title>
 <?php
-$metaDesc  = $metaDescription ?? \App\Frontend\Services\SettingsService::get('site_description', 'Shop from thousands of trusted vendors on Namma E Store — India\'s multi-vendor marketplace.');
+$metaDesc  = $metaDescription ?? \App\Frontend\Services\SettingsService::get('site_description', 'Shop from thousands of trusted sellers on Namma E Store — India\'s multi-seller marketplace.');
 $metaImg   = $metaImage ?? (FRONTEND_ASSETS . '/images/og-default.jpg');
 $appPath   = parse_url(APP_URL, PHP_URL_PATH) ?: '';
 $reqUri    = $_SERVER['REQUEST_URI'] ?? '/';
@@ -54,12 +54,12 @@ $cartCnt  = $cartCount ?? 0;
   <div class="flash-ticker" id="ticker">
     <span>Free delivery on orders above ₹499</span>
     <span>Upto 70% off on Fashion</span>
-    <span><a href="<?= APP_URL ?>/sell">New vendors joining daily – Sell on <?= e($siteName) ?></a></span>
+    <span><a href="<?= APP_URL ?>/sell">New sellers joining daily – Sell on <?= e($siteName) ?></a></span>
     <span>EMI available on products above ₹3000</span>
     <span>Flash Sale: Extra 15% off with code BAZAR15</span>
     <span>Free delivery on orders above ₹499</span>
     <span>Upto 70% off on Fashion</span>
-    <span><a href="<?= APP_URL ?>/sell">New vendors joining daily – Sell on <?= e($siteName) ?></a></span>
+    <span><a href="<?= APP_URL ?>/sell">New sellers joining daily – Sell on <?= e($siteName) ?></a></span>
     <span>EMI available on products above ₹3000</span>
     <span>Flash Sale: Extra 15% off with code BAZAR15</span>
   </div>
@@ -72,7 +72,7 @@ $cartCnt  = $cartCount ?? 0;
     <div class="header-search">
       <form action="<?= APP_URL ?>/search" method="GET">
         <select name="category"><option value="">All</option><?php foreach($cats as $cat): ?><option value="<?= $cat['id'] ?>" <?= (($filters['category']??$_GET['category']??'')==$cat['id'])?'selected':'' ?>><?= e($cat['name']) ?></option><?php endforeach; ?></select>
-        <input type="text" name="q" placeholder="Search products, brands, vendors..." value="<?= e($_GET['q']??'') ?>">
+        <input type="text" name="q" placeholder="Search products, brands, sellers..." value="<?= e($_GET['q']??'') ?>">
         <button type="submit">🔍</button>
       </form>
     </div>

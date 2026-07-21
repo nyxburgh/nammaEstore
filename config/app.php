@@ -56,29 +56,29 @@ if (!defined('APP_URL')) {
 }
 
 define('ADMIN_PREFIX',  'mc-admin');
-define('VENDOR_PREFIX', 'my-vendor');
+define('SELLER_PREFIX', 'my-seller');
 define('ADMIN_URL',     APP_URL . '/' . ADMIN_PREFIX);
-define('VENDOR_URL',    APP_URL . '/' . VENDOR_PREFIX);
+define('SELLER_URL',    APP_URL . '/' . SELLER_PREFIX);
 
 // ╔══════════════════════════════════════════════════════════╗
 // ║  SUBDOMAIN MODE  (opt-in — uncomment and update)          ║
-// ║  Only needed if you want admin/vendor on separate          ║
-// ║  subdomains instead of /mc-admin, /my-vendor prefixes.     ║
+// ║  Only needed if you want admin/seller on separate          ║
+// ║  subdomains instead of /mc-admin, /my-seller prefixes.     ║
 // ╚══════════════════════════════════════════════════════════╝
 // define('ROUTING_MODE', 'subdomain'); // set above instead
 // define('ADMIN_URL',    'https://admin.yourdomain.com');
-// define('VENDOR_URL',   'https://vendor.yourdomain.com');
+// define('SELLER_URL',   'https://seller.yourdomain.com');
 // define('ADMIN_HOST',   'admin.yourdomain.com');
-// define('VENDOR_HOST',  'vendor.yourdomain.com');
+// define('SELLER_HOST',  'seller.yourdomain.com');
 
 if (!defined('ADMIN_HOST'))  define('ADMIN_HOST',  '');
-if (!defined('VENDOR_HOST')) define('VENDOR_HOST', '');
+if (!defined('SELLER_HOST')) define('SELLER_HOST', '');
 
-// ── Vendor store URL pattern ──────────────────────────────────
+// ── Seller store URL pattern ──────────────────────────────────
 // 'path' → yourdomain.com/shop/techmart-store   (safe, no conflicts)
 // 'slug' → yourdomain.com/techmart-store         (clean, root-level slug)
-define('VENDOR_STORE_MODE', 'path');   // 'path' | 'slug'
-define('VENDOR_STORE_BASE', 'shop');   // used when mode = 'path'
+define('SELLER_STORE_MODE', 'path');   // 'path' | 'slug'
+define('SELLER_STORE_BASE', 'shop');   // used when mode = 'path'
 
 // ── Paths ─────────────────────────────────────────────────────
 // WEB_ROOT is defined by the active entry point (index.php or
@@ -93,12 +93,12 @@ define('UPLOAD_URL',  APP_URL   . '/uploads');
 // Panel asset URLs
 define('ADMIN_ASSETS',    APP_URL . '/assets/admin');
 define('FRONTEND_ASSETS', APP_URL . '/assets/frontend');
-define('VENDOR_ASSETS',   APP_URL . '/assets/vendor-panel');
+define('SELLER_ASSETS',   APP_URL . '/assets/seller-panel');
 
 // ── Panel view paths ──────────────────────────────────────────
 define('ADMIN_VIEWS',    APP_PATH . '/admin/Views');
 define('FRONTEND_VIEWS', APP_PATH . '/frontend/Views');
-define('VENDOR_VIEWS',   APP_PATH . '/vendor-panel/Views');
+define('SELLER_VIEWS',   APP_PATH . '/seller-panel/Views');
 
 // ── Database ──────────────────────────────────────────────────
 define('DB_PREFIX', 'mc_');

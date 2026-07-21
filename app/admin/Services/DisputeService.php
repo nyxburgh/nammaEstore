@@ -25,10 +25,10 @@ class DisputeService
         $d = $this->disputes->findById($id);
         if ($d) {
             (new NotificationService())->notify(
-                'vendor', (int) $d['vendor_id'], 'dispute',
+                'seller', (int) $d['seller_id'], 'dispute',
                 'Dispute resolved',
                 'The dispute on order #' . $d['order_id'] . ' has been resolved.' . ($note ? " Note: {$note}" : ''),
-                VENDOR_URL . '/orders'
+                SELLER_URL . '/orders'
             );
         }
     }

@@ -51,9 +51,9 @@ class ReturnRepository extends Repository
         return $this->paginate($sql, [$userId], $page);
     }
 
-    public function getForVendor(int $vendorId, int $page = 1, array $f = []): array
+    public function getForSeller(int $sellerId, int $page = 1, array $f = []): array
     {
-        $where = 'r.vendor_id=?'; $params = [$vendorId];
+        $where = 'r.seller_id=?'; $params = [$sellerId];
         if (!empty($f['status'])) { $where .= ' AND r.status=?'; $params[] = $f['status']; }
 
         $sql = "SELECT r.*, oi.product_name, o.order_number, u.name as customer_name
@@ -75,12 +75,12 @@ class ReturnRepository extends Repository
         $sortCol = safeSortField($f['sort'] ?? null, ['id', 'type', 'status', 'requested_at'], 'requested_at');
         $sortDir = safeSortDir($f['dir'] ?? null);
 
-        $sql = "SELECT r.*, oi.product_name, o.order_number, u.name as customer_name, vu.name as vendor_name
+        $sql = "SELECT r.*, oi.product_name, o.order_number, u.name as customer_name, vu.name as seller_name
                 FROM `{$this->t()}` r
                 JOIN `{$this->t('order_items')}` oi ON oi.id=r.order_item_id
                 JOIN `{$this->t('orders')}` o ON o.id=r.order_id
                 JOIN `{$this->t('users')}` u ON u.id=r.user_id
-                JOIN `{$this->t('users')}` vu ON vu.id=r.vendor_id
+                JOIN `{$this->t('users')}` vu ON vu.id=r.seller_id
                 WHERE $where ORDER BY r.{$sortCol} {$sortDir}";
         return $this->paginate($sql, $params, $page);
     }

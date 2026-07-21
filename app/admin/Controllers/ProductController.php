@@ -1,20 +1,20 @@
 <?php
 namespace App\Admin\Controllers;
 use App\Core\{Middleware, Auth};
-use App\Admin\Services\{ProductService, CategoryService, VendorService, BrandService};
+use App\Admin\Services\{ProductService, CategoryService, SellerService, BrandService};
 
 class ProductController extends AdminController
 {
     private ProductService $products;
     private CategoryService $categories;
-    private VendorService $vendors;
+    private SellerService $sellers;
     private BrandService $brands;
 
     public function __construct() {
         parent::__construct();
         $this->products   = new ProductService();
         $this->categories = new CategoryService();
-        $this->vendors    = new VendorService();
+        $this->sellers    = new SellerService();
         $this->brands     = new BrandService();
     }
 
@@ -25,7 +25,7 @@ class ProductController extends AdminController
             'search'      => $this->input('search'),
             'status'      => $this->input('status'),
             'category_id' => $this->input('category_id'),
-            'vendor_id'   => $this->input('vendor_id'),
+            'seller_id'   => $this->input('seller_id'),
             'sort'        => $this->input('sort'),
             'dir'         => $this->input('dir'),
         ];
@@ -49,7 +49,7 @@ class ProductController extends AdminController
             'product'      => null,
             'categories'   => $this->categories->flatOptions(),
             'brands'       => $this->brands->list(1, [])['data'] ?? [],
-            'vendors'      => $this->vendors->options(),
+            'sellers'      => $this->sellers->options(),
             'sidebarStats' => $this->sidebarStats(),
         ]);
     }
@@ -60,7 +60,7 @@ class ProductController extends AdminController
         Middleware::can('products', 'edit');
         csrf_check();
         if (empty($_POST['name']))      { $this->setFlash('error', 'Product name is required.'); $this->redirect(ADMIN_URL . '/products/create'); return; }
-        if (empty($_POST['vendor_id'])) { $this->setFlash('error', 'Vendor is required.');        $this->redirect(ADMIN_URL . '/products/create'); return; }
+        if (empty($_POST['seller_id'])) { $this->setFlash('error', 'Seller is required.');        $this->redirect(ADMIN_URL . '/products/create'); return; }
         if (empty($_POST['price']))     { $this->setFlash('error', 'Price is required.');         $this->redirect(ADMIN_URL . '/products/create'); return; }
 
         $id = $this->products->save(null, $_POST, $_FILES);
@@ -99,7 +99,7 @@ class ProductController extends AdminController
             'product'      => $product,
             'categories'   => $this->categories->flatOptions(),
             'brands'       => $this->brands->list(1, [])['data'] ?? [],
-            'vendors'      => $this->vendors->options(),
+            'sellers'      => $this->sellers->options(),
             'sidebarStats' => $this->sidebarStats(),
         ]);
     }

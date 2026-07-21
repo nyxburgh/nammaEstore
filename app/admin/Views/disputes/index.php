@@ -4,7 +4,7 @@
 </div>
 
 <div class="filter-bar mb-3"><form method="get" class="row g-2 align-items-end">
-  <div class="col-md-4"><input type="text" name="search" class="form-control" placeholder="Order # or vendor..." value="<?= e($filters['search']??'') ?>"></div>
+  <div class="col-md-4"><input type="text" name="search" class="form-control" placeholder="Order # or seller..." value="<?= e($filters['search']??'') ?>"></div>
   <div class="col-md-3"><select name="status" class="form-select" onchange="this.form.submit()">
     <option value="open" <?= ($filters['status']??'')==='open'?'selected':'' ?>>Open</option>
     <option value="resolved" <?= ($filters['status']??'')==='resolved'?'selected':'' ?>>Resolved</option>
@@ -14,7 +14,7 @@
 </form></div>
 
 <div class="card"><div class="table-responsive"><table class="table mb-0">
-  <thead><tr><th><?= sortHeader('#','id',$p.'/disputes') ?></th><th>Order</th><th>Vendor</th><th>Raised By</th><th>Reason</th><th><?= sortHeader('Status','status',$p.'/disputes') ?></th><th><?= sortHeader('Opened','created_at',$p.'/disputes') ?></th><th></th></tr></thead>
+  <thead><tr><th><?= sortHeader('#','id',$p.'/disputes') ?></th><th>Order</th><th>Seller</th><th>Raised By</th><th>Reason</th><th><?= sortHeader('Status','status',$p.'/disputes') ?></th><th><?= sortHeader('Opened','created_at',$p.'/disputes') ?></th><th></th></tr></thead>
   <tbody>
   <?php if(empty($disputes['data'])): ?>
     <tr><td colspan="8"><div class="empty-state"><i class="bi bi-exclamation-triangle"></i><h6>No disputes</h6></div></td></tr>
@@ -22,7 +22,7 @@
   <tr>
     <td style="color:var(--muted);font-size:12px;">#<?= $d['id'] ?></td>
     <td><?= e($d['order_number']) ?></td>
-    <td><?= e($d['vendor_name']) ?></td>
+    <td><?= e($d['seller_name']) ?></td>
     <td><?= ucfirst($d['raised_by']) ?></td>
     <td style="max-width:220px;font-size:12px;"><?= e($d['reason']) ?></td>
     <td><?= statusBadge($d['status']) ?></td>

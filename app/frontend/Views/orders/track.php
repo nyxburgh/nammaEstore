@@ -55,7 +55,7 @@
     <?php if(!empty($order['shipments'])): foreach($order['shipments'] as $sh): ?>
     <div class="shipment-card">
       <div class="shipment-head">
-        <div><div class="shipment-courier">🚚 <?= e($sh['courier_name']) ?></div><div class="shipment-vendor">Shipped by <?= e($sh['shop_name'] ?? $sh['vendor_name']) ?></div></div>
+        <div><div class="shipment-courier">🚚 <?= e($sh['courier_name']) ?></div><div class="shipment-seller">Shipped by <?= e($sh['shop_name'] ?? $sh['seller_name']) ?></div></div>
         <span class="status-badge status-<?= $sh['status']==='delivered'?'delivered':($sh['status']==='failed'||$sh['status']==='rto'?'cancelled':'processing') ?>"><?= ucwords(str_replace('_',' ',$sh['status'])) ?></span>
       </div>
       <div class="shipment-tracking-num">Tracking #: <code><?= e($sh['tracking_number']) ?></code><?php if($sh['tracking_url']): ?> · <a href="<?= e($sh['tracking_url']) ?>" target="_blank" rel="noopener">Track on courier site →</a><?php endif; ?></div>

@@ -16,7 +16,7 @@
           <button class="wish-rm" data-action="remove-wish" data-product-id="<?= (int)$w['product_id'] ?>">✕</button>
         </div>
         <div class="wish-info">
-          <div class="wish-vendor">🏪 <?= e($w['shop_name']??'Shop') ?></div>
+          <div class="wish-seller">🏪 <?= e($w['shop_name']??'Shop') ?></div>
           <div class="wish-name"><?= e($w['name']) ?></div>
           <div class="wish-price"><span class="price-current"><?= currency($price) ?></span><?php if($price<$orig): ?><span class="price-orig"><?= currency($orig) ?></span><?php endif; ?></div>
           <?php if($w['status']==='active'): ?>

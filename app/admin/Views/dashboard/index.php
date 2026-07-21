@@ -3,7 +3,7 @@
 <div class="row g-3 mb-3">
   <div class="col-xl-3 col-md-6"><div class="stat-card"><div class="si purple"><i class="bi bi-currency-rupee"></i></div><div><div class="stat-label">Total Revenue</div><div class="stat-val"><?= currency($stats['total_revenue']) ?></div><div class="stat-sub">Today: <span class="up"><?= currency($stats['revenue_today']) ?></span></div></div></div></div>
   <div class="col-xl-3 col-md-6"><div class="stat-card"><div class="si pink"><i class="bi bi-bag-check-fill"></i></div><div><div class="stat-label">Total Orders</div><div class="stat-val"><?= number_format($stats['total_orders']) ?></div><div class="stat-sub">Today: <span class="up"><?= $stats['orders_today'] ?></span></div></div></div></div>
-  <div class="col-xl-3 col-md-6"><div class="stat-card"><div class="si green"><i class="bi bi-shop"></i></div><div><div class="stat-label">Active Vendors</div><div class="stat-val"><?= number_format($stats['active_vendors']) ?></div><div class="stat-sub">Pending: <span class="dn"><?= $stats['pending_vendors'] ?></span></div></div></div></div>
+  <div class="col-xl-3 col-md-6"><div class="stat-card"><div class="si green"><i class="bi bi-shop"></i></div><div><div class="stat-label">Active Sellers</div><div class="stat-val"><?= number_format($stats['active_sellers']) ?></div><div class="stat-sub">Pending: <span class="dn"><?= $stats['pending_sellers'] ?></span></div></div></div></div>
   <div class="col-xl-3 col-md-6"><div class="stat-card"><div class="si blue"><i class="bi bi-people-fill"></i></div><div><div class="stat-label">Customers</div><div class="stat-val"><?= number_format($stats['total_customers']) ?></div><div class="stat-sub">New this month: <span class="up"><?= $stats['new_users_month'] ?></span></div></div></div></div>
 </div>
 <!-- Row 2: Order status mini chips -->
@@ -27,7 +27,7 @@
       <div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Total Collected</div>
       <div style="font-size:32px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:14px;"><?= currency((float)($commission['total_commission']??0)) ?></div>
       <div class="w-100">
-        <?php foreach([['Vendor Earnings',currency((float)($commission['total_vendor_earning']??0)),'#16a34a'],['Avg Commission',number_format((float)($commission['avg_commission_pct']??0),1).'%','var(--purple)'],['Transactions',number_format((int)($commission['total_transactions']??0)),'var(--text)']] as [$l,$v,$c]): ?>
+        <?php foreach([['Seller Earnings',currency((float)($commission['total_seller_earning']??0)),'#16a34a'],['Avg Commission',number_format((float)($commission['avg_commission_pct']??0),1).'%','var(--purple)'],['Transactions',number_format((int)($commission['total_transactions']??0)),'var(--text)']] as [$l,$v,$c]): ?>
         <div class="d-flex justify-content-between align-items-center py-2" style="border-top:1px solid var(--border);"><span style="font-size:12.5px;color:var(--muted);"><?= $l ?></span><span style="font-size:13px;font-weight:700;color:<?= $c ?>;"><?= $v ?></span></div>
         <?php endforeach; ?>
       </div>
@@ -35,7 +35,7 @@
     </div>
   </div></div>
 </div>
-<!-- Row 4: Recent Orders + Pending/Top Vendors -->
+<!-- Row 4: Recent Orders + Pending/Top Sellers -->
 <div class="row g-3">
   <div class="col-xl-7"><div class="card">
     <div class="card-header"><span class="card-title">Recent Orders</span><a href="<?= $p ?>/orders" class="btn btn-sm btn-outline-primary">View All</a></div>
@@ -57,24 +57,24 @@
     </table></div>
   </div></div>
   <div class="col-xl-5 d-flex flex-column gap-3">
-    <?php if(!empty($pendingVendors)): ?>
-    <div class="card"><div class="card-header"><span class="card-title">Pending Vendors <span class="badge badge-warning ms-1"><?= count($pendingVendors) ?></span></span><a href="<?= $p ?>/vendors?status=pending" class="btn btn-sm btn-outline-primary">All</a></div>
-      <?php foreach($pendingVendors as $v): ?>
+    <?php if(!empty($pendingSellers)): ?>
+    <div class="card"><div class="card-header"><span class="card-title">Pending Sellers <span class="badge badge-warning ms-1"><?= count($pendingSellers) ?></span></span><a href="<?= $p ?>/sellers?status=pending" class="btn btn-sm btn-outline-primary">All</a></div>
+      <?php foreach($pendingSellers as $v): ?>
       <div class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom" style="border-color:var(--border)!important;">
         <div class="d-flex align-items-center gap-2"><div class="av av-sm"><?= strtoupper(substr($v['name'],0,1)) ?></div><div><div style="font-size:13px;font-weight:600;"><?= e($v['name']) ?></div><div style="font-size:11px;color:var(--muted);"><?= e($v['shop_name']) ?></div></div></div>
         <div class="d-flex gap-1">
-          <form method="post" action="<?= $p ?>/vendors/<?= $v['id'] ?>/approve" style="display:inline;">
+          <form method="post" action="<?= $p ?>/sellers/<?= $v['id'] ?>/approve" style="display:inline;">
   <?= csrf_field() ?><button class="btn btn-sm btn-success" style="padding:3px 10px;font-size:12px;border-radius:6px;">✓</button></form>
-          <a href="<?= $p ?>/vendors/<?= $v['id'] ?>" class="btn btn-sm btn-outline-secondary" style="padding:3px 8px;font-size:12px;border-radius:6px;">View</a>
+          <a href="<?= $p ?>/sellers/<?= $v['id'] ?>" class="btn btn-sm btn-outline-secondary" style="padding:3px 8px;font-size:12px;border-radius:6px;">View</a>
         </div>
       </div>
       <?php endforeach; ?>
     </div>
     <?php endif; ?>
-    <div class="card flex-fill"><div class="card-header"><span class="card-title">Top Vendors</span></div>
-      <?php if(empty($topVendors)): ?><div class="card-body"><div class="empty-state" style="padding:20px;"><i class="bi bi-shop"></i><h6>No sales yet</h6></div></div>
-      <?php else: foreach($topVendors as $i=>$v): ?>
-      <div class="d-flex align-items-center justify-content-between px-3 py-2 <?= $i<count($topVendors)-1?'border-bottom':'' ?>" style="border-color:var(--border)!important;">
+    <div class="card flex-fill"><div class="card-header"><span class="card-title">Top Sellers</span></div>
+      <?php if(empty($topSellers)): ?><div class="card-body"><div class="empty-state" style="padding:20px;"><i class="bi bi-shop"></i><h6>No sales yet</h6></div></div>
+      <?php else: foreach($topSellers as $i=>$v): ?>
+      <div class="d-flex align-items-center justify-content-between px-3 py-2 <?= $i<count($topSellers)-1?'border-bottom':'' ?>" style="border-color:var(--border)!important;">
         <div class="d-flex align-items-center gap-2"><span style="width:20px;text-align:center;font-size:12px;font-weight:700;color:var(--muted);"><?= $i+1 ?></span><div class="av av-sm"><?= strtoupper(substr($v['shop_name']??$v['name'],0,1)) ?></div><div><div style="font-size:13px;font-weight:600;"><?= e($v['shop_name']??$v['name']) ?></div><div style="font-size:11px;color:var(--muted);"><?= $v['order_count'] ?> orders</div></div></div>
         <span style="font-size:13px;font-weight:700;color:var(--purple);"><?= currency($v['total_sales']) ?></span>
       </div>

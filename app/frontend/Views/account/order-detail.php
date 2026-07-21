@@ -67,7 +67,7 @@
   <div class="invoice-row">
     <div>
       <div class="invoice-number"><?= e($inv['invoice_number']) ?></div>
-      <div class="invoice-meta">Sold by <?= e($inv['shop_name'] ?? $inv['vendor_name']) ?> · <?= currency($inv['grand_total']) ?></div>
+      <div class="invoice-meta">Sold by <?= e($inv['shop_name'] ?? $inv['seller_name']) ?> · <?= currency($inv['grand_total']) ?></div>
     </div>
     <div class="invoice-actions">
       <a href="<?= APP_URL ?>/invoices/<?= $inv['id'] ?>/download" class="btn-save">⬇ Download</a>

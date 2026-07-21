@@ -56,7 +56,7 @@ class ReturnService
                 'Refund for return #' . $id
             );
         }
-        // Physical return means the item comes back to the vendor —
+        // Physical return means the item comes back to the seller —
         // restock it. (Replacements aren't restocked here: a new unit
         // already went out to replace the defective one, netting to
         // no stock change worth automating.)

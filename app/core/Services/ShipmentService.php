@@ -16,13 +16,13 @@ class ShipmentService
     }
 
     /**
-     * Create a shipment for a vendor's portion of an order. Goes
+     * Create a shipment for a seller's portion of an order. Goes
      * through ShippingInterface (currently the manual provider — the
-     * vendor/admin types in courier + tracking number) so a real
+     * seller/admin types in courier + tracking number) so a real
      * courier aggregator can be swapped in later without touching
      * this method.
      */
-    public function create(int $orderId, int $vendorId, int $splitId, array $details): array
+    public function create(int $orderId, int $sellerId, int $splitId, array $details): array
     {
         if ($this->shipments->findBySplitId($splitId)) {
             return ['success' => false, 'message' => 'A shipment already exists for this order.'];
@@ -32,8 +32,8 @@ class ShipmentService
 
         $shipmentId = $this->shipments->createWithTracking([
             'order_id'              => $orderId,
-            'order_vendor_split_id' => $splitId,
-            'vendor_id'             => $vendorId,
+            'order_seller_split_id' => $splitId,
+            'seller_id'             => $sellerId,
             'courier_name'          => $result['courier_name'],
             'tracking_number'       => $result['tracking_number'],
             'tracking_url'          => $result['tracking_url'],
@@ -73,7 +73,7 @@ class ShipmentService
                 'out_for_delivery' => 'is out for delivery',
                 'delivered'        => 'has been delivered',
                 'failed'           => 'delivery attempt failed',
-                'rto'              => 'is being returned to the vendor',
+                'rto'              => 'is being returned to the seller',
             ];
             (new NotificationService())->notify(
                 'customer', (int) $order['user_id'], 'shipment',
@@ -86,9 +86,9 @@ class ShipmentService
         return ['success' => true];
     }
 
-    public function findForVendor(int $id, int $vendorId): ?array
+    public function findForSeller(int $id, int $sellerId): ?array
     {
         $s = $this->shipments->findWithTracking($id);
-        return ($s && (int) $s['vendor_id'] === $vendorId) ? $s : null;
+        return ($s && (int) $s['seller_id'] === $sellerId) ? $s : null;
     }
 }

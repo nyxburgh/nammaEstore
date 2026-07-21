@@ -54,9 +54,10 @@ class CustomerService
             return ['success' => false, 'message' => 'Email already in use by another account.'];
         }
         $this->users->update($id, [
-            'name'  => $d['name'],
-            'email' => $d['email'],
-            'phone' => $d['phone'] ?? null,
+            'name'      => $d['name'],
+            'email'     => $d['email'],
+            'phone'     => $d['phone'] ?? null,
+            'is_active' => isset($d['is_active']) ? (int) $d['is_active'] : 1,
         ]);
         if (!empty($d['password'])) {
             if (strlen($d['password']) < 8) return ['success' => false, 'message' => 'Password must be at least 8 characters.'];

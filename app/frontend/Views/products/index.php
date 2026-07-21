@@ -88,7 +88,7 @@
             <button class="product-wishlist" data-action="toggle-wishlist" data-product-id="<?= (int)$p['id'] ?>">🤍</button>
           </div>
           <div class="product-info">
-            <div class="vendor-tag">🏪 <?= e($p['shop_name']??'Shop') ?></div>
+            <div class="seller-tag">🏪 <?= e($p['shop_name']??'Shop') ?></div>
             <div class="product-name"><?= e($p['name']) ?></div>
             <div class="product-price">
               <span class="price-current"><?= currency($price) ?></span>

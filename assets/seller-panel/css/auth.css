@@ -1,0 +1,54 @@
+/* Namma E Store — seller/seller auth pages styles (extracted from seller-panel layouts/auth.php per the no-inline-CSS coding rule) */
+
+:root{--pink-deep:#c2185b;--pink-main:#e91e8c;--pink-soft:#fce4ec;--blue-main:#1565c0;--gold:#f9a825;--dark:#1a1a2e;--gray:#6b7280;--radius:14px;--transition:0.25s cubic-bezier(0.4,0,0.2,1);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#c2185b 0%,#e91e8c 50%,#1565c0 100%);min-height:100vh;display:flex;flex-direction:column;}
+
+/* Slim site header */
+.auth-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 24px;background:rgba(0,0,0,.18);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.12);}
+.ah-logo{font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:700;color:white;text-decoration:none;letter-spacing:-.5px;}
+.ah-logo span{color:#42a5f5;}
+.ah-nav{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.ah-link{color:rgba(255,255,255,.85);text-decoration:none;font-size:.8rem;font-weight:600;padding:7px 14px;border-radius:50px;transition:background var(--transition),color var(--transition);white-space:nowrap;}
+.ah-link:hover{background:rgba(255,255,255,.15);color:white;}
+.ah-link.ah-home{background:rgba(255,255,255,.92);color:var(--pink-deep);}
+.ah-link.ah-home:hover{background:white;}
+@media(max-width:600px){.ah-link:not(.ah-home){display:none;}}
+
+.auth-main{flex:1;display:flex;align-items:center;justify-content:center;padding:28px 20px;}
+.auth-wrap{width:100%;max-width:460px;}
+.auth-brand{text-align:center;margin-bottom:24px;}
+.auth-logo{font-family:'Sora',sans-serif;font-size:2.2rem;font-weight:700;color:white;text-decoration:none;}
+.auth-logo span{color:#42a5f5;}
+.auth-tagline{color:rgba(255,255,255,.7);font-size:.82rem;margin-top:4px;}
+.seller-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);color:white;padding:4px 14px;border-radius:50px;font-size:.72rem;font-weight:700;margin-top:8px;letter-spacing:.5px;}
+.auth-card{background:white;border-radius:20px;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+@media(max-width:480px){.auth-card{padding:24px 20px;}}
+.auth-title{font-family:'Sora',sans-serif;font-size:1.4rem;color:var(--dark);margin-bottom:4px;}
+.auth-sub{font-size:.82rem;color:var(--gray);margin-bottom:22px;}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:.78rem;font-weight:700;color:var(--dark);margin-bottom:5px;}
+.form-control{width:100%;padding:10px 13px;border:1.5px solid #e8dff0;border-radius:9px;font-size:.88rem;font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color var(--transition);}
+.form-control:focus{border-color:var(--pink-main);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-grid .form-group{margin-bottom:0;}
+.full{grid-column:1/-1;}
+.btn-auth{width:100%;padding:13px;background:linear-gradient(90deg,var(--pink-main),var(--pink-deep));color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all var(--transition);margin-top:6px;}
+.btn-auth:hover{background:linear-gradient(90deg,var(--pink-deep),var(--blue-main));}
+.auth-alt{text-align:center;margin-top:16px;font-size:.82rem;color:var(--gray);}
+.auth-alt a{color:var(--pink-main);font-weight:600;text-decoration:none;}
+.alert{padding:11px 14px;border-radius:9px;font-size:.82rem;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.alert-danger{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
+.alert-success{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;}
+.divider{display:flex;align-items:center;gap:10px;margin:16px 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#f0e0ec;}
+.divider span{font-size:.72rem;color:var(--gray);}
+.auth-back{display:block;text-align:center;margin-top:16px;color:rgba(255,255,255,.8);text-decoration:none;font-size:.85rem;font-weight:600;transition:color var(--transition);}
+.auth-back:hover{color:white;}
+
+/* Auth footer */
+.auth-footer{padding:16px 20px 20px;text-align:center;border-top:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.14);}
+.af-links{display:flex;justify-content:center;gap:8px 22px;flex-wrap:wrap;margin-bottom:8px;}
+.af-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.76rem;transition:color var(--transition);}
+.af-links a:hover{color:white;}
+.af-copy{font-size:.72rem;color:rgba(255,255,255,.5);}

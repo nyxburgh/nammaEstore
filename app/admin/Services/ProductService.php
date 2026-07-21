@@ -53,7 +53,7 @@ class ProductService
             : slugify($d['name']) . '-' . uniqid();
 
         $data = [
-            'vendor_id'   => (int) $d['vendor_id'],
+            'seller_id'   => (int) $d['seller_id'],
             'category_id' => $d['category_id'] ?: null,
             'brand_id'    => $d['brand_id'] ?: null,
             'name'        => $d['name'],

@@ -2,9 +2,9 @@
 namespace App\Admin\Services;
 
 use App\Repositories\{
-    OrderVendorSplitRepository,
-    VendorSettlementRepository,
-    VendorWalletRepository,
+    OrderSellerSplitRepository,
+    SellerSettlementRepository,
+    SellerWalletRepository,
     ReturnRepository,
     DisputeRepository,
     SettingsRepository,
@@ -12,7 +12,7 @@ use App\Repositories\{
 };
 
 /**
- * The vendor settlement engine.
+ * The seller settlement engine.
  *
  * Implements the spec's waterfall exactly:
  *   Order Amount
@@ -25,28 +25,28 @@ use App\Repositories\{
  *   (-) Penalty
  *   (-) Refund
  *   (-) Subscription Due
- *   = Vendor Payable
+ *   = Seller Payable
  *
  * And the eligibility gate:
  *   - Order must be delivered AND paid
  *   - Return window (days since delivery) must be closed
  *   - No open return/replacement/cancel request on any item in the split
- *   - No open dispute on the order for this vendor
- *   - If vendor_type = 'subscription': the vendor's subscription must
+ *   - No open dispute on the order for this seller
+ *   - If seller_type = 'subscription': the seller's subscription must
  *     currently be ACTIVE, or the entire settlement is blocked
  *     (not just charged a fallback commission — spec is explicit that
  *     a lapsed subscription blocks settlement outright).
  *
  * Run this periodically (cron) via runEligibilityPass(), and run
  * creditEligibleToWallets() to move anything that became eligible
- * into vendor wallets. Both are also safe to trigger manually from
+ * into seller wallets. Both are also safe to trigger manually from
  * the admin settlement dashboard.
  */
 class SettlementService
 {
-    private OrderVendorSplitRepository $splits;
-    private VendorSettlementRepository $settlements;
-    private VendorWalletRepository $wallets;
+    private OrderSellerSplitRepository $splits;
+    private SellerSettlementRepository $settlements;
+    private SellerWalletRepository $wallets;
     private ReturnRepository $returns;
     private DisputeRepository $disputes;
     private SettingsRepository $settings;
@@ -54,9 +54,9 @@ class SettlementService
 
     public function __construct()
     {
-        $this->splits      = new OrderVendorSplitRepository();
-        $this->settlements = new VendorSettlementRepository();
-        $this->wallets      = new VendorWalletRepository();
+        $this->splits      = new OrderSellerSplitRepository();
+        $this->settlements = new SellerSettlementRepository();
+        $this->wallets      = new SellerWalletRepository();
         $this->returns      = new ReturnRepository();
         $this->disputes     = new DisputeRepository();
         $this->settings     = new SettingsRepository();
@@ -66,7 +66,7 @@ class SettlementService
     /**
      * Evaluate every delivered-and-paid split that hasn't been paid
      * out yet. For each: compute the waterfall, decide eligibility,
-     * and upsert a vendor_settlements row reflecting current status.
+     * and upsert a seller_settlements row reflecting current status.
      * Does NOT move money — see creditEligibleToWallets() for that.
      */
     public function runEligibilityPass(): array
@@ -79,9 +79,9 @@ class SettlementService
             $eval = $this->evaluateSplit($split);
 
             $this->settlements->upsert([
-                'vendor_id'             => $split['vendor_id'],
+                'seller_id'             => $split['seller_id'],
                 'order_id'              => $split['order_id'],
-                'order_vendor_split_id' => $split['id'],
+                'order_seller_split_id' => $split['id'],
                 'gross_amount'          => $split['gross_amount'],
                 'tax_amount'            => 0.00,
                 'shipping_amount'       => $eval['shipping_amount'],
@@ -107,10 +107,10 @@ class SettlementService
     }
 
     /**
-     * Move every 'eligible' settlement into the vendor's wallet and
+     * Move every 'eligible' settlement into the seller's wallet and
      * mark the underlying split as paid out of the pending queue.
      * This is the actual money-movement step (wallet balance, not a
-     * bank transfer — the vendor withdraws from the wallet separately).
+     * bank transfer — the seller withdraws from the wallet separately).
      */
     public function creditEligibleToWallets(): array
     {
@@ -125,13 +125,13 @@ class SettlementService
                 continue;
             }
             $this->wallets->credit(
-                (int) $s['vendor_id'],
+                (int) $s['seller_id'],
                 (float) $s['net_payable'],
                 'settlement',
                 (int) $s['id'],
                 'Settlement for order #' . $s['order_id']
             );
-            $this->splits->markPaid((int) $s['order_vendor_split_id']);
+            $this->splits->markPaid((int) $s['order_seller_split_id']);
             $this->settlements->markCredited((int) $s['id']);
             $credited++;
             $totalAmount += (float) $s['net_payable'];
@@ -146,7 +146,7 @@ class SettlementService
      */
     private function evaluateSplit(array $split): array
     {
-        $vendorId = (int) $split['vendor_id'];
+        $sellerId = (int) $split['seller_id'];
         $orderId  = (int) $split['order_id'];
 
         // ── Gate 1: delivered + paid already guaranteed by the
@@ -167,7 +167,7 @@ class SettlementService
         }
 
         // ── Gate 3: no open return/replacement/cancel on any item ──
-        $itemIds = $this->splits->getItemIds($orderId, $vendorId);
+        $itemIds = $this->splits->getItemIds($orderId, $sellerId);
         $refundAmount = 0.0;
         foreach ($itemIds as $itemId) {
             if ($this->returns->hasOpenRequest($itemId)) {
@@ -177,19 +177,19 @@ class SettlementService
         }
 
         // ── Gate 4: no open dispute ─────────────────────────────
-        if ($this->disputes->hasOpenDispute($orderId, $vendorId)) {
+        if ($this->disputes->hasOpenDispute($orderId, $sellerId)) {
             return $this->hold('Open dispute on this order.', $split);
         }
 
-        // ── Gate 5: subscription vendors must have an active plan ──
+        // ── Gate 5: subscription sellers must have an active plan ──
         $subscriptionDue = 0.00;
-        if (($split['vendor_type'] ?? 'commission') === 'subscription') {
-            $profile = $this->users->getVendorProfile($vendorId);
+        if (($split['seller_type'] ?? 'commission') === 'subscription') {
+            $profile = $this->users->getSellerProfile($sellerId);
             $isActive = !empty($profile['expires_at']) && strtotime($profile['expires_at']) > time();
             if (!$isActive) {
                 return $this->hold('Subscription is not active — settlement blocked until renewed.', $split);
             }
-            // Subscription vendors pay 0% commission while active; any
+            // Subscription sellers pay 0% commission while active; any
             // commission_amount already stored on the split (e.g. from
             // a stale calculation) is instead treated as the
             // subscription due line so the waterfall stays honest.
@@ -198,10 +198,10 @@ class SettlementService
 
         // ── All gates passed — compute the waterfall ────────────
         $gross          = (float) $split['gross_amount'];
-        $shippingAmount = 0.00; // shipping is charged at order level, not per-vendor-split, in the current schema
+        $shippingAmount = 0.00; // shipping is charged at order level, not per-seller-split, in the current schema
         $platformPct    = (float) $this->settings->get('settlement_platform_charge_pct', 0);
         $platformCharge = round($gross * $platformPct / 100, 2);
-        $commission     = ($split['vendor_type'] ?? 'commission') === 'subscription' ? 0.00 : (float) $split['commission_amount'];
+        $commission     = ($split['seller_type'] ?? 'commission') === 'subscription' ? 0.00 : (float) $split['commission_amount'];
         $penalty        = 0.00; // penalty engine is a future phase hook; kept as an explicit waterfall line now
 
         $netPayable = round(

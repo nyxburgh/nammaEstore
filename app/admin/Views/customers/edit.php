@@ -6,6 +6,12 @@
     <div class="mb-3"><label class="form-label">Full Name *</label><input type="text" name="name" class="form-control" required value="<?= e($c['name']) ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
     <div class="mb-3"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" required value="<?= e($c['email']) ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
     <div class="mb-3"><label class="form-label">Phone</label><input type="tel" name="phone" class="form-control" value="<?= e($c['phone'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+    <div class="mb-3"><label class="form-label">Status</label>
+      <select name="is_active" class="form-select">
+        <option value="1" <?= ($c['is_active']??1)==1?'selected':'' ?>>Active</option>
+        <option value="0" <?= ($c['is_active']??1)==0?'selected':'' ?>>Inactive</option>
+      </select>
+    </div>
     <div class="mb-4"><label class="form-label">Reset Password</label><input type="password" name="password" class="form-control" minlength="8" placeholder="Leave blank to keep current" oninput="validateField(this)" onblur="validateField(this)"></div>
     <div class="d-flex gap-2"><button type="submit" class="btn btn-primary">Save Changes</button><a href="<?= $p ?>/customers/<?= $c['id'] ?>" class="btn btn-outline-secondary">Cancel</a></div>
   </form>

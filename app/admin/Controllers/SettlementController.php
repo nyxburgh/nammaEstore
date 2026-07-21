@@ -33,7 +33,7 @@ class SettlementController extends AdminController
         $this->redirect(ADMIN_URL . '/settlements');
     }
 
-    /** Move eligible settlements into vendor wallets. */
+    /** Move eligible settlements into seller wallets. */
     public function credit(): void
     {
         Middleware::superAdmin();

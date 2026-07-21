@@ -2,7 +2,7 @@
 
 <h2>Orders &amp; delivery</h2>
 <details class="faq-item"><summary>How do I track my order?</summary><div class="faq-a">Use the <a href="<?= APP_URL ?>/track">Track Order</a> page with your order number, or open the order inside <a href="<?= APP_URL ?>/account/orders">My Account → My Orders</a>.</div></details>
-<details class="faq-item"><summary>Why did my order arrive in separate parcels?</summary><div class="faq-a">We're a multi-vendor marketplace — items from different sellers ship separately. You're never charged extra for split deliveries.</div></details>
+<details class="faq-item"><summary>Why did my order arrive in separate parcels?</summary><div class="faq-a">We're a multi-seller marketplace — items from different sellers ship separately. You're never charged extra for split deliveries.</div></details>
 <details class="faq-item"><summary>Is Cash on Delivery available?</summary><div class="faq-a">Yes, COD is available on most products. You'll see the option at checkout if every item in your cart supports it.</div></details>
 
 <h2>Returns &amp; refunds</h2>
@@ -15,5 +15,5 @@
 <details class="faq-item"><summary>I forgot my password. What do I do?</summary><div class="faq-a">Use the <a href="<?= APP_URL ?>/forgot-password">Forgot Password</a> link on the login page to reset it via email.</div></details>
 
 <h2>Selling on the marketplace</h2>
-<details class="faq-item"><summary>How do I become a seller?</summary><div class="faq-a">Register on the <a href="<?= VENDOR_URL ?>/register">Vendor Panel</a>, verify your email with the OTP, complete your shop profile and start listing products.</div></details>
-<details class="faq-item"><summary>What commission does the marketplace charge?</summary><div class="faq-a">The default commission is set by the marketplace admin and shown in your vendor dashboard before you list. Settlements are credited to your vendor wallet after the return window closes.</div></details>
+<details class="faq-item"><summary>How do I become a seller?</summary><div class="faq-a">Register on the <a href="<?= SELLER_URL ?>/register">Seller Panel</a>, verify your email with the OTP, complete your shop profile and start listing products.</div></details>
+<details class="faq-item"><summary>What commission does the marketplace charge?</summary><div class="faq-a">The default commission is set by the marketplace admin and shown in your seller dashboard before you list. Settlements are credited to your seller wallet after the return window closes.</div></details>

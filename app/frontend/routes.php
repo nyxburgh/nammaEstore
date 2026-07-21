@@ -9,7 +9,7 @@ use App\Frontend\Controllers\CheckoutController;
 use App\Frontend\Controllers\OrderController;
 use App\Frontend\Controllers\AccountController;
 use App\Frontend\Controllers\AuthController;
-use App\Frontend\Controllers\VendorStoreController;
+use App\Frontend\Controllers\SellerStoreController;
 use App\Frontend\Controllers\InvoiceController;
 use App\Frontend\Controllers\SeoController;
 use App\Frontend\Controllers\PageController;
@@ -23,7 +23,7 @@ $router = new Router();
 $router->get('/',                                   HomeController::class . '@index');
 $router->post('/subscribe',                         HomeController::class . '@subscribe');
 
-// ── Become a Seller (marketing page — links out to VENDOR_URL) ─
+// ── Become a Seller (marketing page — links out to SELLER_URL) ─
 $router->get('/sell',                               SellController::class . '@index');
 
 // ── Auth ─────────────────────────────────────────────────────
@@ -108,16 +108,16 @@ $router->get('/sitemap.xml',                        SeoController::class . '@sit
 $router->get('/manifest.json',                      PwaController::class . '@manifest');
 $router->get('/sw.js',                              PwaController::class . '@serviceWorker');
 
-// ── Vendor Store Pages ────────────────────────────────────────
+// ── Seller Store Pages ────────────────────────────────────────
 // Mode: 'path'  → mycart.com/shop/{slug}
 // Mode: 'slug'  → mycart.com/{slug}   (must stay LAST — catches anything)
-if (VENDOR_STORE_MODE === 'path') {
-    $router->get('/' . VENDOR_STORE_BASE . '/{slug}',
-                 VendorStoreController::class . '@show');
+if (SELLER_STORE_MODE === 'path') {
+    $router->get('/' . SELLER_STORE_BASE . '/{slug}',
+                 SellerStoreController::class . '@show');
 } else {
     // Root-slug mode — MUST be last so it doesn't swallow real routes
     $router->get('/{slug}',
-                 VendorStoreController::class . '@show');
+                 SellerStoreController::class . '@show');
 }
 
 return $router;

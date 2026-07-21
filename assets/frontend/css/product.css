@@ -31,8 +31,8 @@
 .thumb img{width:100%;height:100%;object-fit:cover;}
 
 /* Product Info */
-.product-vendor{font-size:.78rem;color:var(--gray);margin-bottom:8px;}
-.product-vendor a{color:var(--pink-main);font-weight:600;text-decoration:none;}
+.product-seller{font-size:.78rem;color:var(--gray);margin-bottom:8px;}
+.product-seller a{color:var(--pink-main);font-weight:600;text-decoration:none;}
 .product-main-title{font-family:'Sora',sans-serif;font-size:1.7rem;color:var(--dark);margin-bottom:12px;line-height:1.25;}
 .product-rating-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
 .stars{color:var(--gold);font-size:.95rem;letter-spacing:1px;}
@@ -136,7 +136,7 @@
 .product-discount-badge{position:absolute;top:8px;left:8px;background:var(--pink-main);color:white;font-size:.65rem;font-weight:800;padding:3px 8px;border-radius:50px;}
 .product-wishlist{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:white;border:none;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;}
 .product-info{padding:10px;}
-.vendor-tag{font-size:.65rem;color:var(--gray);margin-bottom:3px;}
+.seller-tag{font-size:.65rem;color:var(--gray);margin-bottom:3px;}
 .product-name{font-size:.78rem;font-weight:600;color:var(--dark);margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .product-price{display:flex;align-items:baseline;gap:5px;margin-bottom:7px;flex-wrap:wrap;}
 .price-current{font-family:'Sora',sans-serif;font-size:.9rem;font-weight:700;color:var(--pink-deep);}

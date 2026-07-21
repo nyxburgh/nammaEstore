@@ -21,11 +21,11 @@
           </div>
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label fw-600">Vendor *</label>
-              <select name="vendor_id" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
-                <option value="">Select vendor</option>
-                <?php foreach($vendors as $v): ?>
-                <option value="<?= $v['id'] ?>" <?= ($product['vendor_id']??'') == $v['id'] ? 'selected' : '' ?>>
+              <label class="form-label fw-600">Seller *</label>
+              <select name="seller_id" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
+                <option value="">Select seller</option>
+                <?php foreach($sellers as $v): ?>
+                <option value="<?= $v['id'] ?>" <?= ($product['seller_id']??'') == $v['id'] ? 'selected' : '' ?>>
                   <?= e($v['shop_name'] ?: $v['name']) ?> (<?= e($v['email']) ?>)
                 </option>
                 <?php endforeach; ?>

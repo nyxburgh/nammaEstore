@@ -17,7 +17,7 @@ class CouponValidationService
      * discount. Does NOT record usage — that happens only after the
      * order is successfully placed (see CheckoutService).
      *
-     * @param array $items Cart items — each needs product_id, vendor_id, category_id, brand_id, price/sale_price, quantity
+     * @param array $items Cart items — each needs product_id, seller_id, category_id, brand_id, price/sale_price, quantity
      */
     public function validate(string $code, int $userId, float $subtotal, array $items): array
     {
@@ -52,11 +52,11 @@ class CouponValidationService
 
         // ── Scope eligibility against cart contents ──────────
         $eligibleAmount = $subtotal;
-        if (in_array($coupon['scope'], ['vendor', 'category', 'brand', 'product'], true)) {
+        if (in_array($coupon['scope'], ['seller', 'category', 'brand', 'product'], true)) {
             $eligibleAmount = 0.0;
             foreach ($items as $item) {
                 $matches = match ($coupon['scope']) {
-                    'vendor'   => (int) ($item['vendor_id'] ?? 0) === (int) $coupon['scope_id'],
+                    'seller'   => (int) ($item['seller_id'] ?? 0) === (int) $coupon['scope_id'],
                     'category' => (int) ($item['category_id'] ?? 0) === (int) $coupon['scope_id'],
                     'brand'    => (int) ($item['brand_id'] ?? 0) === (int) $coupon['scope_id'],
                     'product'  => (int) ($item['product_id'] ?? 0) === (int) $coupon['scope_id'],

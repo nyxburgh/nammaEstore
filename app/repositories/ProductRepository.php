@@ -15,7 +15,7 @@ class ProductRepository extends Repository
     public function getProducts(int $page = 1, array $f = []): array
     {
         $w = '1=1'; $p = [];
-        if (!empty($f['vendor_id']))   { $w .= " AND p.vendor_id=?";   $p[] = $f['vendor_id']; }
+        if (!empty($f['seller_id']))   { $w .= " AND p.seller_id=?";   $p[] = $f['seller_id']; }
         if (!empty($f['category_id'])) { $w .= " AND p.category_id=?"; $p[] = $f['category_id']; }
         if (!empty($f['status']))      { $w .= " AND p.status=?";       $p[] = $f['status']; }
         if (!empty($f['search']))      { $w .= " AND (p.name LIKE ? OR p.sku LIKE ?)"; $s = '%' . $f['search'] . '%'; $p[] = $s; $p[] = $s; }
@@ -23,12 +23,12 @@ class ProductRepository extends Repository
         $sortCol = safeSortField($f['sort'] ?? null, ['id', 'name', 'price', 'stock', 'created_at'], 'created_at');
         $sortDir = safeSortDir($f['dir'] ?? null);
 
-        $sql = "SELECT p.*, c.name as category_name, u.name as vendor_name, vp.shop_name,
+        $sql = "SELECT p.*, c.name as category_name, u.name as seller_name, vp.shop_name,
                     (SELECT image_path FROM `{$this->t('product_images')}` WHERE product_id=p.id AND is_primary=1 LIMIT 1) as primary_image
                 FROM `{$this->t()}` p
                 LEFT JOIN `{$this->t('categories')}` c ON c.id=p.category_id
-                LEFT JOIN `{$this->t('users')}` u ON u.id=p.vendor_id
-                LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=p.vendor_id
+                LEFT JOIN `{$this->t('users')}` u ON u.id=p.seller_id
+                LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=p.seller_id
                 WHERE $w ORDER BY p.{$sortCol} {$sortDir}";
         return $this->paginate($sql, $p, $page);
     }
@@ -36,11 +36,11 @@ class ProductRepository extends Repository
     public function getProductDetail(int $id): ?array
     {
         $r = $this->db->fetchOne(
-            "SELECT p.*, c.name as category_name, u.name as vendor_name, vp.shop_name
+            "SELECT p.*, c.name as category_name, u.name as seller_name, vp.shop_name
              FROM `{$this->t()}` p
              LEFT JOIN `{$this->t('categories')}` c ON c.id=p.category_id
-             LEFT JOIN `{$this->t('users')}` u ON u.id=p.vendor_id
-             LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=p.vendor_id
+             LEFT JOIN `{$this->t('users')}` u ON u.id=p.seller_id
+             LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=p.seller_id
              WHERE p.id=?", [$id]);
         if (!$r) return null;
         $r['images']   = $this->db->fetchAll("SELECT * FROM `{$this->t('product_images')}` WHERE product_id=? ORDER BY sort_order", [$id]);

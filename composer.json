@@ -1,6 +1,6 @@
 {
     "name": "bazario/marketplace",
-    "description": "Multi-vendor marketplace platform",
+    "description": "Multi-seller marketplace platform",
     "type": "project",
     "require": {
         "php": ">=8.3",

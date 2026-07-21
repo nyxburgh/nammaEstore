@@ -12,7 +12,7 @@
   <div class="col-md-3 d-flex gap-2"><button class="btn btn-primary flex-fill">Filter</button><a href="<?= $p ?>/products" class="btn btn-outline-secondary">Reset</a></div>
 </form></div>
 <div class="card"><div class="table-responsive"><table class="table mb-0">
-  <thead><tr><th><?= sortHeader('#','id',$p.'/products') ?></th><th><?= sortHeader('Product','name',$p.'/products') ?></th><th>Vendor</th><th>Category</th><th><?= sortHeader('Price','price',$p.'/products') ?></th><th><?= sortHeader('Stock','stock',$p.'/products') ?></th><th>Status</th><th>Actions</th></tr></thead>
+  <thead><tr><th><?= sortHeader('#','id',$p.'/products') ?></th><th><?= sortHeader('Product','name',$p.'/products') ?></th><th>Seller</th><th>Category</th><th><?= sortHeader('Price','price',$p.'/products') ?></th><th><?= sortHeader('Stock','stock',$p.'/products') ?></th><th>Status</th><th>Actions</th></tr></thead>
   <tbody>
   <?php if(empty($products['data'])): ?><tr><td colspan="8"><div class="empty-state"><i class="bi bi-box-seam"></i><h6>No products</h6></div></td></tr>
   <?php else: foreach($products['data'] as $pr): ?>
@@ -22,7 +22,7 @@
       <?php if($pr['primary_image']): ?><img src="<?= UPLOAD_URL.'/'.$pr['primary_image'] ?>" style="width:36px;height:36px;object-fit:cover;border-radius:7px;border:1px solid var(--border);"><?php else: ?><div style="width:36px;height:36px;background:var(--bg);border-radius:7px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);"><i class="bi bi-image"></i></div><?php endif; ?>
       <div><div style="font-weight:600;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?= e($pr['name']) ?></div><div style="font-size:11px;color:var(--muted);">SKU: <?= e($pr['sku']??'—') ?></div></div>
     </div></td>
-    <td style="font-size:13px;"><?= e($pr['shop_name']??$pr['vendor_name']) ?></td>
+    <td style="font-size:13px;"><?= e($pr['shop_name']??$pr['seller_name']) ?></td>
     <td style="font-size:13px;"><?= e($pr['category_name']??'—') ?></td>
     <td style="font-weight:700;"><?= currency($pr['sale_price']??$pr['price']) ?><?php if($pr['sale_price']&&$pr['sale_price']<$pr['price']): ?><div style="font-size:11px;color:var(--muted);text-decoration:line-through;"><?= currency($pr['price']) ?></div><?php endif; ?></td>
     <td style="font-weight:600;<?= $pr['stock']<=5?'color:#dc2626;':'' ?>"><?= number_format($pr['stock']) ?><?php if($pr['stock']<=$pr['low_stock_threshold']): ?><span class="badge badge-danger ms-1" style="font-size:9px;">Low</span><?php endif; ?></td>

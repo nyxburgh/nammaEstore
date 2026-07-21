@@ -8,7 +8,7 @@ class HomeController extends FrontendController
     {
         $svc = new ProductService();
         $this->view('home.index', [
-            'title'       => SettingsService::get('site_name', 'Namma E Store') . ' — Multi-Vendor Marketplace',
+            'title'       => SettingsService::get('site_name', 'Namma E Store') . ' — Multi-Seller Marketplace',
             'trending'    => $svc->getTrending(10),
             'newArrivals' => $svc->getNewArrivals(10),
             'deals'       => $svc->getDeals(4),

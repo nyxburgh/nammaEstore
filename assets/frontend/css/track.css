@@ -40,7 +40,7 @@
 .shipment-card + .shipment-card{margin-top:-8px;}
 .shipment-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
 .shipment-courier{font-weight:700;font-size:.88rem;color:var(--dark);}
-.shipment-vendor{font-size:.72rem;color:var(--gray);}
+.shipment-seller{font-size:.72rem;color:var(--gray);}
 .shipment-tracking-num{font-size:.8rem;color:var(--gray);margin-bottom:10px;}
 .shipment-tracking-num code{background:var(--pink-pale);padding:2px 8px;border-radius:6px;color:var(--pink-deep);}
 .shipment-events{padding-left:16px;}

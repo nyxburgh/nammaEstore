@@ -6,7 +6,7 @@
 
 -- ───────── BASE SCHEMA (database.sql) ─────────
 -- ============================================================
--- MY CART — Multi-Vendor Marketplace
+-- MY CART — Multi-Seller Marketplace
 -- Database: mycart_marketplace | Prefix: mc_
 -- ============================================================
 
@@ -48,7 +48,7 @@ CREATE TABLE `mc_admin_permissions` (
 
 CREATE TABLE `mc_activity_logs` (
   `id`          BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `actor_type`  ENUM('admin','sub_admin','vendor','customer') NOT NULL,
+  `actor_type`  ENUM('admin','sub_admin','seller','customer') NOT NULL,
   `actor_id`    INT UNSIGNED NOT NULL,
   `actor_name`  VARCHAR(150) NOT NULL,
   `action`      VARCHAR(100) NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE `mc_users` (
   `email`             VARCHAR(150) NOT NULL UNIQUE,
   `phone`             VARCHAR(20) DEFAULT NULL,
   `password`          VARCHAR(255) NOT NULL,
-  `role`              ENUM('customer','vendor') NOT NULL DEFAULT 'customer',
+  `role`              ENUM('customer','seller') NOT NULL DEFAULT 'customer',
   `avatar`            VARCHAR(255) DEFAULT NULL,
   `is_active`         TINYINT(1) NOT NULL DEFAULT 1,
   `is_verified`       TINYINT(1) NOT NULL DEFAULT 0,
@@ -101,8 +101,8 @@ CREATE TABLE `mc_user_addresses` (
   KEY `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 3. VENDOR PROFILES & SUBSCRIPTIONS
-CREATE TABLE `mc_vendor_profiles` (
+-- 3. SELLER PROFILES & SUBSCRIPTIONS
+CREATE TABLE `mc_seller_profiles` (
   `id`             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `user_id`        INT UNSIGNED NOT NULL UNIQUE,
   `shop_name`      VARCHAR(200) NOT NULL,
@@ -141,9 +141,9 @@ CREATE TABLE `mc_subscription_plans` (
   `updated_at`                 DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `mc_vendor_subscriptions` (
+CREATE TABLE `mc_seller_subscriptions` (
   `id`          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `vendor_id`   INT UNSIGNED NOT NULL,
+  `seller_id`   INT UNSIGNED NOT NULL,
   `plan_id`     INT UNSIGNED NOT NULL,
   `status`      ENUM('active','expired','cancelled') NOT NULL DEFAULT 'active',
   `started_at`  DATETIME NOT NULL,
@@ -151,21 +151,21 @@ CREATE TABLE `mc_vendor_subscriptions` (
   `payment_ref` VARCHAR(100) DEFAULT NULL,
   `amount_paid` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
   `created_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT `fk_vs_vendor` FOREIGN KEY (`vendor_id`) REFERENCES `mc_users`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_vs_seller` FOREIGN KEY (`seller_id`) REFERENCES `mc_users`(`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_vs_plan` FOREIGN KEY (`plan_id`) REFERENCES `mc_subscription_plans`(`id`),
-  KEY `idx_vendor_status` (`vendor_id`,`status`)
+  KEY `idx_seller_status` (`seller_id`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `mc_vendor_monthly_turnover` (
+CREATE TABLE `mc_seller_monthly_turnover` (
   `id`             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `vendor_id`      INT UNSIGNED NOT NULL,
+  `seller_id`      INT UNSIGNED NOT NULL,
   `month`          TINYINT UNSIGNED NOT NULL,
   `year`           SMALLINT UNSIGNED NOT NULL,
   `total_turnover` DECIMAL(14,2) NOT NULL DEFAULT 0.00,
   `total_orders`   INT UNSIGNED NOT NULL DEFAULT 0,
   `updated_at`     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY `uq_vendor_month_year` (`vendor_id`,`month`,`year`),
-  CONSTRAINT `fk_vmt_vendor` FOREIGN KEY (`vendor_id`) REFERENCES `mc_users`(`id`) ON DELETE CASCADE
+  UNIQUE KEY `uq_seller_month_year` (`seller_id`,`month`,`year`),
+  CONSTRAINT `fk_vmt_seller` FOREIGN KEY (`seller_id`) REFERENCES `mc_users`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 4. CATEGORIES
@@ -187,7 +187,7 @@ CREATE TABLE `mc_categories` (
 -- 5. PRODUCTS
 CREATE TABLE `mc_products` (
   `id`                  INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `vendor_id`           INT UNSIGNED NOT NULL,
+  `seller_id`           INT UNSIGNED NOT NULL,
   `category_id`         INT UNSIGNED DEFAULT NULL,
   `name`                VARCHAR(255) NOT NULL,
   `slug`                VARCHAR(255) NOT NULL UNIQUE,
@@ -208,9 +208,9 @@ CREATE TABLE `mc_products` (
   `views`               INT UNSIGNED NOT NULL DEFAULT 0,
   `created_at`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT `fk_prod_vendor` FOREIGN KEY (`vendor_id`) REFERENCES `mc_users`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_prod_seller` FOREIGN KEY (`seller_id`) REFERENCES `mc_users`(`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_prod_cat` FOREIGN KEY (`category_id`) REFERENCES `mc_categories`(`id`) ON DELETE SET NULL,
-  KEY `idx_vendor` (`vendor_id`), KEY `idx_status` (`status`)
+  KEY `idx_seller` (`seller_id`), KEY `idx_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `mc_product_images` (
@@ -297,7 +297,7 @@ CREATE TABLE `mc_order_items` (
   `id`            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `order_id`      INT UNSIGNED NOT NULL,
   `product_id`    INT UNSIGNED NOT NULL,
-  `vendor_id`     INT UNSIGNED NOT NULL,
+  `seller_id`     INT UNSIGNED NOT NULL,
   `variant_id`    INT UNSIGNED DEFAULT NULL,
   `product_name`  VARCHAR(255) NOT NULL,
   `variant_label` VARCHAR(100) DEFAULT NULL,
@@ -306,24 +306,24 @@ CREATE TABLE `mc_order_items` (
   `subtotal`      DECIMAL(14,2) NOT NULL,
   `status`        ENUM('placed','confirmed','shipped','delivered','cancelled','returned') NOT NULL DEFAULT 'placed',
   CONSTRAINT `fk_oi_order` FOREIGN KEY (`order_id`) REFERENCES `mc_orders`(`id`) ON DELETE CASCADE,
-  KEY `idx_order` (`order_id`), KEY `idx_vendor` (`vendor_id`)
+  KEY `idx_order` (`order_id`), KEY `idx_seller` (`seller_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `mc_order_vendor_splits` (
+CREATE TABLE `mc_order_seller_splits` (
   `id`                INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `order_id`          INT UNSIGNED NOT NULL,
-  `vendor_id`         INT UNSIGNED NOT NULL,
+  `seller_id`         INT UNSIGNED NOT NULL,
   `gross_amount`      DECIMAL(14,2) NOT NULL,
   `commission_pct`    DECIMAL(5,2) NOT NULL DEFAULT 0.00,
   `commission_amount` DECIMAL(12,2) NOT NULL DEFAULT 0.00,
-  `vendor_earning`    DECIMAL(12,2) NOT NULL,
+  `seller_earning`    DECIMAL(12,2) NOT NULL,
   `payout_status`     ENUM('pending','processing','paid','on_hold') NOT NULL DEFAULT 'pending',
   `payout_date`       DATETIME DEFAULT NULL,
   `created_at`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY `uq_order_vendor` (`order_id`,`vendor_id`),
+  UNIQUE KEY `uq_order_seller` (`order_id`,`seller_id`),
   CONSTRAINT `fk_ovs_order` FOREIGN KEY (`order_id`) REFERENCES `mc_orders`(`id`) ON DELETE CASCADE,
-  KEY `idx_vendor` (`vendor_id`)
+  KEY `idx_seller` (`seller_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `mc_order_status_timeline` (
@@ -331,7 +331,7 @@ CREATE TABLE `mc_order_status_timeline` (
   `order_id`        INT UNSIGNED NOT NULL,
   `status`          VARCHAR(50) NOT NULL,
   `note`            TEXT DEFAULT NULL,
-  `changed_by_type` ENUM('admin','vendor','system') NOT NULL DEFAULT 'system',
+  `changed_by_type` ENUM('admin','seller','system') NOT NULL DEFAULT 'system',
   `changed_by_id`   INT UNSIGNED DEFAULT NULL,
   `created_at`      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT `fk_ost_order` FOREIGN KEY (`order_id`) REFERENCES `mc_orders`(`id`) ON DELETE CASCADE,
@@ -360,7 +360,7 @@ CREATE TABLE `mc_commissions` (
   `id`                INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `order_id`          INT UNSIGNED NOT NULL,
   `order_item_id`     INT UNSIGNED NOT NULL,
-  `vendor_id`         INT UNSIGNED NOT NULL,
+  `seller_id`         INT UNSIGNED NOT NULL,
   `product_id`        INT UNSIGNED NOT NULL,
   `plan_id`           INT UNSIGNED DEFAULT NULL,
   `plan_name`         VARCHAR(100) NOT NULL,
@@ -368,9 +368,9 @@ CREATE TABLE `mc_commissions` (
   `turnover_before`   DECIMAL(14,2) NOT NULL DEFAULT 0.00,
   `commission_pct`    DECIMAL(5,2) NOT NULL,
   `commission_amount` DECIMAL(12,2) NOT NULL,
-  `vendor_earning`    DECIMAL(12,2) NOT NULL,
+  `seller_earning`    DECIMAL(12,2) NOT NULL,
   `calculated_at`     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  KEY `idx_vendor` (`vendor_id`), KEY `idx_order` (`order_id`), KEY `idx_calc` (`calculated_at`)
+  KEY `idx_seller` (`seller_id`), KEY `idx_order` (`order_id`), KEY `idx_calc` (`calculated_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 9. REVIEWS
@@ -463,8 +463,8 @@ INSERT INTO `mc_categories` (`name`,`slug`,`sort_order`,`is_active`) VALUES
 ('Sports',         'sports',        4, 1),
 ('Books',          'books',         5, 1);
 
--- ─── Vendor profile extensions ──────────────────────────────
-ALTER TABLE `mc_vendor_profiles`
+-- ─── Seller profile extensions ──────────────────────────────
+ALTER TABLE `mc_seller_profiles`
   ADD COLUMN IF NOT EXISTS `shop_phone`   VARCHAR(20) DEFAULT NULL AFTER `description`,
   ADD COLUMN IF NOT EXISTS `address`      VARCHAR(255) DEFAULT NULL AFTER `shop_phone`,
   ADD COLUMN IF NOT EXISTS `city`         VARCHAR(100) DEFAULT NULL AFTER `address`,
@@ -481,14 +481,14 @@ INSERT IGNORE INTO `mc_categories` (`name`,`slug`,`sort_order`,`is_active`) VALU
 
 -- ───────── MIGRATION: 002_settlement_engine.sql ─────────
 -- ═══════════════════════════════════════════════════════════════
--- Migration 002: Vendor Settlement Engine (Phase 1)
+-- Migration 002: Seller Settlement Engine (Phase 1)
 -- ═══════════════════════════════════════════════════════════════
 -- Run this AFTER the base database.sql has already been imported.
 -- In phpMyAdmin (XAMPP): select mycart_marketplace → SQL tab →
 -- paste this file's contents → Go.
 --
 -- What this adds:
---   • Explicit subscription-vs-commission vendor split (was a
+--   • Explicit subscription-vs-commission seller split (was a
 --     turnover-threshold heuristic before — now matches the spec's
 --     two genuinely separate settlement paths)
 --   • Return window tracking (orders.delivered_at)
@@ -496,20 +496,20 @@ INSERT IGNORE INTO `mc_categories` (`name`,`slug`,`sort_order`,`is_active`) VALU
 --     settlement — money can't be released until the return window
 --     is provably closed)
 --   • Disputes (settlement is blocked while a dispute is open)
---   • Vendor wallet + a full audit-ledger of every balance change
---   • Vendor settlements (the per-order deduction waterfall)
---   • Vendor withdrawals (payout requests: UPI/Bank/Wallet,
+--   • Seller wallet + a full audit-ledger of every balance change
+--   • Seller settlements (the per-order deduction waterfall)
+--   • Seller withdrawals (payout requests: UPI/Bank/Wallet,
 --     manual or auto approval)
---   • Vendor KYC documents (GST cert, PAN, cancelled cheque, etc.)
+--   • Seller KYC documents (GST cert, PAN, cancelled cheque, etc.)
 -- ═══════════════════════════════════════════════════════════════
 
--- ── 1. Explicit vendor type ──────────────────────────────────
+-- ── 1. Explicit seller type ──────────────────────────────────
 -- 'subscription' = pays a plan fee, 0% commission while active,
 --                   settlement BLOCKED entirely if subscription lapses.
 -- 'commission'   = no subscription, a % is deducted from every order,
 --                   settlement is never blocked by subscription status.
-ALTER TABLE `mc_vendor_profiles`
-    ADD COLUMN `vendor_type` ENUM('subscription','commission') NOT NULL DEFAULT 'commission' AFTER `status`;
+ALTER TABLE `mc_seller_profiles`
+    ADD COLUMN `seller_type` ENUM('subscription','commission') NOT NULL DEFAULT 'commission' AFTER `status`;
 
 -- ── 2. Delivery timestamp (return-window anchor) ─────────────
 ALTER TABLE `mc_orders`
@@ -521,7 +521,7 @@ CREATE TABLE `mc_returns` (
     `order_id`       INT UNSIGNED NOT NULL,
     `order_item_id`  INT UNSIGNED NOT NULL,
     `user_id`        INT UNSIGNED NOT NULL,
-    `vendor_id`      INT UNSIGNED NOT NULL,
+    `seller_id`      INT UNSIGNED NOT NULL,
     `type`           ENUM('return','replacement','cancel') NOT NULL DEFAULT 'return',
     `reason`         VARCHAR(255) NOT NULL,
     `note`           TEXT DEFAULT NULL,
@@ -532,7 +532,7 @@ CREATE TABLE `mc_returns` (
     `resolved_by`    INT UNSIGNED DEFAULT NULL,
     CONSTRAINT `fk_ret_order` FOREIGN KEY (`order_id`) REFERENCES `mc_orders`(`id`) ON DELETE CASCADE,
     CONSTRAINT `fk_ret_item` FOREIGN KEY (`order_item_id`) REFERENCES `mc_order_items`(`id`) ON DELETE CASCADE,
-    KEY `idx_vendor` (`vendor_id`), KEY `idx_status` (`status`), KEY `idx_order` (`order_id`)
+    KEY `idx_seller` (`seller_id`), KEY `idx_status` (`status`), KEY `idx_order` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ── 4. Disputes ───────────────────────────────────────────────
@@ -542,8 +542,8 @@ CREATE TABLE `mc_returns` (
 CREATE TABLE `mc_disputes` (
     `id`          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `order_id`    INT UNSIGNED NOT NULL,
-    `vendor_id`   INT UNSIGNED NOT NULL,
-    `raised_by`   ENUM('customer','vendor','admin') NOT NULL,
+    `seller_id`   INT UNSIGNED NOT NULL,
+    `raised_by`   ENUM('customer','seller','admin') NOT NULL,
     `raised_by_id` INT UNSIGNED NOT NULL,
     `reason`      VARCHAR(255) NOT NULL,
     `status`      ENUM('open','resolved') NOT NULL DEFAULT 'open',
@@ -551,25 +551,25 @@ CREATE TABLE `mc_disputes` (
     `created_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `resolved_at` DATETIME DEFAULT NULL,
     CONSTRAINT `fk_disp_order` FOREIGN KEY (`order_id`) REFERENCES `mc_orders`(`id`) ON DELETE CASCADE,
-    KEY `idx_vendor_status` (`vendor_id`,`status`)
+    KEY `idx_seller_status` (`seller_id`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ── 5. Vendor wallet ──────────────────────────────────────────
-CREATE TABLE `mc_vendor_wallets` (
+-- ── 5. Seller wallet ──────────────────────────────────────────
+CREATE TABLE `mc_seller_wallets` (
     `id`               INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `vendor_id`        INT UNSIGNED NOT NULL UNIQUE,
+    `seller_id`        INT UNSIGNED NOT NULL UNIQUE,
     `balance`          DECIMAL(14,2) NOT NULL DEFAULT 0.00,
     `total_earned`     DECIMAL(14,2) NOT NULL DEFAULT 0.00,
     `total_withdrawn`  DECIMAL(14,2) NOT NULL DEFAULT 0.00,
     `updated_at`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT `fk_vw_vendor` FOREIGN KEY (`vendor_id`) REFERENCES `mc_users`(`id`) ON DELETE CASCADE
+    CONSTRAINT `fk_vw_seller` FOREIGN KEY (`seller_id`) REFERENCES `mc_users`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Full audit trail of every balance change — required for any
--- financial ledger, and for resolving vendor payout disputes.
-CREATE TABLE `mc_vendor_wallet_transactions` (
+-- financial ledger, and for resolving seller payout disputes.
+CREATE TABLE `mc_seller_wallet_transactions` (
     `id`               INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `vendor_id`        INT UNSIGNED NOT NULL,
+    `seller_id`        INT UNSIGNED NOT NULL,
     `type`             ENUM('credit','debit') NOT NULL,
     `amount`           DECIMAL(12,2) NOT NULL,
     `balance_after`    DECIMAL(14,2) NOT NULL,
@@ -577,19 +577,19 @@ CREATE TABLE `mc_vendor_wallet_transactions` (
     `reference_id`     INT UNSIGNED DEFAULT NULL,
     `description`      VARCHAR(255) DEFAULT NULL,
     `created_at`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    KEY `idx_vendor` (`vendor_id`), KEY `idx_reference` (`reference_type`,`reference_id`)
+    KEY `idx_seller` (`seller_id`), KEY `idx_reference` (`reference_type`,`reference_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ── 6. Vendor settlements ─────────────────────────────────────
--- One row per order_vendor_split that has become (or was evaluated
+-- ── 6. Seller settlements ─────────────────────────────────────
+-- One row per order_seller_split that has become (or was evaluated
 -- to become) eligible. Holds the full deduction waterfall from the
 -- spec: Order Amount − Tax − Shipping − Platform Charges −
--- Commission − Penalty − Refund − Subscription Due = Vendor Payable.
-CREATE TABLE `mc_vendor_settlements` (
+-- Commission − Penalty − Refund − Subscription Due = Seller Payable.
+CREATE TABLE `mc_seller_settlements` (
     `id`                   INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `vendor_id`            INT UNSIGNED NOT NULL,
+    `seller_id`            INT UNSIGNED NOT NULL,
     `order_id`             INT UNSIGNED NOT NULL,
-    `order_vendor_split_id` INT UNSIGNED NOT NULL,
+    `order_seller_split_id` INT UNSIGNED NOT NULL,
     `gross_amount`         DECIMAL(12,2) NOT NULL,
     `tax_amount`           DECIMAL(12,2) NOT NULL DEFAULT 0.00,
     `shipping_amount`      DECIMAL(12,2) NOT NULL DEFAULT 0.00,
@@ -605,15 +605,15 @@ CREATE TABLE `mc_vendor_settlements` (
     `credited_at`          DATETIME DEFAULT NULL,
     `created_at`           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    UNIQUE KEY `uq_split` (`order_vendor_split_id`),
+    UNIQUE KEY `uq_split` (`order_seller_split_id`),
     CONSTRAINT `fk_settle_order` FOREIGN KEY (`order_id`) REFERENCES `mc_orders`(`id`) ON DELETE CASCADE,
-    KEY `idx_vendor_status` (`vendor_id`,`status`)
+    KEY `idx_seller_status` (`seller_id`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ── 7. Vendor withdrawals (payout requests) ──────────────────
-CREATE TABLE `mc_vendor_withdrawals` (
+-- ── 7. Seller withdrawals (payout requests) ──────────────────
+CREATE TABLE `mc_seller_withdrawals` (
     `id`              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `vendor_id`       INT UNSIGNED NOT NULL,
+    `seller_id`       INT UNSIGNED NOT NULL,
     `amount`          DECIMAL(12,2) NOT NULL,
     `method`          ENUM('upi','bank_transfer','wallet') NOT NULL,
     `method_details`  VARCHAR(255) DEFAULT NULL,
@@ -622,20 +622,20 @@ CREATE TABLE `mc_vendor_withdrawals` (
     `requested_at`    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `processed_at`    DATETIME DEFAULT NULL,
     `processed_by`    INT UNSIGNED DEFAULT NULL,
-    KEY `idx_vendor_status` (`vendor_id`,`status`)
+    KEY `idx_seller_status` (`seller_id`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ── 8. Vendor KYC documents ───────────────────────────────────
-CREATE TABLE `mc_vendor_documents` (
+-- ── 8. Seller KYC documents ───────────────────────────────────
+CREATE TABLE `mc_seller_documents` (
     `id`           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `vendor_id`    INT UNSIGNED NOT NULL,
+    `seller_id`    INT UNSIGNED NOT NULL,
     `doc_type`     ENUM('gst_certificate','pan_card','cancelled_cheque','shop_license','other') NOT NULL,
     `file_path`    VARCHAR(255) NOT NULL,
     `status`       ENUM('pending','verified','rejected') NOT NULL DEFAULT 'pending',
     `uploaded_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `verified_by`  INT UNSIGNED DEFAULT NULL,
     `verified_at`  DATETIME DEFAULT NULL,
-    KEY `idx_vendor` (`vendor_id`)
+    KEY `idx_seller` (`seller_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ── 9. Settlement-related config (key/value in existing settings table) ──
@@ -646,21 +646,21 @@ INSERT INTO `mc_settings` (`key`,`value`,`group`,`label`,`type`) VALUES
     ('settlement_platform_charge_pct', '0',    'settlement', 'Flat Platform Charge (%)',          'number')
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
 
--- ── 10. Backfill existing vendors ────────────────────────────
+-- ── 10. Backfill existing sellers ────────────────────────────
 -- Anyone currently on a paid plan is treated as a subscription
--- vendor going forward; everyone else defaults to commission
+-- seller going forward; everyone else defaults to commission
 -- (matches the ALTER TABLE default, this just makes it explicit
--- for vendors that already have an active paid subscription).
-UPDATE `mc_vendor_profiles` vp
-JOIN `mc_vendor_subscriptions` vs ON vs.vendor_id = vp.user_id AND vs.status = 'active'
+-- for sellers that already have an active paid subscription).
+UPDATE `mc_seller_profiles` vp
+JOIN `mc_seller_subscriptions` vs ON vs.seller_id = vp.user_id AND vs.status = 'active'
 JOIN `mc_subscription_plans` sp ON sp.id = vs.plan_id AND sp.price > 0
-SET vp.vendor_type = 'subscription';
+SET vp.seller_type = 'subscription';
 
--- Give every existing vendor a wallet row so lookups never need
+-- Give every existing seller a wallet row so lookups never need
 -- an existence check.
-INSERT INTO `mc_vendor_wallets` (vendor_id)
-SELECT id FROM `mc_users` WHERE role = 'vendor'
-ON DUPLICATE KEY UPDATE vendor_id = vendor_id;
+INSERT INTO `mc_seller_wallets` (seller_id)
+SELECT id FROM `mc_users` WHERE role = 'seller'
+ON DUPLICATE KEY UPDATE seller_id = seller_id;
 
 
 -- ───────── MIGRATION: 003_coupons_giftcards_wallet.sql ─────────
@@ -674,12 +674,12 @@ ON DUPLICATE KEY UPDATE vendor_id = vendor_id;
 --   • Brands (was entirely missing — needed for "Brand Coupon" to
 --     be a real scope rather than a spec item with nothing behind it)
 --   • Coupons — all 10 scopes from the spec: fixed/percentage value
---     types, and platform/vendor/category/brand/product/user/
+--     types, and platform/seller/category/brand/product/user/
 --     first-order/festival scopes, sharing one flexible schema
---   • Gift vouchers — company/vendor/recharge types, expiry,
+--   • Gift vouchers — company/seller/recharge types, expiry,
 --     partial usage with running balance
 --   • Customer wallet — balance + full audit ledger, same pattern
---     as the vendor wallet from Phase 1
+--     as the seller wallet from Phase 1
 --   • Order-level columns to record which coupon/gift-card/wallet
 --     amount applied, so refunds and reporting can trace them back
 -- ═══════════════════════════════════════════════════════════════
@@ -701,9 +701,9 @@ ALTER TABLE `mc_products`
 -- ── 2. Coupons ────────────────────────────────────────────────
 -- One flexible table covers all spec-listed coupon types:
 --   value_type: fixed | percentage
---   scope:      platform | vendor | category | brand | product |
+--   scope:      platform | seller | category | brand | product |
 --               user | first_order | festival
--- scope_id holds the relevant vendor/category/brand/product/user id
+-- scope_id holds the relevant seller/category/brand/product/user id
 -- depending on `scope` (NULL for platform/first_order/festival,
 -- which apply universally rather than to one target).
 CREATE TABLE `mc_coupons` (
@@ -714,7 +714,7 @@ CREATE TABLE `mc_coupons` (
     `value`               DECIMAL(10,2) NOT NULL,
     `max_discount_amount` DECIMAL(10,2) DEFAULT NULL COMMENT 'cap for percentage coupons',
     `min_order_amount`    DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    `scope`               ENUM('platform','vendor','category','brand','product','user','first_order','festival') NOT NULL DEFAULT 'platform',
+    `scope`               ENUM('platform','seller','category','brand','product','user','first_order','festival') NOT NULL DEFAULT 'platform',
     `scope_id`            INT UNSIGNED DEFAULT NULL,
     `usage_limit_total`   INT UNSIGNED DEFAULT NULL COMMENT 'NULL = unlimited',
     `usage_limit_per_user` INT UNSIGNED NOT NULL DEFAULT 1,
@@ -742,8 +742,8 @@ CREATE TABLE `mc_coupon_usages` (
 CREATE TABLE `mc_gift_cards` (
     `id`               INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `code`             VARCHAR(30) NOT NULL UNIQUE,
-    `type`             ENUM('company','vendor','recharge') NOT NULL DEFAULT 'company',
-    `vendor_id`        INT UNSIGNED DEFAULT NULL COMMENT 'set only for type=vendor',
+    `type`             ENUM('company','seller','recharge') NOT NULL DEFAULT 'company',
+    `seller_id`        INT UNSIGNED DEFAULT NULL COMMENT 'set only for type=seller',
     `initial_balance`  DECIMAL(10,2) NOT NULL,
     `current_balance`  DECIMAL(10,2) NOT NULL,
     `issued_to_email`  VARCHAR(150) DEFAULT NULL,
@@ -766,7 +766,7 @@ CREATE TABLE `mc_gift_card_transactions` (
     CONSTRAINT `fk_gct_card` FOREIGN KEY (`gift_card_id`) REFERENCES `mc_gift_cards`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ── 4. Customer wallet (same audit-ledger pattern as vendor wallet) ──
+-- ── 4. Customer wallet (same audit-ledger pattern as seller wallet) ──
 CREATE TABLE `mc_customer_wallets` (
     `id`              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `user_id`         INT UNSIGNED NOT NULL UNIQUE,
@@ -813,13 +813,13 @@ ON DUPLICATE KEY UPDATE user_id = user_id;
 -- What this adds:
 --   • HSN code + GST rate on products (required to itemize tax on
 --     any invoice — was missing entirely)
---   • Vendor registered address/state (required for place-of-supply:
+--   • Seller registered address/state (required for place-of-supply:
 --     CGST+SGST for intra-state sales, IGST for inter-state — this
---     was informally patched around in Phase 1's vendor settings
+--     was informally patched around in Phase 1's seller settings
 --     with a silent try/catch; this migration makes those columns
 --     real so GST calculation has something reliable to read)
 --   • Company/platform GST identity (for the invoice letterhead)
---   • Invoices + invoice line items, one invoice per vendor's
+--   • Invoices + invoice line items, one invoice per seller's
 --     portion of an order (matches how Indian marketplaces actually
 --     invoice — each seller is the seller-of-record for GST purposes)
 -- ═══════════════════════════════════════════════════════════════
@@ -829,11 +829,11 @@ ALTER TABLE `mc_products`
     ADD COLUMN `hsn_code` VARCHAR(20) DEFAULT NULL AFTER `sku`,
     ADD COLUMN `gst_rate` DECIMAL(5,2) NOT NULL DEFAULT 18.00 AFTER `hsn_code`;
 
--- ── 2. Vendor registered address (place of supply) ────────────
--- Only added if not already present — Phase 1's VendorSettingsService
+-- ── 2. Seller registered address (place of supply) ────────────
+-- Only added if not already present — Phase 1's SellerSettingsService
 -- wrote to these defensively via try/catch in case a prior manual
 -- migration had already added them; this is the authoritative version.
-ALTER TABLE `mc_vendor_profiles`
+ALTER TABLE `mc_seller_profiles`
     ADD COLUMN IF NOT EXISTS `shop_phone` VARCHAR(20) DEFAULT NULL AFTER `description`,
     ADD COLUMN IF NOT EXISTS `address`    VARCHAR(255) DEFAULT NULL AFTER `shop_phone`,
     ADD COLUMN IF NOT EXISTS `city`       VARCHAR(100) DEFAULT NULL AFTER `address`,
@@ -850,16 +850,16 @@ INSERT INTO `mc_settings` (`key`,`value`,`group`,`label`,`type`) VALUES
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
 
 -- ── 4. Invoices ───────────────────────────────────────────────
--- One invoice per (order, vendor) pair — mirrors order_vendor_splits,
--- since each vendor is the seller-of-record for their portion of a
--- multi-vendor order and GST law requires the invoice to name the
+-- One invoice per (order, seller) pair — mirrors order_seller_splits,
+-- since each seller is the seller-of-record for their portion of a
+-- multi-seller order and GST law requires the invoice to name the
 -- actual seller, not the platform.
 CREATE TABLE `mc_invoices` (
     `id`                    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `invoice_number`        VARCHAR(50) NOT NULL UNIQUE,
     `order_id`              INT UNSIGNED NOT NULL,
-    `order_vendor_split_id` INT UNSIGNED NOT NULL,
-    `vendor_id`             INT UNSIGNED NOT NULL,
+    `order_seller_split_id` INT UNSIGNED NOT NULL,
+    `seller_id`             INT UNSIGNED NOT NULL,
     `user_id`               INT UNSIGNED NOT NULL,
     `invoice_date`          DATE NOT NULL,
     `place_of_supply`       VARCHAR(100) NOT NULL,
@@ -873,9 +873,9 @@ CREATE TABLE `mc_invoices` (
     `pdf_path`              VARCHAR(255) DEFAULT NULL,
     `emailed_at`            DATETIME DEFAULT NULL,
     `created_at`            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY `uq_split_invoice` (`order_vendor_split_id`),
+    UNIQUE KEY `uq_split_invoice` (`order_seller_split_id`),
     CONSTRAINT `fk_inv_order` FOREIGN KEY (`order_id`) REFERENCES `mc_orders`(`id`) ON DELETE CASCADE,
-    KEY `idx_vendor` (`vendor_id`), KEY `idx_user` (`user_id`)
+    KEY `idx_seller` (`seller_id`), KEY `idx_user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `mc_invoice_items` (
@@ -905,10 +905,10 @@ CREATE TABLE `mc_invoice_items` (
 --
 -- What this adds:
 --   • Shipments + shipment tracking timeline, one shipment per
---     (order, vendor) pair — matches order_vendor_splits, since each
---     vendor ships their own portion of a multi-vendor order
+--     (order, seller) pair — matches order_seller_splits, since each
+--     seller ships their own portion of a multi-seller order
 --     independently with their own courier/tracking number
---   • In-app notifications (customer/vendor/admin) — was a fully
+--   • In-app notifications (customer/seller/admin) — was a fully
 --     static placeholder page before this migration
 --   • Barcode field on products (SKU already existed)
 --   • Low-stock notification toggle
@@ -922,8 +922,8 @@ ALTER TABLE `mc_products`
 CREATE TABLE `mc_shipments` (
     `id`                    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `order_id`              INT UNSIGNED NOT NULL,
-    `order_vendor_split_id` INT UNSIGNED NOT NULL,
-    `vendor_id`             INT UNSIGNED NOT NULL,
+    `order_seller_split_id` INT UNSIGNED NOT NULL,
+    `seller_id`             INT UNSIGNED NOT NULL,
     `courier_name`          VARCHAR(100) NOT NULL,
     `tracking_number`       VARCHAR(100) NOT NULL,
     `tracking_url`          VARCHAR(255) DEFAULT NULL,
@@ -935,9 +935,9 @@ CREATE TABLE `mc_shipments` (
     `delivered_at`          DATETIME DEFAULT NULL,
     `created_at`            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    UNIQUE KEY `uq_split_shipment` (`order_vendor_split_id`),
+    UNIQUE KEY `uq_split_shipment` (`order_seller_split_id`),
     CONSTRAINT `fk_ship_order` FOREIGN KEY (`order_id`) REFERENCES `mc_orders`(`id`) ON DELETE CASCADE,
-    KEY `idx_vendor` (`vendor_id`), KEY `idx_tracking` (`tracking_number`)
+    KEY `idx_seller` (`seller_id`), KEY `idx_tracking` (`tracking_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `mc_shipment_tracking` (
@@ -953,7 +953,7 @@ CREATE TABLE `mc_shipment_tracking` (
 -- ── 3. Notifications ──────────────────────────────────────────
 CREATE TABLE `mc_notifications` (
     `id`          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `user_type`   ENUM('customer','vendor','admin') NOT NULL,
+    `user_type`   ENUM('customer','seller','admin') NOT NULL,
     `user_id`     INT UNSIGNED NOT NULL,
     `type`        VARCHAR(50) NOT NULL COMMENT 'order_placed|order_status|shipment|return|withdrawal|low_stock|dispute|generic',
     `title`       VARCHAR(150) NOT NULL,
@@ -966,7 +966,7 @@ CREATE TABLE `mc_notifications` (
 
 -- ── 4. Settings ───────────────────────────────────────────────
 INSERT INTO `mc_settings` (`key`,`value`,`group`,`label`,`type`) VALUES
-    ('low_stock_notifications', '1', 'inventory', 'Notify vendor when stock hits threshold', 'boolean'),
+    ('low_stock_notifications', '1', 'inventory', 'Notify seller when stock hits threshold', 'boolean'),
     ('default_courier',         'Manual / Self-Ship', 'shipping', 'Default Courier Name', 'text')
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
 
@@ -980,7 +980,7 @@ ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
 -- paste → Go.
 --
 -- What this adds:
---   • Login attempt lockout for both customer/vendor and admin login
+--   • Login attempt lockout for both customer/seller and admin login
 --   • A generic rate-limit table (login throttling, and reusable for
 --     any other sensitive endpoint)
 --   • Remember-me token support actually wired up — the column
@@ -1026,28 +1026,28 @@ ALTER TABLE `mc_admin_permissions`
 
 -- ───────── MIGRATION: 007_otp_verification.sql ─────────
 -- ═══════════════════════════════════════════════════════════════
--- Migration 007: OTP Verification (vendor self-registration email check)
+-- Migration 007: OTP Verification (seller self-registration email check)
 -- ═══════════════════════════════════════════════════════════════
 -- Run AFTER 006_security_hardening.sql has already been imported.
 -- phpMyAdmin: select mycart_marketplace → SQL tab → paste → Go.
 --
 -- What this adds:
---   • A generic OTP table — used here for vendor self-registration
+--   • A generic OTP table — used here for seller self-registration
 --     email verification, but the `purpose` column keeps it reusable
 --     for other OTP flows later (spec also lists "OTP Login") without
 --     a new table each time.
 --
 -- Business rule this implements:
---   • Admin-created vendors go live immediately (unchanged — already
+--   • Admin-created sellers go live immediately (unchanged — already
 --     the existing behavior).
---   • Self-registered vendors start as unverified/pending and must
+--   • Self-registered sellers start as unverified/pending and must
 --     confirm an emailed OTP before their shop goes live.
 -- ═══════════════════════════════════════════════════════════════
 
 CREATE TABLE `mc_otps` (
     `id`          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `identifier`  VARCHAR(150) NOT NULL COMMENT 'email or phone the OTP was sent to',
-    `purpose`     VARCHAR(50) NOT NULL COMMENT 'vendor_email_verify|login|password_reset|...',
+    `purpose`     VARCHAR(50) NOT NULL COMMENT 'seller_email_verify|login|password_reset|...',
     `otp_code`    VARCHAR(10) NOT NULL,
     `attempts`    TINYINT UNSIGNED NOT NULL DEFAULT 0,
     `is_used`     TINYINT(1) NOT NULL DEFAULT 0,
@@ -1110,7 +1110,7 @@ ON DUPLICATE KEY UPDATE user_id = user_id;
 -- ═══ 010: Info Center pages (admin-managed CMS) ═══
 -- 010: Info Center pages become admin-manageable.
 -- Content supports tokens replaced at render time:
---   {{app_url}} {{vendor_url}} {{site_name}} {{site_email}} {{site_phone}}
+--   {{app_url}} {{seller_url}} {{site_name}} {{site_email}} {{site_phone}}
 CREATE TABLE IF NOT EXISTS `mc_pages` (
   `id`                INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `slug`              VARCHAR(100) NOT NULL,

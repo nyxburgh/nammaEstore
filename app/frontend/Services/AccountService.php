@@ -46,10 +46,10 @@ class AccountService
             [$orderId]
         );
         $o['invoices'] = $this->db->fetchAll(
-            "SELECT i.id, i.invoice_number, i.grand_total, u.name as vendor_name, vp.shop_name
+            "SELECT i.id, i.invoice_number, i.grand_total, u.name as seller_name, vp.shop_name
              FROM `".DB_PREFIX."invoices` i
-             JOIN `".DB_PREFIX."users` u ON u.id = i.vendor_id
-             LEFT JOIN `".DB_PREFIX."vendor_profiles` vp ON vp.user_id = i.vendor_id
+             JOIN `".DB_PREFIX."users` u ON u.id = i.seller_id
+             LEFT JOIN `".DB_PREFIX."seller_profiles` vp ON vp.user_id = i.seller_id
              WHERE i.order_id = ?",
             [$orderId]
         );

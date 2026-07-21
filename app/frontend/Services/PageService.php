@@ -58,7 +58,7 @@ class PageService
     {
         return strtr($html, [
             '{{app_url}}'    => APP_URL,
-            '{{vendor_url}}' => VENDOR_URL,
+            '{{seller_url}}' => SELLER_URL,
             '{{site_name}}'  => e(SettingsService::get('site_name', 'Namma E Store')),
             '{{site_email}}' => e(SettingsService::get('site_email', 'info@nammaestore.com')),
             '{{site_phone}}' => e(SettingsService::get('site_phone', '+91 9999999999')),

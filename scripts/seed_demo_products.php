@@ -1,6 +1,6 @@
 <?php
 /**
- * One-off script: seeds a demo vendor + demo products with generated
+ * One-off script: seeds a demo seller + demo products with generated
  * placeholder images, for local demo/testing purposes.
  *
  * Run once:  php scripts/seed_demo_products.php
@@ -20,24 +20,24 @@ if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0777, true);
 }
 
-// ── 1. Demo vendor ──────────────────────────────────────────────
-$vendorEmail = 'vendor.demo@mycart.com';
+// ── 1. Demo seller ──────────────────────────────────────────────
+$sellerEmail = 'seller.demo@mycart.com';
 $existing = $pdo->prepare("SELECT id FROM mc_users WHERE email = ?");
-$existing->execute([$vendorEmail]);
-$vendorId = $existing->fetchColumn();
+$existing->execute([$sellerEmail]);
+$sellerId = $existing->fetchColumn();
 
-if (!$vendorId) {
+if (!$sellerId) {
     $pdo->prepare("INSERT INTO mc_users (name, email, phone, password, role, is_active, is_verified, email_verified_at)
-                   VALUES (?, ?, ?, ?, 'vendor', 1, 1, NOW())")
-        ->execute(['Demo Vendor', $vendorEmail, '9876543210', password_hash('Vendor@123', PASSWORD_BCRYPT)]);
-    $vendorId = $pdo->lastInsertId();
+                   VALUES (?, ?, ?, ?, 'seller', 1, 1, NOW())")
+        ->execute(['Demo Seller', $sellerEmail, '9876543210', password_hash('Seller@123', PASSWORD_BCRYPT)]);
+    $sellerId = $pdo->lastInsertId();
 
-    $pdo->prepare("INSERT INTO mc_vendor_profiles (user_id, shop_name, shop_slug, description, status, vendor_type)
+    $pdo->prepare("INSERT INTO mc_seller_profiles (user_id, shop_name, shop_slug, description, status, seller_type)
                    VALUES (?, 'Namma E Store Demo Shop', 'namma-demo-shop', 'Demo shop seeded for showcasing the marketplace.', 'active', 'commission')")
-        ->execute([$vendorId]);
-    echo "Created demo vendor (id=$vendorId, login: $vendorEmail / Vendor@123)\n";
+        ->execute([$sellerId]);
+    echo "Created demo seller (id=$sellerId, login: $sellerEmail / Seller@123)\n";
 } else {
-    echo "Using existing demo vendor (id=$vendorId)\n";
+    echo "Using existing demo seller (id=$sellerId)\n";
 }
 
 // ── 2. Demo customer ──────────────────────────────────────────────
@@ -107,7 +107,7 @@ function downloadProductImage(string $path, string $keywords, string $title): vo
 
 $insertProduct = $pdo->prepare(
     "INSERT INTO mc_products
-        (vendor_id, category_id, name, slug, sku, description, short_description,
+        (seller_id, category_id, name, slug, sku, description, short_description,
          price, sale_price, stock, status, is_featured, gst_rate, approved_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active', ?, 18.00, NOW())"
 );
@@ -141,7 +141,7 @@ foreach ($products as [$catSlug, $name, $price, $salePrice, $stock, $keywords, $
           . ucwords(str_replace('-', ' ', $catSlug)) . ".";
 
     $insertProduct->execute([
-        $vendorId, $categoryId, $name, $slug, $sku, $desc, $shortDesc,
+        $sellerId, $categoryId, $name, $slug, $sku, $desc, $shortDesc,
         $price, $salePrice, $stock, $featured ? 1 : 0,
     ]);
     $productId = $pdo->lastInsertId();

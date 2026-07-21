@@ -50,7 +50,7 @@ class CustomerReturnService
             'order_id'      => $orderId,
             'order_item_id' => $orderItemId,
             'user_id'       => $userId,
-            'vendor_id'     => $item['vendor_id'],
+            'seller_id'     => $item['seller_id'],
             'type'          => in_array($type, ['return', 'replacement', 'cancel'], true) ? $type : 'return',
             'reason'        => $reason,
             'note'          => $note,

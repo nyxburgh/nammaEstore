@@ -30,8 +30,8 @@ class GiftCardRepository extends Repository
         $sortCol = safeSortField($f['sort'] ?? null, ['id', 'code', 'current_balance', 'created_at'], 'created_at');
         $sortDir = safeSortDir($f['dir'] ?? null);
 
-        $sql = "SELECT gc.*, u.name as vendor_name FROM `{$this->t()}` gc
-                LEFT JOIN `{$this->t('users')}` u ON u.id=gc.vendor_id
+        $sql = "SELECT gc.*, u.name as seller_name FROM `{$this->t()}` gc
+                LEFT JOIN `{$this->t('users')}` u ON u.id=gc.seller_id
                 WHERE $where ORDER BY gc.{$sortCol} {$sortDir}";
         return $this->paginate($sql, $params, $page);
     }

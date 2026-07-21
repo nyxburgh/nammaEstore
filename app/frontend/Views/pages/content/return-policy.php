@@ -7,7 +7,7 @@
 <ol>
   <li>Go to <a href="<?= APP_URL ?>/account/orders">My Account → My Orders</a> and open the delivered order.</li>
   <li>Click <strong>Request Return</strong>, choose <em>Return</em> or <em>Replacement</em>, and tell us the reason.</li>
-  <li>Our team (or the vendor) reviews the request — you'll get a notification once it's approved.</li>
+  <li>Our team (or the seller) reviews the request — you'll get a notification once it's approved.</li>
   <li>Hand the item to the pickup executive or ship it back as instructed.</li>
 </ol>
 

@@ -22,11 +22,11 @@ class ReportService
 
     public function commission(string $from, string $to): array
     {
-        return $this->reports->commissionByVendor($from, $to);
+        return $this->reports->commissionBySeller($from, $to);
     }
 
-    public function vendors(): array
+    public function sellers(): array
     {
-        return $this->reports->vendorPerformance();
+        return $this->reports->sellerPerformance();
     }
 }

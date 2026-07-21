@@ -8,7 +8,7 @@
   <div class="col-md-3"><input type="text" name="search" class="form-control" placeholder="Search code..." value="<?= e($filters['search'] ?? '') ?>"></div>
   <div class="col-md-3"><select name="scope" class="form-select">
     <option value="">All Scopes</option>
-    <?php foreach(['platform','vendor','category','brand','product','user','first_order','festival'] as $s): ?>
+    <?php foreach(['platform','seller','category','brand','product','user','first_order','festival'] as $s): ?>
     <option value="<?= $s ?>" <?= ($filters['scope']??'')===$s?'selected':'' ?>><?= ucwords(str_replace('_',' ',$s)) ?></option>
     <?php endforeach; ?>
   </select></div>

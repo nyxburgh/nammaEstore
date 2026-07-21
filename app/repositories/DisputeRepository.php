@@ -7,11 +7,11 @@ class DisputeRepository extends Repository
 {
     protected string $table = 'disputes';
 
-    public function hasOpenDispute(int $orderId, int $vendorId): bool
+    public function hasOpenDispute(int $orderId, int $sellerId): bool
     {
         return (bool) $this->db->fetchOne(
-            "SELECT id FROM `{$this->t()}` WHERE order_id=? AND vendor_id=? AND status='open'",
-            [$orderId, $vendorId]
+            "SELECT id FROM `{$this->t()}` WHERE order_id=? AND seller_id=? AND status='open'",
+            [$orderId, $sellerId]
         );
     }
 
@@ -24,10 +24,10 @@ class DisputeRepository extends Repository
         $sortCol = safeSortField($f['sort'] ?? null, ['id', 'status', 'created_at'], 'created_at');
         $sortDir = safeSortDir($f['dir'] ?? null);
 
-        $sql = "SELECT d.*, o.order_number, u.name as vendor_name
+        $sql = "SELECT d.*, o.order_number, u.name as seller_name
                 FROM `{$this->t()}` d
                 JOIN `{$this->t('orders')}` o ON o.id=d.order_id
-                JOIN `{$this->t('users')}` u ON u.id=d.vendor_id
+                JOIN `{$this->t('users')}` u ON u.id=d.seller_id
                 WHERE $where ORDER BY d.{$sortCol} {$sortDir}";
         return $this->paginate($sql, $params, $page);
     }

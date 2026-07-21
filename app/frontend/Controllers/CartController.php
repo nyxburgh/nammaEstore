@@ -47,7 +47,7 @@ class CartController extends FrontendController
             return [
                 'id'        => (int)$item['id'],
                 'name'      => $item['name'],
-                'vendor'    => $item['shop_name'] ?: $item['vendor_name'],
+                'seller'    => $item['shop_name'] ?: $item['seller_name'],
                 'image'     => !empty($item['image']) ? UPLOAD_URL . '/' . $item['image'] : null,
                 'variant'   => !empty($item['variant_value']) ? ($item['variant_name'] . ': ' . $item['variant_value']) : null,
                 'qty'       => $qty,

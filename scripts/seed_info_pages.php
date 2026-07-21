@@ -3,7 +3,7 @@
  * One-off script: renders the static Info Center content views into
  * HTML and seeds them into mc_pages (migration 010) so admins can
  * edit them from the panel. Live URLs are converted into tokens
- * ({{app_url}}, {{vendor_url}}, {{site_name}}) that the frontend
+ * ({{app_url}}, {{seller_url}}, {{site_name}}) that the frontend
  * re-expands at render time.
  *
  * Run once:  php scripts/seed_info_pages.php
@@ -41,10 +41,10 @@ foreach (PageController::PAGES as $slug => [$icon, $title, $short]) {
         include $file;
         $html = trim(ob_get_clean());
         // Tokenize live values so the content survives URL / name changes.
-        // VENDOR_URL first — it contains APP_URL as a prefix.
+        // SELLER_URL first — it contains APP_URL as a prefix.
         $html = str_replace(
-            [VENDOR_URL, APP_URL, $siteName],
-            ['{{vendor_url}}', '{{app_url}}', '{{site_name}}'],
+            [SELLER_URL, APP_URL, $siteName],
+            ['{{seller_url}}', '{{app_url}}', '{{site_name}}'],
             $html
         );
     }

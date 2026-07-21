@@ -8,7 +8,7 @@
   <div class="col-lg-8">
     <div class="card mb-3"><div class="card-header"><span class="card-title">Items (<?= count($order['items']) ?>)</span></div>
       <div class="table-responsive"><table class="table mb-0">
-        <thead><tr><th>Product</th><th>Vendor</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th><th>Status</th></tr></thead>
+        <thead><tr><th>Product</th><th>Seller</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th><th>Status</th></tr></thead>
         <tbody>
         <?php foreach($order['items'] as $item): ?>
         <tr>
@@ -16,7 +16,7 @@
             <?php if($item['product_image']): ?><img src="<?= UPLOAD_URL.'/'.$item['product_image'] ?>" style="width:36px;height:36px;border-radius:7px;object-fit:cover;border:1px solid var(--border);"><?php else: ?><div style="width:36px;height:36px;background:var(--bg);border-radius:7px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);"><i class="bi bi-image"></i></div><?php endif; ?>
             <div><div style="font-weight:600;font-size:13px;"><?= e($item['product_name']) ?></div><?php if($item['variant_label']): ?><div style="font-size:11px;color:var(--muted);"><?= e($item['variant_label']) ?></div><?php endif; ?></div>
           </div></td>
-          <td style="font-size:13px;"><?= e($item['shop_name']??$item['vendor_name']) ?></td>
+          <td style="font-size:13px;"><?= e($item['shop_name']??$item['seller_name']) ?></td>
           <td style="font-weight:700;">×<?= $item['quantity'] ?></td>
           <td><?= currency($item['unit_price']) ?></td>
           <td style="font-weight:700;color:var(--purple);"><?= currency($item['subtotal']) ?></td>
@@ -33,13 +33,13 @@
     </div>
     <?php if(!empty($order['splits'])): ?>
     <div class="card mb-3"><div class="card-header"><span class="card-title"><i class="bi bi-pie-chart me-1"></i>Commission Splits</span></div>
-      <div class="table-responsive"><table class="table mb-0"><thead><tr><th>Vendor</th><th>Gross</th><th>Commission %</th><th>Commission</th><th>Net Earning</th><th>Payout</th></tr></thead><tbody>
+      <div class="table-responsive"><table class="table mb-0"><thead><tr><th>Seller</th><th>Gross</th><th>Commission %</th><th>Commission</th><th>Net Earning</th><th>Payout</th></tr></thead><tbody>
       <?php foreach($order['splits'] as $sp): ?><tr>
-        <td style="font-weight:600;"><?= e($sp['shop_name']??$sp['vendor_name']) ?></td>
+        <td style="font-weight:600;"><?= e($sp['shop_name']??$sp['seller_name']) ?></td>
         <td style="font-weight:600;"><?= currency($sp['gross_amount']) ?></td>
         <td><span class="badge badge-warning"><?= number_format($sp['commission_pct'],1) ?>%</span></td>
         <td style="color:var(--pink);font-weight:700;"><?= currency($sp['commission_amount']) ?></td>
-        <td style="color:#16a34a;font-weight:700;"><?= currency($sp['vendor_earning']) ?></td>
+        <td style="color:#16a34a;font-weight:700;"><?= currency($sp['seller_earning']) ?></td>
         <td><?= statusBadge($sp['payout_status']) ?></td>
       </tr><?php endforeach; ?>
       </tbody></table></div>

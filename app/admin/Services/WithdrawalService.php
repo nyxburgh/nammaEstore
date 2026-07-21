@@ -1,18 +1,18 @@
 <?php
 namespace App\Admin\Services;
 
-use App\Repositories\{VendorWithdrawalRepository, VendorWalletRepository, SettingsRepository};
+use App\Repositories\{SellerWithdrawalRepository, SellerWalletRepository, SettingsRepository};
 
 class WithdrawalService
 {
-    private VendorWithdrawalRepository $withdrawals;
-    private VendorWalletRepository $wallets;
+    private SellerWithdrawalRepository $withdrawals;
+    private SellerWalletRepository $wallets;
     private SettingsRepository $settings;
 
     public function __construct()
     {
-        $this->withdrawals = new VendorWithdrawalRepository();
-        $this->wallets      = new VendorWalletRepository();
+        $this->withdrawals = new SellerWithdrawalRepository();
+        $this->wallets      = new SellerWalletRepository();
         $this->settings     = new SettingsRepository();
     }
 
@@ -27,19 +27,19 @@ class WithdrawalService
         if (!$w || $w['status'] !== 'pending') {
             return ['success' => false, 'message' => 'Request is not pending.'];
         }
-        // Approving debits the wallet immediately — the vendor's
+        // Approving debits the wallet immediately — the seller's
         // balance reflects money that's committed to payout, even
         // before the bank transfer/UPI settlement is manually confirmed.
         try {
             $this->wallets->debit(
-                (int) $w['vendor_id'], (float) $w['amount'], 'withdrawal', $id,
+                (int) $w['seller_id'], (float) $w['amount'], 'withdrawal', $id,
                 'Withdrawal approved via ' . $w['method']
             );
         } catch (\RuntimeException $e) {
             return ['success' => false, 'message' => $e->getMessage()];
         }
         $this->withdrawals->markProcessed($id, 'approved', $adminId);
-        $this->notifyVendor((int) $w['vendor_id'], 'Withdrawal approved', 'Your withdrawal of ' . currency((float) $w['amount']) . ' has been approved.');
+        $this->notifySeller((int) $w['seller_id'], 'Withdrawal approved', 'Your withdrawal of ' . currency((float) $w['amount']) . ' has been approved.');
         return ['success' => true];
     }
 
@@ -50,7 +50,7 @@ class WithdrawalService
             return ['success' => false, 'message' => 'Request is not pending.'];
         }
         $this->withdrawals->markProcessed($id, 'rejected', $adminId, $note);
-        $this->notifyVendor((int) $w['vendor_id'], 'Withdrawal rejected', 'Your withdrawal of ' . currency((float) $w['amount']) . ' was rejected.' . ($note ? " Reason: {$note}" : ''));
+        $this->notifySeller((int) $w['seller_id'], 'Withdrawal rejected', 'Your withdrawal of ' . currency((float) $w['amount']) . ' was rejected.' . ($note ? " Reason: {$note}" : ''));
         return ['success' => true];
     }
 
@@ -62,12 +62,12 @@ class WithdrawalService
             return ['success' => false, 'message' => 'Request must be approved first.'];
         }
         $this->withdrawals->markProcessed($id, 'paid', $adminId);
-        $this->notifyVendor((int) $w['vendor_id'], 'Withdrawal paid', currency((float) $w['amount']) . ' has been transferred to you.');
+        $this->notifySeller((int) $w['seller_id'], 'Withdrawal paid', currency((float) $w['amount']) . ' has been transferred to you.');
         return ['success' => true];
     }
 
-    private function notifyVendor(int $vendorId, string $title, string $message): void
+    private function notifySeller(int $sellerId, string $title, string $message): void
     {
-        (new \App\Core\Services\NotificationService())->notify('vendor', $vendorId, 'withdrawal', $title, $message, VENDOR_URL . '/wallet');
+        (new \App\Core\Services\NotificationService())->notify('seller', $sellerId, 'withdrawal', $title, $message, SELLER_URL . '/wallet');
     }
 }

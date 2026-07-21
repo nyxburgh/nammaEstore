@@ -14,7 +14,7 @@ class WishlistRepository extends Repository
                        vp.shop_name
                 FROM `{$this->t()}` w
                 JOIN `{$this->t('products')}` p ON p.id=w.product_id
-                LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=p.vendor_id
+                LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=p.seller_id
                 WHERE w.user_id=? ORDER BY w.created_at DESC";
         return $this->paginate($sql, [$userId], $page);
     }

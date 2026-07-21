@@ -1,4 +1,4 @@
-/* Namma E Store — vendor storefront page styles (extracted from vendor/store.php per the no-inline-CSS coding rule) */
+/* Namma E Store — seller storefront page styles (extracted from seller/store.php per the no-inline-CSS coding rule) */
 
 .store-hero{background:linear-gradient(135deg,#c2185b,#e91e8c,#1565c0);padding:32px 0;margin-bottom:0;}
 .store-hero-inner{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}

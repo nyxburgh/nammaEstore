@@ -12,15 +12,15 @@
         <label class="form-label">Type *</label>
         <select name="type" id="typeSelect" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
           <option value="company">Company Gift Card</option>
-          <option value="vendor">Vendor Gift Card</option>
+          <option value="seller">Seller Gift Card</option>
           <option value="recharge">Recharge Gift Card</option>
         </select>
       </div>
-      <div class="col-md-4" id="vendorWrap" style="display:none;">
-        <label class="form-label">Vendor *</label>
-        <select name="vendor_id" class="form-select">
-          <option value="">— select vendor —</option>
-          <?php foreach(($vendors ?? []) as $v): ?>
+      <div class="col-md-4" id="sellerWrap" style="display:none;">
+        <label class="form-label">Seller *</label>
+        <select name="seller_id" class="form-select">
+          <option value="">— select seller —</option>
+          <?php foreach(($sellers ?? []) as $v): ?>
           <option value="<?= $v['id'] ?>"><?= e($v['shop_name'] ?: $v['name']) ?></option>
           <?php endforeach; ?>
         </select>

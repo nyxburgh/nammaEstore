@@ -38,12 +38,12 @@ function cartItemRow(item) {
   const img = item.image
     ? '<img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.name) + '">'
     : '🛍️';
-  const variant = item.variant ? '<div class="vendor">' + escapeHtml(item.variant) + '</div>' : '';
+  const variant = item.variant ? '<div class="seller">' + escapeHtml(item.variant) + '</div>' : '';
   return '<div class="cart-item">' +
     '<div class="cart-item-img">' + img + '</div>' +
     '<div class="cart-item-info">' +
       '<h5>' + escapeHtml(item.name) + '</h5>' +
-      '<div class="vendor">🏪 ' + escapeHtml(item.vendor || 'Shop') + '</div>' +
+      '<div class="seller">🏪 ' + escapeHtml(item.seller || 'Shop') + '</div>' +
       variant +
       '<div class="cart-item-controls">' +
         '<button class="qty-btn" data-action="drawer-qty" data-item-id="' + item.id + '" data-delta="-1">−</button>' +

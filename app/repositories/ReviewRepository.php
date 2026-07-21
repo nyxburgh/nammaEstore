@@ -73,7 +73,7 @@ class ReviewRepository extends Repository
                 FROM `{$this->t()}` r
                 JOIN `{$this->t('products')}` p ON p.id=r.product_id
                 JOIN `{$this->t('users')}` u ON u.id=r.user_id
-                LEFT JOIN `{$this->t('vendor_profiles')}` vp ON vp.user_id=p.vendor_id
+                LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=p.seller_id
                 WHERE $where ORDER BY r.{$sortCol} {$sortDir}";
         return $this->paginate($sql, $params, $page);
     }

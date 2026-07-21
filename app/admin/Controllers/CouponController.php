@@ -1,7 +1,7 @@
 <?php
 namespace App\Admin\Controllers;
 use App\Core\{Auth, Middleware};
-use App\Admin\Services\{CouponService, CategoryService, BrandService, VendorService};
+use App\Admin\Services\{CouponService, CategoryService, BrandService, SellerService};
 use App\Repositories\ProductRepository;
 
 class CouponController extends AdminController
@@ -33,7 +33,7 @@ class CouponController extends AdminController
             'coupon'     => null,
             'categories' => (new CategoryService())->flatOptions(),
             'brands'     => (new BrandService())->list(1, [])['data'] ?? [],
-            'vendors'    => (new VendorService())->options(),
+            'sellers'    => (new SellerService())->options(),
         ]);
     }
 
@@ -56,7 +56,7 @@ class CouponController extends AdminController
             'coupon'     => $coupon,
             'categories' => (new CategoryService())->flatOptions(),
             'brands'     => (new BrandService())->list(1, [])['data'] ?? [],
-            'vendors'    => (new VendorService())->options(),
+            'sellers'    => (new SellerService())->options(),
         ]);
     }
 

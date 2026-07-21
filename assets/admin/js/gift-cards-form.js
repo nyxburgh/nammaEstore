@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
   var typeSelect = document.getElementById('typeSelect');
-  var vendorWrap = document.getElementById('vendorWrap');
-  if (!typeSelect || !vendorWrap) return;
+  var sellerWrap = document.getElementById('sellerWrap');
+  if (!typeSelect || !sellerWrap) return;
 
   typeSelect.addEventListener('change', function () {
-    vendorWrap.style.display = this.value === 'vendor' ? '' : 'none';
+    sellerWrap.style.display = this.value === 'seller' ? '' : 'none';
   });
 });
