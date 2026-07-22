@@ -5,14 +5,14 @@
 **49 tables total**, verified with zero duplicate definitions and
 balanced SQL syntax (`database/full_install.sql`). Covers: users/
 admins/RBAC, products/categories/brands, cart/orders/order-items,
-vendor settlement (wallets, settlements, withdrawals), coupons/gift
+seller settlement (wallets, settlements, withdrawals), coupons/gift
 cards/customer wallet, GST invoicing, shipments/notifications, OTP
 verification, loyalty points, and rate-limiting/security tables.
 
 This zip reflects everything built through **Phase 7**: Architecture
-(Phase 0), Vendor Settlement (Phase 1), Coupons/Gift Cards/Wallet
+(Phase 0), Seller Settlement (Phase 1), Coupons/Gift Cards/Wallet
 (Phase 3), GST & Invoicing (Phase 4), Shipping/Notifications/Inventory
-(Phase 5), Security/SEO hardening (Phase 6), vendor email-OTP
+(Phase 5), Security/SEO hardening (Phase 6), seller email-OTP
 verification, and PWA + Loyalty Points (Phase 7).
 
 Phase 7 items **not** built — deliberately, since the spec itself
@@ -72,7 +72,7 @@ payment/SMS/email/WhatsApp provider credentials.
 
 - **Storefront:** http://localhost/mycart/
 - **Admin panel:** http://localhost/mycart/mc-admin/
-- **Vendor panel:** http://localhost/mycart/my-vendor/
+- **Seller panel:** http://localhost/mycart/my-seller/
 - **Sitemap:** http://localhost/mycart/sitemap.xml
 - **Robots:** http://localhost/mycart/robots.txt
 
@@ -89,13 +89,13 @@ WHERE email = 'admin@mycart.com';
 ```
 Log in with **admin@mycart.com / Admin@123**.
 
-No seeded vendor or customer — register a customer via the
-storefront, and create a vendor from **Admin → Vendors → Add Vendor**.
+No seeded seller or customer — register a customer via the
+storefront, and create a seller from **Admin → Sellers → Add Seller**.
 
 ## 7. A realistic end-to-end test path
 
-1. Admin: create 1–2 categories, a brand, and a vendor.
-2. Vendor panel: log in as that vendor, add a product — fill in
+1. Admin: create 1–2 categories, a brand, and a seller.
+2. Seller panel: log in as that seller, add a product — fill in
    **HSN code, GST rate, barcode** (Phase 4/5), set stock low enough
    to test the low-stock notification.
 3. Admin → Settings → lower **Settlement → Return Window** to `0`
@@ -109,11 +109,11 @@ storefront, and create a vendor from **Admin → Vendors → Add Vendor**.
 6. Admin → Orders: mark the order **Delivered** — this sets
    `delivered_at`, which the whole settlement engine depends on (this
    was silently broken before Phase 5 fixed it).
-7. Vendor panel → order detail: create a shipment (courier + tracking
+7. Seller panel → order detail: create a shipment (courier + tracking
    number) — customer gets notified, tracking page updates.
 8. Admin → Settlements: **Run Eligibility Pass**, then **Credit
    Eligible to Wallets**.
-9. Check: vendor's Wallet page (balance credited), customer's Orders
+9. Check: seller's Wallet page (balance credited), customer's Orders
    → Download/Email GST Invoice, customer's Notifications page.
 10. Try a return: from the customer's order detail, request a return;
     Admin → Returns → approve → mark refunded — check the customer's
@@ -146,17 +146,17 @@ storefront, and create a vendor from **Admin → Vendors → Add Vendor**.
   checkout, auth pages, account wallet/returns/notifications/order-
   detail, order tracking. Still has pre-existing inline styles/scripts
   from the original build: `home/index.php`, `products/index.php`,
-  `products/show.php`, `cart/index.php`, `vendor/store.php`, and a
+  `products/show.php`, `cart/index.php`, `seller/store.php`, and a
   few remaining `account/*.php` pages (orders, profile, addresses,
-  wishlist, reviews, overview). Admin/vendor panels are explicitly
+  wishlist, reviews, overview). Admin/seller panels are explicitly
   out of scope per your instruction.
 - Phase 7 (multi-warehouse, PWA, multi-currency, GraphQL, etc.) not
   started — deliberately deferred, matching the spec's own guidance.
 - `composer install` hasn't been run anywhere yet.
-- ~~Vendor self-registration currently activates the shop immediately~~
-  **Fixed:** admin-created vendors still go live immediately; self-
-  registered vendors now must confirm a 6-digit email OTP before
-  their shop activates (Vendor Panel → Register → check the email
+- ~~Seller self-registration currently activates the shop immediately~~
+  **Fixed:** admin-created sellers still go live immediately; self-
+  registered sellers now must confirm a 6-digit email OTP before
+  their shop activates (Seller Panel → Register → check the email
   configured in your `.env`, or check the `mc_otps` table directly
   in phpMyAdmin if SMTP isn't set up yet — the code is written there
   either way).

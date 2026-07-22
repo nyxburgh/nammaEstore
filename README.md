@@ -1,7 +1,7 @@
-# Namma E Store — Multi-Vendor Marketplace
+# Namma E Store — Multi-Seller Marketplace
 
-A complete PHP MVC multi-vendor marketplace with three panels:
-Admin, Vendor Dashboard, and Customer Storefront.
+A complete PHP MVC multi-seller marketplace with three panels:
+Admin, Seller Dashboard, and Customer Storefront.
 
 ---
 
@@ -44,7 +44,7 @@ Edit `config/database.php`:
 |-----|-------|
 | `http://localhost/mycart/` | Customer Storefront |
 | `http://localhost/mycart/mc-admin/` | Admin Panel |
-| `http://localhost/mycart/my-vendor/` | Vendor Dashboard |
+| `http://localhost/mycart/my-seller/` | Seller Dashboard |
 
 ---
 
@@ -69,13 +69,13 @@ mycart/
 │   ├── .htaccess                ← Apache rewrite rules
 │   └── uploads/                 ← User-uploaded files
 └── app/
-    ├── bootstrap.php            ← Panel routing (admin/vendor/frontend)
+    ├── bootstrap.php            ← Panel routing (admin/seller/frontend)
     ├── core/                    ← Router, Controller, Model, Auth, DB
     ├── helpers/functions.php    ← currency(), e(), formatDate(), etc.
     ├── models/                  ← Shared models (User, Product, Order...)
     ├── admin/                   ← Admin panel (Controllers/Services/Views)
     ├── frontend/                ← Customer storefront
-    └── vendor-panel/            ← Vendor dashboard
+    └── seller-panel/            ← Seller dashboard
 ```
 
 ---
@@ -91,8 +91,8 @@ mycart/
 - Order tracking by order number
 - User account: orders, wishlist, addresses, reviews, payments, profile
 
-### Vendor Dashboard (`/my-vendor/`)
-- Registration + login (auto-creates vendor profile + free plan)
+### Seller Dashboard (`/my-seller/`)
+- Registration + login (auto-creates seller profile + free plan)
 - Dashboard: revenue chart, stats, recent orders, top products
 - Product management: add, edit, image upload, variants
 - Order management: status updates with timeline
@@ -102,10 +102,10 @@ mycart/
 
 ### Admin Panel (`/mc-admin/`)
 - Super admin + sub-admins with module permissions
-- Vendor management (approve/suspend)
-- Product management across all vendors
+- Seller management (approve/suspend)
+- Product management across all sellers
 - Order monitoring
-- Reports: sales, commissions, vendors
+- Reports: sales, commissions, sellers
 - Banner/homepage management
 - Platform settings
 - Activity log
@@ -120,7 +120,7 @@ mycart/
 | Starter | ₹500/mo | ₹10,000/mo | 10% after |
 | Growth | ₹1,000/mo | ₹20,000/mo | 10% after |
 
-Commission is calculated per order, tracked per vendor per month.
+Commission is calculated per order, tracked per seller per month.
 
 ---
 
@@ -145,5 +145,5 @@ define('APP_URL', 'http://localhost/mycart');
 |--------|---------|
 | `mc_` | All database tables |
 | `mc-admin` | Admin URL prefix |
-| `my-vendor` | Vendor URL prefix |
+| `my-seller` | Seller URL prefix |
 

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title><?= e($title??'Dashboard') ?> — Namma E Store Admin</title>
-<link href="<?= admin_asset('seller/bootstrap/bootstrap.min.css') ?>" rel="stylesheet">
-<link href="<?= admin_asset('seller/bootstrap-icons/bootstrap-icons.min.css') ?>" rel="stylesheet">
+<link href="<?= admin_asset('vendor/bootstrap/bootstrap.min.css') ?>" rel="stylesheet">
+<link href="<?= admin_asset('vendor/bootstrap-icons/bootstrap-icons.min.css') ?>" rel="stylesheet">
 <style>
 :root{
   --pink:#e91e8c;--pink-soft:#fde8f4;
@@ -322,8 +322,8 @@ setTimeout(()=>{const t=document.getElementById('flash-toast');if(t){t.style.ani
   </div>
 </div>
 
-<script src="<?= admin_asset('seller/bootstrap/bootstrap.bundle.min.js') ?>"></script>
-<script src="<?= admin_asset('seller/chartjs/chart.umd.min.js') ?>"></script>
+<script src="<?= admin_asset('vendor/bootstrap/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= admin_asset('vendor/chartjs/chart.umd.min.js') ?>"></script>
 <script src="<?= admin_asset('js/form-validation.js') ?>"></script>
 <script>
 document.querySelectorAll('.toggle-status').forEach(el=>{
