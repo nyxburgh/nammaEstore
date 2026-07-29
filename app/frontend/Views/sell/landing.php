@@ -1,3 +1,4 @@
+<?php $sellerLoggedIn = \App\Core\Auth::isSellerLoggedIn(); ?>
 <div class="sell-hero">
   <div class="container sell-hero-inner">
     <nav class="breadcrumbs light" aria-label="Breadcrumb">
@@ -8,8 +9,12 @@
     <h1>Grow your business.<br>Sell on <?= e($siteName) ?>.</h1>
     <p>Join <?= number_format($sellerCount) ?>+ sellers already reaching customers across the country. Set up your store in minutes and start selling today.</p>
     <div class="sell-hero-ctas">
+      <?php if($sellerLoggedIn): ?>
+      <a href="<?= SELLER_URL ?>/dashboard" class="sell-btn-primary">Go to Seller Dashboard →</a>
+      <?php else: ?>
       <a href="<?= SELLER_URL ?>/register" class="sell-btn-primary">Start Selling →</a>
       <a href="<?= SELLER_URL ?>/login" class="sell-btn-secondary">Already a seller? Sign in</a>
+      <?php endif; ?>
     </div>
     <div class="sell-hero-stats">
       <div class="shs-item"><strong><?= number_format($sellerCount) ?>+</strong><span>Active Sellers</span></div>
@@ -114,9 +119,11 @@
   <?php endif; ?>
 
   <!-- CTA STRIP -->
+  <?php if(!$sellerLoggedIn): ?>
   <div class="sell-cta-strip">
     <div class="scs-text"><strong>Ready to get started?</strong> Create your seller account in under 5 minutes.</div>
     <a href="<?= SELLER_URL ?>/register" class="scs-btn">Register as a Seller →</a>
   </div>
+  <?php endif; ?>
 
 </div>

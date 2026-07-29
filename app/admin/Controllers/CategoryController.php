@@ -28,11 +28,14 @@ class CategoryController extends AdminController
     {
         Middleware::adminAuth();
         Middleware::can('products');
+        $parentId = (int) $this->input('parent_id', 0);
+        $parent   = $parentId ? $this->service->find($parentId) : null;
         $this->view('categories.form', [
-            'title'        => 'Add Category',
-            'category'     => null,
-            'parents'      => $this->service->parentOptions(),
-            'sidebarStats' => $this->sidebarStats(),
+            'title'          => $parent ? 'Add Sub Category' : 'Add Category',
+            'category'       => null,
+            'parentCategory' => $parent,
+            'parents'        => $this->service->parentOptions(),
+            'sidebarStats'   => $this->sidebarStats(),
         ]);
     }
 
@@ -64,11 +67,13 @@ class CategoryController extends AdminController
             return;
         }
 
+        $parent = !empty($cat['parent_id']) ? $this->service->find((int)$cat['parent_id']) : null;
         $this->view('categories.form', [
-            'title'        => 'Edit Category',
-            'category'     => $cat,
-            'parents'      => $this->service->parentOptions((int)$id),
-            'sidebarStats' => $this->sidebarStats(),
+            'title'          => $parent ? 'Edit Sub Category' : 'Edit Category',
+            'category'       => $cat,
+            'parentCategory' => $parent,
+            'parents'        => $this->service->parentOptions((int)$id),
+            'sidebarStats'   => $this->sidebarStats(),
         ]);
     }
 

@@ -35,6 +35,9 @@ class AuthController extends SellerController
         }
         $r = (new SellerAuthService())->register($_POST);
         if (!$r['success']) { $this->setFlash('error', $r['message']); $this->redirect(SELLER_URL.'/register'); return; }
+        if (isset($r['debug_otp'])) {
+            $this->setFlash('success', "Registered! (Dev mode — no SMTP configured, your verification code is: {$r['debug_otp']})");
+        }
         $this->redirect(SELLER_URL.'/verify-email');
     }
     public function logout(): void {
@@ -63,7 +66,10 @@ class AuthController extends SellerController
         Middleware::sellerAuth();
         $seller = \App\Core\Auth::seller();
         $r = (new SellerAuthService())->resendVerification((int) $seller['id'], $seller['email'], $seller['name'] ?? 'your shop');
-        $this->setFlash($r['success'] ? 'success' : 'error', $r['success'] ? 'A new code has been sent to your email.' : $r['message']);
+        $msg = isset($r['debug_otp'])
+            ? "Dev mode — no SMTP configured, your verification code is: {$r['debug_otp']}"
+            : ($r['success'] ? 'A new code has been sent to your email.' : $r['message']);
+        $this->setFlash($r['success'] ? 'success' : 'error', $msg);
         $this->redirect(SELLER_URL.'/verify-email');
     }
 }

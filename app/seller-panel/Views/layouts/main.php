@@ -411,7 +411,8 @@ function confirmDelete(url, msg){
 function toggleProductStatus(id){
   fetch(SELLER_URL+'/products/'+id+'/toggle',{method:'POST',body:new URLSearchParams({_csrf_token:CSRF_TOKEN})}).then(r=>r.json()).then(d=>{
     if(d.success){location.reload();}
-  });
+    else{showToast('⚠️ '+(d.message||'Could not update status.'));}
+  }).catch(()=>{showToast('⚠️ Session expired or network error — please refresh and try again.');});
 }
 </script>
 <?= $scripts ?? '' ?>

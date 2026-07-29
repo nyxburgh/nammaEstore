@@ -47,6 +47,7 @@ $isLogged = \App\Core\Auth::isUserLoggedIn();
 $user     = \App\Core\Auth::user();
 $cats     = $categories ?? [];
 $cartCnt  = $cartCount ?? 0;
+$sellerLoggedIn = $sellerLoggedIn ?? false;
 ?>
 
 <!-- FLASH TICKER -->
@@ -79,6 +80,9 @@ $cartCnt  = $cartCount ?? 0;
     <div class="header-actions">
       <a href="<?= APP_URL ?>/sell" class="header-btn sell-header-btn"><span class="icon">🏪</span><span class="label">Sell on <?= e($siteName) ?></span></a>
       <div class="desk-account-wrap">
+        <?php if($sellerLoggedIn): ?>
+        <a href="<?= SELLER_URL ?>/dashboard" class="header-btn"><span class="icon">👤</span><span class="label">Seller Dashboard</span></a>
+        <?php else: ?>
         <button class="header-btn" data-action="toggle-desk-account"><span class="icon">👤</span><span class="label"><?= $isLogged?e($user['name']):'Account' ?></span></button>
         <div class="desk-account-dropdown" id="deskAccDropdown">
           <div class="desk-acc-header">
@@ -105,6 +109,7 @@ $cartCnt  = $cartCount ?? 0;
             <?php endif; ?>
           </ul>
         </div>
+        <?php endif; ?>
       </div>
       <div class="btn-wrap" data-action="open-cart">
         <button class="header-btn"><span class="icon">🛒</span><span class="label">Cart</span></button>
@@ -186,7 +191,11 @@ $cartCnt  = $cartCount ?? 0;
     <a href="<?= APP_URL ?>" class="mob-nav-btn nav-home"><span class="m-icon">🏠</span><span class="m-label">Home</span></a>
     <button class="mob-nav-btn nav-cats" data-action="toggle-cats"><span class="m-icon">🗂️</span><span class="m-label">Categories</span></button>
     <div class="mob-nav-center-wrap" data-action="open-cart"><div class="mob-nav-center">🛒<span class="mob-cart-badge" id="cartBadgeMob"><?= $cartCnt ?: '' ?></span></div><span class="mob-nav-center-label">Cart</span></div>
+    <?php if($sellerLoggedIn): ?>
+    <a href="<?= SELLER_URL ?>/dashboard" class="mob-nav-btn"><span class="m-icon">👤</span><span class="m-label">Account</span></a>
+    <?php else: ?>
     <button class="mob-nav-btn" data-action="toggle-account"><span class="m-icon">👤</span><span class="m-label">Account</span></button>
+    <?php endif; ?>
     <button class="mob-nav-btn" data-action="toggle-menu"><span class="m-icon">☰</span><span class="m-label">Menu</span></button>
   </div>
 </nav>

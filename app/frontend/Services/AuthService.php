@@ -43,9 +43,11 @@ class AuthService
         // emailed OTP) must verify before the first login completes.
         if (!(int) $user['is_verified']) {
             RateLimiter::clear($rlKey);
-            $this->sendVerificationOtp($user['email']);
-            return ['success' => false, 'needs_verification' => true, 'email' => $user['email'],
-                    'message' => 'Please verify your email. We sent a new code to ' . $user['email'] . '.'];
+            $otp = $this->sendVerificationOtp($user['email']);
+            $message = isset($otp['debug_otp'])
+                ? "Please verify your email. (Dev mode — no SMTP configured, your verification code is: {$otp['debug_otp']})"
+                : 'Please verify your email. We sent a new code to ' . $user['email'] . '.';
+            return ['success' => false, 'needs_verification' => true, 'email' => $user['email'], 'message' => $message];
         }
 
         RateLimiter::clear($rlKey);
@@ -84,8 +86,10 @@ class AuthService
         ]);
         // The account stays logged-out until the emailed OTP is
         // confirmed — see verifyEmail().
-        $this->sendVerificationOtp($d['email']);
-        return ['success' => true, 'needs_verification' => true, 'email' => $d['email']];
+        $otp = $this->sendVerificationOtp($d['email']);
+        $result = ['success' => true, 'needs_verification' => true, 'email' => $d['email']];
+        if (isset($otp['debug_otp'])) $result['debug_otp'] = $otp['debug_otp'];
+        return $result;
     }
 
     public function sendVerificationOtp(string $email): array {

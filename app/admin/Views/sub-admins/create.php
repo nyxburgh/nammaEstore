@@ -1,6 +1,6 @@
 <?php $p=ADMIN_URL;
-$moduleLabels=['products'=>'Product Management','payments'=>'Payment Monitoring','reports'=>'Reports & Analytics','activity'=>'Activity Logs','banners'=>'Banner Management'];
-$moduleIcons=['products'=>'box-seam','payments'=>'credit-card','reports'=>'bar-chart','activity'=>'clock-history','banners'=>'images']; ?>
+$moduleLabels=['products'=>'Product Management','payments'=>'Payment Monitoring','reports'=>'Reports & Analytics','activity'=>'Activity Logs','banners'=>'Banner Management','settlements'=>'Settlements','returns'=>'Returns','disputes'=>'Disputes','coupons'=>'Coupons','gift_cards'=>'Gift Cards','brands'=>'Brands'];
+$moduleIcons=['products'=>'box-seam','payments'=>'credit-card','reports'=>'bar-chart','activity'=>'clock-history','banners'=>'images','settlements'=>'cash-stack','returns'=>'arrow-return-left','disputes'=>'exclamation-triangle','coupons'=>'ticket-perforated','gift_cards'=>'gift','brands'=>'tags']; ?>
 <div class="d-flex align-items-center gap-3 mb-4"><a href="<?= $p ?>/sub-admins" class="btn btn-sm btn-outline-secondary btn-icon"><i class="bi bi-arrow-left"></i></a><h5 style="font-weight:800;margin:0;">Add Sub-Admin</h5></div>
 <form method="POST" action="<?= $p ?>/sub-admins" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>

@@ -9,10 +9,11 @@ class ProductController extends FrontendController
     {
         $svc     = new ProductService();
         $filters = [
-            'sort'      => $this->input('sort', 'newest'),
-            'category'  => $this->input('category'),
-            'min_price' => $this->input('min_price'),
-            'max_price' => $this->input('max_price'),
+            'sort'       => $this->input('sort', 'newest'),
+            'category'   => $this->input('category'),
+            'categories' => array_filter((array)($_GET['categories'] ?? [])),
+            'min_price'  => $this->input('min_price'),
+            'max_price'  => $this->input('max_price'),
         ];
 
         $this->view('products.index', [
@@ -29,9 +30,10 @@ class ProductController extends FrontendController
     {
         $svc     = new ProductService();
         $filters = [
-            'sort'      => $this->input('sort', 'newest'),
-            'min_price' => $this->input('min_price'),
-            'max_price' => $this->input('max_price'),
+            'sort'       => $this->input('sort', 'newest'),
+            'categories' => array_filter((array)($_GET['categories'] ?? [])),
+            'min_price'  => $this->input('min_price'),
+            'max_price'  => $this->input('max_price'),
         ];
         $result  = $svc->getByCategory($slug, (int)$this->input('page', 1), $filters);
 

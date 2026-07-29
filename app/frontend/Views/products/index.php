@@ -23,9 +23,23 @@
         <?php if(isset($searchQ)): ?><input type="hidden" name="q" value="<?= e($searchQ) ?>"><?php endif; ?>
         <div class="filter-group">
           <h4>Categories</h4>
-          <div><?php foreach($categories as $cat): ?>
-            <a href="<?= APP_URL ?>/category/<?= e($cat['slug']) ?>" class="filter-chip <?= isset($category)&&$category['slug']===$cat['slug']?'active':'' ?>"><?= e($cat['name']) ?></a>
-          <?php endforeach; ?></div>
+          <?php $selectedCatIds = array_map('intval', array_merge(
+                isset($category) ? [$category['id']] : [],
+                $filters['categories'] ?? [],
+                !empty($filters['category']) ? [$filters['category']] : []
+              )); ?>
+          <div class="filter-checklist">
+            <?php foreach($categories as $cat): $isUrlCategory = isset($category) && (int)$category['id']===(int)$cat['id']; ?>
+            <?php if($isUrlCategory): ?>
+            <label class="filter-check active"><input type="checkbox" checked disabled><?= e($cat['name']) ?></label>
+            <?php else: ?>
+            <label class="filter-check">
+              <input type="checkbox" name="categories[]" value="<?= (int)$cat['id'] ?>" <?= in_array((int)$cat['id'],$selectedCatIds,true)?'checked':'' ?> data-action="submit-on-change">
+              <?= e($cat['name']) ?>
+            </label>
+            <?php endif; ?>
+            <?php endforeach; ?>
+          </div>
         </div>
         <div class="filter-group">
           <h4>Price Range</h4>
@@ -56,7 +70,7 @@
         <div class="sort-right">
           <form method="GET" class="sort-form">
             <?php if(isset($searchQ)): ?><input type="hidden" name="q" value="<?= e($searchQ) ?>"><?php endif; ?>
-            <?php if(isset($category)): ?><?php endif; ?>
+            <?php foreach($filters['categories'] ?? [] as $cid): ?><input type="hidden" name="categories[]" value="<?= (int)$cid ?>"><?php endforeach; ?>
             <?php if(!empty($filters['min_price'])): ?><input type="hidden" name="min_price" value="<?= e($filters['min_price']) ?>"><?php endif; ?>
             <?php if(!empty($filters['max_price'])): ?><input type="hidden" name="max_price" value="<?= e($filters['max_price']) ?>"><?php endif; ?>
             <select name="sort" class="sort-select" data-action="submit-on-change">

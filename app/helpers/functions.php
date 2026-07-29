@@ -258,9 +258,10 @@ function uploadFile(array $file, string $folder = 'general', string $context = '
     $dir = UPLOAD_PATH . '/' . $folder;
     if (!is_dir($dir)) mkdir($dir, 0755, true);
 
-    $name = bin2hex(random_bytes(16)) . '.' . $ext;
+    $slug = slugify(\App\Frontend\Services\SettingsService::get('site_name', 'Namma E Store'));
+    $name = $slug . '-' . bin2hex(random_bytes(16)) . '.' . $ext;
     return move_uploaded_file($file['tmp_name'], $dir . '/' . $name)
-        ? 'uploads/' . $folder . '/' . $name
+        ? $folder . '/' . $name
         : null;
 }
 

@@ -19,6 +19,12 @@
 .filter-group h4{font-size:.8rem;font-weight:700;color:var(--dark);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px;}
 .filter-chip{display:inline-flex;align-items:center;padding:5px 12px;border:1.5px solid #f0e6ef;border-radius:50px;font-size:.76rem;font-weight:600;cursor:pointer;margin:3px;transition:all var(--transition);text-decoration:none;color:var(--dark);}
 .filter-chip:hover,.filter-chip.active{background:var(--pink-main);color:white;border-color:var(--pink-main);}
+.filter-checklist{display:flex;flex-direction:column;gap:2px;}
+.filter-check{display:flex;align-items:center;gap:8px;padding:5px 2px;font-size:.8rem;font-weight:600;color:var(--dark);cursor:pointer;border-radius:8px;}
+.filter-check:hover{background:#fdf3f8;}
+.filter-check input[type="checkbox"]{accent-color:var(--pink-main);width:15px;height:15px;flex-shrink:0;}
+.filter-check.active{color:var(--pink-main);cursor:default;}
+.filter-check.active:hover{background:none;}
 .price-inputs{display:flex;align-items:center;gap:6px;margin-bottom:10px;}
 .price-inputs input{flex:1;border:1.5px solid #f0e6ef;border-radius:8px;padding:6px 8px;font-size:.78rem;font-family:'Plus Jakarta Sans',sans-serif;outline:none;width:80px;}
 .price-inputs input:focus{border-color:var(--pink-main);}

@@ -62,8 +62,12 @@ class ProductService
         );
         if (!$cat) return ['category' => null, 'products' => []];
 
-        $where  = "p.status = 'active' AND p.category_id = ?";
-        $params = [$cat['id']];
+        // The URL's category is always included; extra categories checked
+        // in the sidebar (filters['categories']) widen the result set.
+        $catIds = array_unique(array_merge([(int)$cat['id']], array_map('intval', $filters['categories'] ?? [])));
+        $placeholders = implode(',', array_fill(0, count($catIds), '?'));
+        $where  = "p.status = 'active' AND p.category_id IN ({$placeholders})";
+        $params = $catIds;
 
         if (!empty($filters['min_price'])) {
             $where .= " AND COALESCE(p.sale_price, p.price) >= ?";
@@ -109,7 +113,12 @@ class ProductService
         $where  = "p.status = 'active'";
         $params = [];
 
-        if (!empty($filters['category'])) {
+        if (!empty($filters['categories']) && is_array($filters['categories'])) {
+            $catIds = array_map('intval', $filters['categories']);
+            $placeholders = implode(',', array_fill(0, count($catIds), '?'));
+            $where   .= " AND p.category_id IN ({$placeholders})";
+            array_push($params, ...$catIds);
+        } elseif (!empty($filters['category'])) {
             $where   .= " AND p.category_id = ?";
             $params[] = (int)$filters['category'];
         }

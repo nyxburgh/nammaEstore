@@ -81,13 +81,15 @@ class SellerAuthService
             $user = $this->users->findById($uid);
             Auth::loginSeller($user);
 
-            (new \App\Core\Services\OtpService())->send(
+            $otp = (new \App\Core\Services\OtpService())->send(
                 $d['email'], 'seller_email_verify',
                 'Verify your email — ' . $d['shop_name'],
                 'Your Namma E Store seller verification code is'
             );
 
-            return ['success' => true, 'needs_verification' => true];
+            $result = ['success' => true, 'needs_verification' => true];
+            if (isset($otp['debug_otp'])) $result['debug_otp'] = $otp['debug_otp'];
+            return $result;
         } catch (\Exception $e) {
             $db->rollBack();
             return ['success' => false, 'message' => 'Registration failed: ' . $e->getMessage()];

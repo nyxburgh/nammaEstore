@@ -57,7 +57,10 @@ class AuthController extends FrontendController
         $r = (new AuthService())->register($_POST, $this->input('captcha_answer'));
         if (!$r['success']) { $this->setFlash('error', $r['message']); $this->redirect(APP_URL.'/register'); return; }
         $_SESSION['pending_verify_email'] = $r['email'];
-        $this->setFlash('success', 'Account created! Enter the code we emailed you to verify your account.');
+        $msg = isset($r['debug_otp'])
+            ? "Account created! (Dev mode — no SMTP configured, your verification code is: {$r['debug_otp']})"
+            : 'Account created! Enter the code we emailed you to verify your account.';
+        $this->setFlash('success', $msg);
         $this->redirect(APP_URL.'/verify-email');
     }
     public function logout(): void {
@@ -89,7 +92,10 @@ class AuthController extends FrontendController
         $email = $_SESSION['pending_verify_email'] ?? '';
         if (!$email) { $this->redirect(APP_URL.'/register'); return; }
         $r = (new AuthService())->sendVerificationOtp($email);
-        $this->setFlash($r['success'] ? 'success' : 'error', $r['success'] ? 'A new code has been sent to your email.' : $r['message']);
+        $msg = isset($r['debug_otp'])
+            ? "Dev mode — no SMTP configured, your verification code is: {$r['debug_otp']}"
+            : ($r['success'] ? 'A new code has been sent to your email.' : $r['message']);
+        $this->setFlash($r['success'] ? 'success' : 'error', $msg);
         $this->redirect(APP_URL.'/verify-email');
     }
 

@@ -39,21 +39,30 @@ class OtpService
             [$identifier, $purpose, $code, date('Y-m-d H:i:s', time() + 10 * 60)]
         );
 
+        $sent = false;
         try {
-            ProviderFactory::email()->send(
+            $sent = ProviderFactory::email()->send(
                 $identifier, $subject,
                 "<p>{$messagePrefix}: <strong style=\"font-size:20px;letter-spacing:3px;\">{$code}</strong></p><p>This code expires in 10 minutes.</p>"
             );
         } catch (\Exception $e) {
             error_log('OTP email failed: ' . $e->getMessage());
-            // Still return success — the OTP row exists and the admin
-            // can see it was generated; email delivery issues shouldn't
-            // block the flow in a dev/XAMPP environment without SMTP
-            // configured. In production with working SMTP this simply
-            // won't trigger.
         }
 
-        return ['success' => true];
+        $result = ['success' => true];
+        if (!$sent) {
+            // No SMTP configured (common on a local XAMPP box without
+            // composer packages installed) — the OTP row still exists
+            // so the flow isn't blocked, but nothing was actually
+            // emailed. Surface the code in dev so it's still testable;
+            // never do this in production.
+            error_log("OTP email not sent (no working mail transport) for {$identifier} [{$purpose}] — code: {$code}");
+            if (APP_ENV === 'development') {
+                $result['debug_otp'] = $code;
+            }
+        }
+
+        return $result;
     }
 
     /**
