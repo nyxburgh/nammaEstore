@@ -41,12 +41,13 @@ RUN apk add --no-cache \
         libzip \
         oniguruma \
     && apk add --no-cache --virtual .build-deps \
-        icu-dev \
-        libpng-dev \
-        libjpeg-turbo-dev \
-        freetype-dev \
-        libzip-dev \
-        $PHPIZE_DEPS \
+    icu-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libzip-dev \
+    oniguruma-dev \
+    $PHPIZE_DEPS
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j"$(nproc)" \
         pdo_mysql \
