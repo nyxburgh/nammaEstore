@@ -1,0 +1,42 @@
+# ── VCS / editor noise ─────────────────────────────────────────
+.git
+.gitignore
+.github
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# ── Docs (not needed at runtime) ───────────────────────────────
+README.md
+SETUP_GUIDE.md
+CLAUDE.md
+*.md
+
+# ── Local env / secrets — real values come from Coolify's env panel ──
+.env
+.env.*
+!.env.example
+
+# ── Dependencies — installed fresh in the Docker build ─────────
+vendor/
+node_modules/
+
+# ── DB dump — not part of the runtime image ─────────────────────
+database.sql
+database/
+
+# ── User-uploaded content — belongs on a persistent volume, ──────
+# not baked into the image (see Dockerfile volume notes)
+/uploads/*
+!/uploads/.htaccess
+/public/uploads/*
+!/public/uploads/.htaccess
+
+# ── Logs / temp / local server artifacts ────────────────────────
+*.log
+/storage/
+/tmp/
+
+# ── This deployment tooling itself ──────────────────────────────
+docker-compose*.yml
