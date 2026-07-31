@@ -13,9 +13,9 @@
 
 return [
     'host'     => getenv('DB_HOST') ?: 'localhost',
-    'dbname'   => getenv('DB_NAME') ?: 'mycart_marketplace',
-    'username' => getenv('DB_USER') ?: 'root',
-    'password' => getenv('DB_PASS') ?: '',
+    'dbname'   => getenv('DB_DATABASE') ?: 'mycart_marketplace',
+    'username' => getenv('DB_USERNAME') ?: 'root',
+    'password' => getenv('DB_PASSWORD') ?: '',
     'charset'  => 'utf8mb4',
     'options'  => [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
