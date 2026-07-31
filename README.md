@@ -17,7 +17,7 @@ Admin, Seller Dashboard, and Customer Storefront.
 
 ### 1. Copy to htdocs
 ```
-cp -r mycart/ /xampp/htdocs/
+cp -r nammaestore/ /xampp/htdocs/
 ```
 
 ### 2. Create database
@@ -31,7 +31,7 @@ mysql -u root mycart_marketplace < database.sql
 ```
 
 ### 4. Configure database (if needed)
-Edit `config/database.php`:
+Edit `app/Config/database.php`:
 ```php
 'host'     => 'localhost',
 'dbname'   => 'mycart_marketplace',
@@ -40,11 +40,14 @@ Edit `config/database.php`:
 ```
 
 ### 5. Visit the site
+Point your webserver's document root at `public/` (on XAMPP, no vhost
+needed — just browse into the `public/` subfolder):
+
 | URL | Panel |
 |-----|-------|
-| `http://localhost/mycart/` | Customer Storefront |
-| `http://localhost/mycart/mc-admin/` | Admin Panel |
-| `http://localhost/mycart/my-seller/` | Seller Dashboard |
+| `http://localhost/nammaestore/public/` | Customer Storefront |
+| `http://localhost/nammaestore/public/mc-admin/` | Admin Panel |
+| `http://localhost/nammaestore/public/my-seller/` | Seller Dashboard |
 
 ---
 
@@ -58,25 +61,30 @@ Edit `config/database.php`:
 
 ## Project Structure
 ```
-mycart/
-├── .htaccess                    ← Root redirect to public/
+nammaestore/
+├── index.php, .htaccess         ← deprecated fallback entry point (see public/ below)
 ├── database.sql                 ← Schema + seed data
-├── config/
-│   ├── app.php                  ← Constants (APP_URL, DB_PREFIX, etc.)
-│   └── database.php             ← DB credentials
-├── public/
-│   ├── index.php                ← Single entry point
+├── public/                      ← Document root — point your webserver here
+│   ├── index.php                ← Real entry point
 │   ├── .htaccess                ← Apache rewrite rules
 │   └── uploads/                 ← User-uploaded files
-└── app/
-    ├── bootstrap.php            ← Panel routing (admin/seller/frontend)
-    ├── core/                    ← Router, Controller, Model, Auth, DB
-    ├── helpers/functions.php    ← currency(), e(), formatDate(), etc.
-    ├── models/                  ← Shared models (User, Product, Order...)
-    ├── admin/                   ← Admin panel (Controllers/Services/Views)
-    ├── frontend/                ← Customer storefront
-    └── seller-panel/            ← Seller dashboard
+├── app/                         ← Shared library, used by all four panels below
+│   ├── bootstrap.php            ← Panel routing (admin/seller/frontend/api) + asset serving
+│   ├── Core/                    ← Router, Controller, Model, Auth, DB
+│   ├── Config/                  ← app.php, database.php, providers.php
+│   ├── Helpers/functions.php    ← currency(), e(), formatDate(), etc.
+│   ├── Models/                  ← Shared models (User, Product, Order...)
+│   └── Repositories/
+├── admin/                       ← Admin panel (Controllers/Services/Views/Routes/assets)
+├── frontend/                    ← Customer storefront
+├── seller-panel/                ← Seller dashboard
+└── api/                         ← REST endpoints for the future React frontend
 ```
+
+Each panel (`admin/`, `frontend/`, `seller-panel/`, `api/`) is a top-level
+folder with its own `Controllers/`, `Services/`, `Views/`, `Routes/routes.php`,
+and `assets/` — not nested under `app/`, so updating one panel never touches
+another's files.
 
 ---
 
@@ -133,9 +141,9 @@ Update in Admin → Settings → `site_name` key.
 The site name is read from `mc_settings.site_name`. No hardcoded strings.
 
 ### Change APP_URL
-Edit `config/app.php`:
+Edit `app/Config/app.php`:
 ```php
-define('APP_URL', 'http://localhost/mycart');
+define('APP_URL', 'http://localhost/nammaestore/public');
 ```
 
 ---

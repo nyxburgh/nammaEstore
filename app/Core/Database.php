@@ -12,7 +12,7 @@ class Database
 
     private function __construct()
     {
-        $cfg = require BASE_PATH . '/config/database.php';
+        $cfg = require BASE_PATH . '/app/Config/database.php';
         $dsn = "mysql:host={$cfg['host']};dbname={$cfg['dbname']};charset={$cfg['charset']}";
         try {
             $this->pdo = new PDO($dsn, $cfg['username'], $cfg['password'], $cfg['options']);

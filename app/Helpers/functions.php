@@ -272,7 +272,15 @@ function uploadFile(array $file, string $folder = 'general', string $context = '
  */
 function asset(string $path): string
 {
-    $file = BASE_PATH . '/assets/' . ltrim($path, '/');
+    // Each panel keeps its own assets/ folder (admin/assets,
+    // frontend/assets, seller-panel/assets) rather than a shared
+    // public/assets/ — the first path segment names the panel, e.g.
+    // asset('frontend/css/main.css') reads frontend/assets/css/main.css.
+    // bootstrap.php serves these at runtime since they sit outside
+    // the actual web root (public/).
+    $path = ltrim($path, '/');
+    [$panel, $rest] = array_pad(explode('/', $path, 2), 2, '');
+    $file = BASE_PATH . '/' . $panel . '/assets/' . $rest;
     $v    = is_file($file) ? filemtime($file) : time();
-    return APP_URL . '/assets/' . ltrim($path, '/') . '?v=' . $v;
+    return APP_URL . '/assets/' . $path . '?v=' . $v;
 }

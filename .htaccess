@@ -15,9 +15,15 @@ RewriteRule ^(.*)$ index.php [QSA,L]
     Deny from all
 </FilesMatch>
 
-# ── Block direct access to app/ and config/
+# ── Block direct access to source folders ─────────────────────
+# DEPRECATED entry point: this project now targets public/ as the
+# real document root (see public/index.php + public/.htaccess),
+# which keeps these folders outside the web-servable tree entirely
+# and needs no blocklist at all. This rule is a defense-in-depth
+# fallback only, in case a server ever gets pointed at the project
+# root by mistake.
 <IfModule mod_rewrite.c>
-    RewriteRule ^(app|config)/ - [F,L]
+    RewriteRule ^(app|admin|frontend|seller-panel|api|config|database|scripts)/ - [F,L]
 </IfModule>
 
 # ── PHP settings ──────────────────────────────────────────────

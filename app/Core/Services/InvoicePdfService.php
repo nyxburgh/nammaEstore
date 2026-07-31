@@ -68,7 +68,7 @@ class InvoicePdfService
     private function renderHtml(array $invoice, array $company): string
     {
         ob_start();
-        include BASE_PATH . '/app/core/invoice-templates/invoice.php';
+        include BASE_PATH . '/app/Core/invoice-templates/invoice.php';
         return ob_get_clean();
     }
 

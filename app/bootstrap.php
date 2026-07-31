@@ -36,7 +36,7 @@ if (is_file($__envFile)) {
 unset($__envFile);
 
 // ── Config ───────────────────────────────────────────────────
-require BASE_PATH . '/config/app.php';
+require BASE_PATH . '/app/Config/app.php';
 
 // ── Composer autoloader (dompdf, PHPMailer, etc.) ────────────
 // Optional — the app degrades gracefully (see SmtpEmailProvider,
@@ -47,13 +47,13 @@ if (is_file(BASE_PATH . '/vendor/autoload.php')) {
 }
 
 // ── Autoloading (this app's own classes) ─────────────────────
-require BASE_PATH . '/app/core/Autoloader.php';
+require BASE_PATH . '/app/Core/Autoloader.php';
 Autoloader::register();
 
 // ── Helpers ──────────────────────────────────────────────────
-require BASE_PATH . '/app/helpers/functions.php';
-require BASE_PATH . '/app/helpers/csrf.php';
-require BASE_PATH . '/app/helpers/config.php';
+require BASE_PATH . '/app/Helpers/functions.php';
+require BASE_PATH . '/app/Helpers/csrf.php';
+require BASE_PATH . '/app/Helpers/config.php';
 
 // ── Session ──────────────────────────────────────────────────
 if (session_status() === PHP_SESSION_NONE) {
@@ -101,9 +101,48 @@ if ($scriptDir !== '' && str_starts_with($uri, $scriptDir)) {
 }
 $uri = '/' . ltrim($uri, '/');
 
+// ── Static assets ──────────────────────────────────────────────
+// Each panel keeps its own assets/ folder (admin/assets/,
+// frontend/assets/, seller-panel/assets/) colocated with its
+// Controllers/Views, rather than a shared public/assets/. Since
+// those folders sit outside the actual web root (public/) by
+// design, the webserver can't find them as real files — this
+// serves them directly instead of requiring a symlink or a
+// build-time copy step.
+if (preg_match('#^/assets/(admin|frontend|seller-panel)/(.+)$#', $uri, $assetMatch)) {
+    $assetBase = realpath(BASE_PATH . '/' . $assetMatch[1] . '/assets');
+    $assetReal = $assetBase ? realpath($assetBase . '/' . $assetMatch[2]) : false;
+
+    if ($assetBase === false || $assetReal === false || !str_starts_with($assetReal, $assetBase . DIRECTORY_SEPARATOR)) {
+        http_response_code(404);
+        exit;
+    }
+
+    $mime = match (strtolower(pathinfo($assetReal, PATHINFO_EXTENSION))) {
+        'css'          => 'text/css',
+        'js'           => 'application/javascript',
+        'png'          => 'image/png',
+        'jpg', 'jpeg'  => 'image/jpeg',
+        'gif'          => 'image/gif',
+        'svg'          => 'image/svg+xml',
+        'webp'         => 'image/webp',
+        'woff'         => 'font/woff',
+        'woff2'        => 'font/woff2',
+        'ttf'          => 'font/ttf',
+        'ico'          => 'image/x-icon',
+        default        => 'application/octet-stream',
+    };
+    header("Content-Type: {$mime}");
+    header('Cache-Control: public, max-age=31536000, immutable');
+    readfile($assetReal);
+    exit;
+}
+
 $panel = 'frontend';
 
-if (ROUTING_MODE === 'subdomain') {
+if (str_starts_with($uri, '/api/')) {
+    $panel = 'api';
+} elseif (ROUTING_MODE === 'subdomain') {
     $host = $_SERVER['HTTP_HOST'] ?? '';
     if (ADMIN_HOST && $host === ADMIN_HOST)   $panel = 'admin';
     if (SELLER_HOST && $host === SELLER_HOST) $panel = 'seller';
@@ -113,9 +152,10 @@ if (ROUTING_MODE === 'subdomain') {
 }
 
 $routesFile = match ($panel) {
-    'admin'  => BASE_PATH . '/app/admin/routes.php',
-    'seller' => BASE_PATH . '/app/seller-panel/routes.php',
-    default  => BASE_PATH . '/app/frontend/routes.php',
+    'admin'  => BASE_PATH . '/admin/Routes/routes.php',
+    'seller' => BASE_PATH . '/seller-panel/Routes/routes.php',
+    'api'    => BASE_PATH . '/api/Routes/routes.php',
+    default  => BASE_PATH . '/frontend/Routes/routes.php',
 };
 
 /** @var Router $router */

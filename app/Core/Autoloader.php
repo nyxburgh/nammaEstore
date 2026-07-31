@@ -9,21 +9,24 @@ class Autoloader
      */
     private static array $map = [
         // ── Shared core & models ──────────────────────────────
-        'App\\Core\\'                    => 'app/core/',
-        'App\\Models\\'                  => 'app/models/',
-        'App\\Repositories\\'            => 'app/repositories/',
+        'App\\Core\\'                    => 'app/Core/',
+        'App\\Models\\'                  => 'app/Models/',
+        'App\\Repositories\\'            => 'app/Repositories/',
 
         // ── Admin panel ───────────────────────────────────────
-        'App\\Admin\\Controllers\\'      => 'app/admin/Controllers/',
-        'App\\Admin\\Services\\'         => 'app/admin/Services/',
+        'App\\Admin\\Controllers\\'      => 'admin/Controllers/',
+        'App\\Admin\\Services\\'         => 'admin/Services/',
 
         // ── Customer frontend ─────────────────────────────────
-        'App\\Frontend\\Controllers\\'   => 'app/frontend/Controllers/',
-        'App\\Frontend\\Services\\'      => 'app/frontend/Services/',
+        'App\\Frontend\\Controllers\\'   => 'frontend/Controllers/',
+        'App\\Frontend\\Services\\'      => 'frontend/Services/',
 
-        // ── Seller dashboard ──────────────────────────────────
-        'App\\SellerPanel\\Controllers\\' => 'app/seller-panel/Controllers/',
-        'App\\SellerPanel\\Services\\'    => 'app/seller-panel/Services/',
+        // ── Seller dashboard ────────────────────────────────────
+        'App\\SellerPanel\\Controllers\\' => 'seller-panel/Controllers/',
+        'App\\SellerPanel\\Services\\'    => 'seller-panel/Services/',
+
+        // ── REST API (future React frontend) ───────────────────
+        'App\\Api\\Controllers\\'        => 'api/Controllers/',
     ];
 
     public static function register(): void

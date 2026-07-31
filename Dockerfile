@@ -136,15 +136,15 @@ WORKDIR /var/www/html
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
 
-# uploads/ and public/uploads/ must stay writable by the app at
-# runtime (uploadFile() in app/helpers/functions.php writes here).
-# On Coolify, mount a persistent volume at /var/www/html/public/uploads
+# public/uploads/ must stay writable by the app at runtime
+# (uploadFile() in app/Helpers/functions.php writes here). On
+# Coolify, mount a persistent volume at /var/www/html/public/uploads
 # so uploaded files survive redeploys — the directory below just
 # guarantees correct permissions whether or not a volume is mounted.
 RUN mkdir -p /var/www/html/public/uploads \
     && chown -R www-data:www-data /var/www/html \
-    && find /var/www/html/uploads /var/www/html/public/uploads -type d -exec chmod 775 {} \; \
-    && find /var/www/html/uploads /var/www/html/public/uploads -type f -exec chmod 664 {} \;
+    && find /var/www/html/public/uploads -type d -exec chmod 775 {} \; \
+    && find /var/www/html/public/uploads -type f -exec chmod 664 {} \;
 
 EXPOSE 80
 

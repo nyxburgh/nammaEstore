@@ -25,10 +25,11 @@ auction, B2B module, dropshipping, ERP/accounting integration.
 
 Extract this zip into:
 ```
-C:\xampp\htdocs\mycart\      (Windows)
-/opt/lampp/htdocs/mycart/    (Linux)
+C:\xampp\htdocs\nammaestore\      (Windows)
+/opt/lampp/htdocs/nammaestore/    (Linux)
 ```
-So that `htdocs/mycart/index.php` exists directly (not nested one level deeper).
+So that `htdocs/nammaestore/public/index.php` exists directly (not nested one
+level deeper). `public/` is the real document root — see step 5.
 
 ## 2. Create the database
 
@@ -53,7 +54,7 @@ So that `htdocs/mycart/index.php` exists directly (not nested one level deeper).
 
 ## 3. Install Composer dependencies (PDF invoices + SMTP email)
 
-In a terminal inside the `mycart` folder:
+In a terminal inside the `nammaestore` folder:
 ```
 composer install
 ```
@@ -70,11 +71,20 @@ payment/SMS/email/WhatsApp provider credentials.
 
 ## 5. Browse the app
 
-- **Storefront:** http://localhost/mycart/
-- **Admin panel:** http://localhost/mycart/mc-admin/
-- **Seller panel:** http://localhost/mycart/my-seller/
-- **Sitemap:** http://localhost/mycart/sitemap.xml
-- **Robots:** http://localhost/mycart/robots.txt
+Point your webserver's document root at `public/` — on XAMPP this needs no
+vhost change, just browse into the `public/` subfolder directly:
+
+- **Storefront:** http://localhost/nammaestore/public/
+- **Admin panel:** http://localhost/nammaestore/public/mc-admin/
+- **Seller panel:** http://localhost/nammaestore/public/my-seller/
+- **Sitemap:** http://localhost/nammaestore/public/sitemap.xml
+- **Robots:** http://localhost/nammaestore/public/robots.txt
+
+(A deprecated fallback entry point still exists at the project root for
+hosts that can't point their doc root anywhere but the project folder —
+but CSS/JS won't load there since assets live under each panel's own
+folder now, served only through `public/`'s entry point. Use `public/`
+for all normal browsing and testing.)
 
 ## 6. Admin login
 
@@ -125,7 +135,7 @@ storefront, and create a seller from **Admin → Sellers → Add Seller**.
 12. Visit `/manifest.json` and `/sw.js` directly to confirm the PWA
     endpoints respond — full "Add to Home Screen" testing needs
     actual 192x192 and 512x512 PNG icons placed at
-    `assets/frontend/images/pwa-icon-192.png` and `-512.png` (not
+    `frontend/assets/images/pwa-icon-192.png` and `-512.png` (not
     included — these are visual assets, not something to fabricate).
 
 ## 8. Security notes for testing

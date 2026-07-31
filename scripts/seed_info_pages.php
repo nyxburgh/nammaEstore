@@ -11,13 +11,13 @@
  */
 
 define('BASE_PATH', dirname(__DIR__));
-define('WEB_ROOT', BASE_PATH);                       // CLI: no entry point defines it
+define('WEB_ROOT', BASE_PATH . '/public');           // CLI: no entry point defines it
 define('APP_URL', 'http://localhost/mycart');        // CLI: no HTTP context to auto-detect
-require BASE_PATH . '/config/app.php';
-require BASE_PATH . '/config/database.php';
-require BASE_PATH . '/app/core/Autoloader.php';
+require BASE_PATH . '/app/Config/app.php';
+require BASE_PATH . '/app/Config/database.php';
+require BASE_PATH . '/app/Core/Autoloader.php';
 Autoloader::register();
-require BASE_PATH . '/app/helpers/functions.php';
+require BASE_PATH . '/app/Helpers/functions.php';
 
 use App\Core\Database;
 use App\Frontend\Controllers\PageController;

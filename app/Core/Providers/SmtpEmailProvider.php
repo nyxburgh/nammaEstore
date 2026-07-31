@@ -60,7 +60,7 @@ class SmtpEmailProvider implements EmailInterface
     public function sendTemplate(string $to, string $templateId, array $vars = []): bool
     {
         // Plain SMTP has no server-side templates — render locally and send.
-        $templateFile = BASE_PATH . '/app/core/mail-templates/' . $templateId . '.php';
+        $templateFile = BASE_PATH . '/app/Core/mail-templates/' . $templateId . '.php';
         if (!file_exists($templateFile)) {
             error_log("Email template not found: {$templateId}");
             return false;

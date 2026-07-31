@@ -81,14 +81,18 @@ define('SELLER_STORE_MODE', 'path');   // 'path' | 'slug'
 define('SELLER_STORE_BASE', 'shop');   // used when mode = 'path'
 
 // ── Paths ─────────────────────────────────────────────────────
-// WEB_ROOT is defined by the active entry point (index.php or
-// public/index.php) — everything web-reachable is resolved from
-// THAT, not from BASE_PATH, so uploads/assets always land somewhere
-// the browser can actually reach regardless of which entry point
-// is serving the request.
-define('APP_PATH',    BASE_PATH . '/app');
-define('UPLOAD_PATH', WEB_ROOT  . '/uploads');
-define('UPLOAD_URL',  APP_URL   . '/uploads');
+define('APP_PATH', BASE_PATH . '/app');
+
+// Uploaded files always physically live in public/uploads/ — regardless
+// of which entry point served this request. APP_URL, by contrast, DOES
+// vary by entry point (it's derived from SCRIPT_NAME): it already
+// includes "/public" when public/index.php served the request, but
+// doesn't when the deprecated root index.php did. So UPLOAD_URL adds
+// "/public" itself only when APP_URL hasn't already got it — otherwise
+// uploaded images would 404 under the root entry point even though the
+// files exist right there in public/uploads/.
+define('UPLOAD_PATH', BASE_PATH . '/public/uploads');
+define('UPLOAD_URL',  APP_URL . (str_ends_with(APP_URL, '/public') ? '' : '/public') . '/uploads');
 
 // Panel asset URLs
 define('ADMIN_ASSETS',    APP_URL . '/assets/admin');
@@ -96,9 +100,12 @@ define('FRONTEND_ASSETS', APP_URL . '/assets/frontend');
 define('SELLER_ASSETS',   APP_URL . '/assets/seller-panel');
 
 // ── Panel view paths ──────────────────────────────────────────
-define('ADMIN_VIEWS',    APP_PATH . '/admin/Views');
-define('FRONTEND_VIEWS', APP_PATH . '/frontend/Views');
-define('SELLER_VIEWS',   APP_PATH . '/seller-panel/Views');
+// Panels (admin/, frontend/, seller-panel/, api/) live as siblings of
+// app/ at the project root, not under it — app/ now holds only the
+// shared library (Core, Config, Helpers, Models, Repositories).
+define('ADMIN_VIEWS',    BASE_PATH . '/admin/Views');
+define('FRONTEND_VIEWS', BASE_PATH . '/frontend/Views');
+define('SELLER_VIEWS',   BASE_PATH . '/seller-panel/Views');
 
 // ── Database ──────────────────────────────────────────────────
 define('DB_PREFIX', 'mc_');

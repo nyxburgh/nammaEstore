@@ -1,16 +1,18 @@
 <?php
 /**
- * Namma E Store — Root Entry Point
+ * Namma E Store — Root Entry Point (DEPRECATED)
  *
- * Use this when the whole project folder is the web root, e.g.
- *   XAMPP:  htdocs/mycart/          → http://localhost/mycart/
- *   cPanel: public_html/            → https://yourdomain.com/
+ * This project now standardizes on public/index.php as the only
+ * entry point — set your web server's document root to public/
+ * (on XAMPP, just browse to http://localhost/nammaestore/public/
+ * instead of the project root; no vhost change required). That
+ * keeps app/, admin/, frontend/, seller-panel/, api/ outside the
+ * web-servable tree entirely.
  *
- * WEB_ROOT is the directory actually reachable over HTTP — assets,
- * uploads, and generated URLs are all resolved relative to it, so the
- * exact same app/ code works whether this file or public/index.php
- * is the active entry point. See public/index.php for the alternative
- * (app/config kept outside the web root, for VPS/Nginx deployments).
+ * This file is kept only as a fallback for hosts that truly can't
+ * point their doc root anywhere but the project folder (e.g. some
+ * shared cPanel setups). Static assets moved to public/assets/, so
+ * CSS/JS will 404 under this entry point — use public/index.php.
  */
 
 define('BASE_PATH', __DIR__);
