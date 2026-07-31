@@ -26,7 +26,7 @@ return [
 
         'msg91' => [
             'auth_key'  => getenv('MSG91_AUTH_KEY') ?: '',
-            'sender_id' => getenv('MSG91_SENDER_ID') ?: 'BAZARO',
+            'sender_id' => getenv('MSG91_SENDER_ID') ?: 'NAMMAE',
         ],
     ],
 

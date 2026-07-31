@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title><?= e($title??'Shop') ?></title>
 <?php
+$siteNameTag = \App\Frontend\Services\SettingsService::get('site_name', 'Namma E Store');
+$pageTitle   = $title ?? 'Shop';
+// Pages that already build their own " — Site Name" suffix (e.g. seller
+// store pages) aren't suffixed again here — every other page gets it for
+// free without needing to set it themselves.
+$fullTitle   = str_contains($pageTitle, $siteNameTag) ? $pageTitle : $pageTitle . ' — ' . $siteNameTag;
 $metaDesc  = $metaDescription ?? \App\Frontend\Services\SettingsService::get('site_description', 'Shop from thousands of trusted sellers on Namma E Store — India\'s multi-seller marketplace.');
 $metaImg   = $metaImage ?? (FRONTEND_ASSETS . '/images/og-default.jpg');
 $appPath   = parse_url(APP_URL, PHP_URL_PATH) ?: '';
@@ -11,11 +16,12 @@ $reqUri    = $_SERVER['REQUEST_URI'] ?? '/';
 if ($appPath && str_starts_with($reqUri, $appPath)) $reqUri = substr($reqUri, strlen($appPath));
 $canonical = $canonicalUrl ?? (APP_URL . $reqUri);
 ?>
+<title><?= e($fullTitle) ?></title>
 <meta name="description" content="<?= e($metaDesc) ?>">
 <link rel="canonical" href="<?= e($canonical) ?>">
 
 <meta property="og:type" content="<?= e($ogType ?? 'website') ?>">
-<meta property="og:title" content="<?= e($title??'Shop') ?>">
+<meta property="og:title" content="<?= e($fullTitle) ?>">
 <meta property="og:description" content="<?= e($metaDesc) ?>">
 <meta property="og:image" content="<?= e($metaImg) ?>">
 <meta property="og:url" content="<?= e($canonical) ?>">
@@ -57,12 +63,12 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
     <span>Upto 70% off on Fashion</span>
     <span><a href="<?= APP_URL ?>/sell">New sellers joining daily – Sell on <?= e($siteName) ?></a></span>
     <span>EMI available on products above ₹3000</span>
-    <span>Flash Sale: Extra 15% off with code BAZAR15</span>
+    <span>Flash Sale: Extra 15% off with code NAMMA15</span>
     <span>Free delivery on orders above ₹499</span>
     <span>Upto 70% off on Fashion</span>
     <span><a href="<?= APP_URL ?>/sell">New sellers joining daily – Sell on <?= e($siteName) ?></a></span>
     <span>EMI available on products above ₹3000</span>
-    <span>Flash Sale: Extra 15% off with code BAZAR15</span>
+    <span>Flash Sale: Extra 15% off with code NAMMA15</span>
   </div>
 </div>
 

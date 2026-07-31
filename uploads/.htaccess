@@ -1,6 +1,0 @@
-# Block PHP execution in uploads directory
-<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|sh|cgi)$">
-    Order Deny,Allow
-    Deny from all
-</FilesMatch>
-Options -Indexes -ExecCGI

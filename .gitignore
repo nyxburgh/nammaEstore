@@ -5,8 +5,6 @@
 /vendor/
 
 # User-uploaded content
-/uploads/*
-!/uploads/.htaccess
 /public/uploads/*
 !/public/uploads/.htaccess
 

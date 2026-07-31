@@ -12,7 +12,7 @@ function config(string $key, mixed $default = null): mixed
     $file     = array_shift($segments);
 
     if (!array_key_exists($file, $cache)) {
-        $path = BASE_PATH . "/config/{$file}.php";
+        $path = BASE_PATH . "/app/Config/{$file}.php";
         $cache[$file] = file_exists($path) ? require $path : [];
     }
 

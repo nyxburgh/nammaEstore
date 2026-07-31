@@ -28,8 +28,6 @@ database/
 
 # ── User-uploaded content — belongs on a persistent volume, ──────
 # not baked into the image (see Dockerfile volume notes)
-/uploads/*
-!/uploads/.htaccess
 /public/uploads/*
 !/public/uploads/.htaccess
 
