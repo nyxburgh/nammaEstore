@@ -17,6 +17,7 @@ class Database
         try {
             $this->pdo = new PDO($dsn, $cfg['username'], $cfg['password'], $cfg['options']);
         } catch (PDOException $e) {
+            error_log('DB connection failed: ' . $e->getMessage());
             die(APP_ENV === 'development'
                 ? '<b>DB Connection Failed:</b> ' . $e->getMessage()
                 : 'Service temporarily unavailable.');
