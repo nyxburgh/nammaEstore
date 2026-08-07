@@ -127,7 +127,7 @@ $sec = $section ?? 'overview';
         <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Sold</th><th>Revenue</th><th>Stock</th></tr></thead>
         <tbody>
           <?php foreach($topProducts as $p):
-            $imgHtml = !empty($p['image']) ? '<img src="'.UPLOAD_URL.'/'.$p['image'].'" alt="">' : '<span>🛍️</span>';
+            $imgHtml = !empty($p['image']) ? '<img src="'.UPLOAD_URL.'/'.$p['image'].'" alt="'.e($p['name']).'">' : '<span>🛍️</span>';
           ?>
           <tr>
             <td><div class="prod-thumb"><div class="prod-thumb-img"><?= $imgHtml ?></div><div><div class="prod-thumb-name"><?= e($p['name']) ?></div><div class="prod-thumb-sku"><?= e($p['sku']??'—') ?></div></div></div></td>
@@ -156,7 +156,6 @@ $sec = $section ?? 'overview';
   <?php endforeach; ?>
 </div>
 <form method="GET" class="filter-bar">
-  <?= csrf_field() ?>
   <div class="filter-search"><span>🔍</span><input type="text" name="q" placeholder="Search order ID, customer, product..." value="<?= e($filters['q']??'') ?>"></div>
   <input type="hidden" name="status" value="<?= e($filters['status']??'all') ?>">
   <button type="submit" class="btn-pink btn-sm">Search</button>
@@ -213,7 +212,7 @@ $sec = $section ?? 'overview';
     <div class="card"><div class="card-head"><span class="card-title">🛍️ Order Items</span><span class="status <?= e($order['order_status']) ?>"><?= ucfirst($order['order_status']) ?></span></div>
       <div class="card-body no-pad">
         <?php foreach($order['items'] as $item):
-          $img = !empty($item['image']) ? '<img src="'.UPLOAD_URL.'/'.$item['image'].'" alt="">' : '<span>🛍️</span>';
+          $img = !empty($item['image']) ? '<img src="'.UPLOAD_URL.'/'.$item['image'].'" alt="'.e($item['product_name']).'">' : '<span>🛍️</span>';
         ?>
         <div style="display:flex;gap:12px;padding:14px;border-bottom:1px solid #fdf0f7;align-items:center;">
           <div class="prod-thumb-img" style="width:52px;height:52px;border-radius:10px;"><?= $img ?></div>
@@ -304,7 +303,6 @@ $sec = $section ?? 'overview';
 ══════════════════════════════════════ -->
 <div class="page-hd"><div><h1>🛍️ My Products</h1><p>Manage your product catalogue</p></div><div class="hd-actions"><a href="<?= SELLER_URL ?>/products/add" class="btn-pink btn-sm">➕ Add Product</a></div></div>
 <form method="GET" class="filter-bar">
-  <?= csrf_field() ?>
   <div class="filter-search"><span>🔍</span><input type="text" name="q" placeholder="Search by name or SKU..." value="<?= e($filters['q']??'') ?>"></div>
   <select name="category" class="filter-select" onchange="this.form.submit()"><option value="">All Categories</option><?php foreach($categories as $cat): ?><option value="<?= $cat['id'] ?>" <?= ($filters['category']??'')==$cat['id']?'selected':'' ?>><?= e($cat['name']) ?></option><?php endforeach; ?></select>
   <select name="status" class="filter-select" onchange="this.form.submit()"><option value="all">All Status</option><option value="active" <?= ($filters['status']??'')==='active'?'selected':'' ?>>Active</option><option value="inactive" <?= ($filters['status']??'')==='inactive'?'selected':'' ?>>Inactive</option></select>
@@ -320,7 +318,7 @@ $sec = $section ?? 'overview';
         <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Sold</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody>
           <?php foreach($products['data'] as $p):
-            $imgHtml = !empty($p['image']) ? '<img src="'.UPLOAD_URL.'/'.$p['image'].'" alt="">' : '<span>🛍️</span>';
+            $imgHtml = !empty($p['image']) ? '<img src="'.UPLOAD_URL.'/'.$p['image'].'" alt="'.e($p['name']).'">' : '<span>🛍️</span>';
           ?>
           <tr>
             <td><div class="prod-thumb"><div class="prod-thumb-img"><?= $imgHtml ?></div><div><div class="prod-thumb-name"><?= e($p['name']) ?></div><div class="prod-thumb-sku">SKU: <?= e($p['sku']??'—') ?></div></div></div></td>
@@ -430,7 +428,7 @@ $sec = $section ?? 'overview';
           <?php if(!empty($product['images'])): ?>
           <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
             <?php foreach($product['images'] as $img): ?>
-            <div style="width:64px;height:64px;border-radius:8px;overflow:hidden;border:1.5px solid #f0e6ef;"><img src="<?= UPLOAD_URL.'/'.$img['image_path'] ?>" style="width:100%;height:100%;object-fit:cover;" alt=""></div>
+            <div style="width:64px;height:64px;border-radius:8px;overflow:hidden;border:1.5px solid #f0e6ef;"><img src="<?= UPLOAD_URL.'/'.$img['image_path'] ?>" style="width:100%;height:100%;object-fit:cover;" alt="<?= e($product['name'] ?? 'Product image') ?>"></div>
             <?php endforeach; ?>
           </div>
           <?php endif; ?>
@@ -845,7 +843,7 @@ function showImgPreview(input){
   prev.innerHTML="";
   for(const f of input.files){
     const url=URL.createObjectURL(f);
-    prev.insertAdjacentHTML("beforeend",`<div style="width:60px;height:60px;border-radius:8px;overflow:hidden;border:1.5px solid #f0e6ef;"><img src="${url}" style="width:100%;height:100%;object-fit:cover;"></div>`);
+    prev.insertAdjacentHTML("beforeend",`<div style="width:60px;height:60px;border-radius:8px;overflow:hidden;border:1.5px solid #f0e6ef;"><img src="${url}" alt="Selected product image preview" style="width:100%;height:100%;object-fit:cover;"></div>`);
   }
 }
 function loadEarnings(period, btn){

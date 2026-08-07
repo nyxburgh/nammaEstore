@@ -15,7 +15,7 @@
       <div class="col-md-4">
         <label class="form-label">Logo</label>
         <input type="file" name="logo" class="form-control" accept="image/*">
-        <?php if(!empty($b['logo'])): ?><img src="<?= UPLOAD_URL.'/'.$b['logo'] ?>" style="width:40px;margin-top:6px;"><?php endif; ?>
+        <?php if(!empty($b['logo'])): ?><img src="<?= UPLOAD_URL.'/'.$b['logo'] ?>" alt="<?= e($b['name'] ?? 'Brand logo') ?>" style="width:40px;margin-top:6px;"><?php endif; ?>
       </div>
       <div class="col-12">
         <label class="form-check">

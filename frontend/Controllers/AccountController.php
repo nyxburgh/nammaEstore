@@ -59,11 +59,13 @@ class AccountController extends FrontendController
         $this->setFlash('success','Address saved.'); $this->redirect(APP_URL.'/account/addresses');
     }
     public function deleteAddress(string $id): void {
+        csrf_check();
         Middleware::userAuth();
         (new AccountService())->deleteAddress((int)$id, Auth::userId());
         $this->json(['success'=>true]);
     }
     public function setDefaultAddress(string $id): void {
+        csrf_check();
         Middleware::userAuth();
         (new AccountService())->setDefault((int)$id, Auth::userId());
         $this->json(['success'=>true]);
@@ -95,6 +97,7 @@ class AccountController extends FrontendController
         Middleware::userAuth();
         $r = (new AccountService())->updateProfile(Auth::userId(), $_POST);
         $this->setFlash($r['success']?'success':'error', $r['success']?'Profile updated.':$r['message']);
+        if (!$r['success']) { $this->redirectWithInput(APP_URL.'/account/profile'); return; }
         $this->redirect(APP_URL.'/account/profile');
     }
     public function updatePassword(): void {

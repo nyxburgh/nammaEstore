@@ -22,7 +22,7 @@
 <?php else: ?><div class="row g-3">
   <?php foreach($banners['data'] as $b): ?>
   <div class="col-lg-4 col-md-6"><div class="card" style="overflow:hidden;">
-    <div style="position:relative;"><img src="<?= UPLOAD_URL.'/'.$b['image_path'] ?>" style="width:100%;height:155px;object-fit:cover;display:block;">
+    <div style="position:relative;"><img src="<?= UPLOAD_URL.'/'.$b['image_path'] ?>" alt="<?= e($b['title'] ?? 'Banner image') ?>" style="width:100%;height:155px;object-fit:cover;display:block;">
       <div style="position:absolute;top:8px;left:8px;display:flex;gap:6px;">
         <span class="badge badge-primary" style="background:rgba(109,40,217,.85);color:#fff;"><?= ucfirst(str_replace('_',' ',$b['position'])) ?></span>
         <span class="badge" style="background:rgba(0,0,0,.55);color:#fff;">#<?= $b['id'] ?></span>

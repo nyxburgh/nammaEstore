@@ -9,9 +9,9 @@
     <form method="POST" action="<?= APP_URL ?>/account/profile" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
       <div class="form-grid">
-        <div class="form-group"><label class="form-label">Full Name</label><input type="text" name="name" class="form-control" value="<?= e($user['name']) ?>" required oninput="validateField(this)" onblur="validateField(this)"></div>
-        <div class="form-group"><label class="form-label">Email Address</label><input type="email" name="email" class="form-control" value="<?= e($user['email']) ?>" required oninput="validateField(this)" onblur="validateField(this)"></div>
-        <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" name="phone" class="form-control" value="<?= e($user['phone']??'') ?>" placeholder="+91 ..." oninput="validateField(this)" onblur="validateField(this)"></div>
+        <div class="form-group"><label class="form-label">Full Name</label><input type="text" name="name" class="form-control" value="<?= e($old['name'] ?? $user['name']) ?>" required oninput="validateField(this)" onblur="validateField(this)"></div>
+        <div class="form-group"><label class="form-label">Email Address</label><input type="email" name="email" class="form-control" value="<?= e($old['email'] ?? $user['email']) ?>" required oninput="validateField(this)" onblur="validateField(this)"></div>
+        <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" name="phone" class="form-control" value="<?= e($old['phone'] ?? $user['phone'] ?? '') ?>" placeholder="+91 ..." oninput="validateField(this)" onblur="validateField(this)"></div>
       </div>
       <div class="form-foot"><button type="submit" class="btn-save">Save Changes</button></div>
     </form>

@@ -17,7 +17,7 @@
   <?php else: foreach($brands['data'] as $b): ?>
   <tr>
     <td>#<?= $b['id'] ?></td>
-    <td><?php if($b['logo']): ?><img src="<?= UPLOAD_URL.'/'.$b['logo'] ?>" style="width:36px;height:36px;object-fit:contain;border-radius:6px;"><?php else: ?><div style="width:36px;height:36px;background:#f4f0f6;border-radius:6px;display:flex;align-items:center;justify-content:center;">🏷️</div><?php endif; ?></td>
+    <td><?php if($b['logo']): ?><img src="<?= UPLOAD_URL.'/'.$b['logo'] ?>" alt="<?= e($b['name']) ?>" style="width:36px;height:36px;object-fit:contain;border-radius:6px;"><?php else: ?><div style="width:36px;height:36px;background:#f4f0f6;border-radius:6px;display:flex;align-items:center;justify-content:center;">🏷️</div><?php endif; ?></td>
     <td style="font-weight:600;"><?= e($b['name']) ?></td>
     <td><?= (int)$b['product_count'] ?></td>
     <td>

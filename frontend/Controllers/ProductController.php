@@ -141,6 +141,7 @@ class ProductController extends FrontendController
 
     public function submitReview(string $id): void
     {
+        csrf_check();
         if (!Auth::isUserLoggedIn()) {
             $this->json(['success' => false, 'message' => 'Login required.'], 401);
             return;

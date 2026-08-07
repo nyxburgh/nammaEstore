@@ -19,7 +19,7 @@
   <tr>
     <td style="color:var(--muted);font-size:12px;"><?= $pr['id'] ?></td>
     <td><div class="d-flex align-items-center gap-2">
-      <?php if($pr['primary_image']): ?><img src="<?= UPLOAD_URL.'/'.$pr['primary_image'] ?>" style="width:36px;height:36px;object-fit:cover;border-radius:7px;border:1px solid var(--border);"><?php else: ?><div style="width:36px;height:36px;background:var(--bg);border-radius:7px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);"><i class="bi bi-image"></i></div><?php endif; ?>
+      <?php if($pr['primary_image']): ?><img src="<?= UPLOAD_URL.'/'.$pr['primary_image'] ?>" alt="<?= e($pr['name']) ?>" style="width:36px;height:36px;object-fit:cover;border-radius:7px;border:1px solid var(--border);"><?php else: ?><div style="width:36px;height:36px;background:var(--bg);border-radius:7px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);"><i class="bi bi-image"></i></div><?php endif; ?>
       <div><div style="font-weight:600;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?= e($pr['name']) ?></div><div style="font-size:11px;color:var(--muted);">SKU: <?= e($pr['sku']??'—') ?></div></div>
     </div></td>
     <td style="font-size:13px;"><?= e($pr['shop_name']??$pr['seller_name']) ?></td>

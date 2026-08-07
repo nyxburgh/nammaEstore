@@ -113,7 +113,7 @@
           <div class="d-flex flex-wrap gap-2 mb-3">
             <?php foreach($product['images'] as $img): ?>
             <div class="position-relative">
-              <img src="<?= UPLOAD_URL.'/'.$img['image_path'] ?>" style="width:72px;height:72px;object-fit:cover;border-radius:9px;border:2px solid <?= $img['is_primary']?'var(--purple)':'var(--border)' ?>;">
+              <img src="<?= UPLOAD_URL.'/'.$img['image_path'] ?>" alt="<?= e($product['name'] ?? 'Product image') ?>" style="width:72px;height:72px;object-fit:cover;border-radius:9px;border:2px solid <?= $img['is_primary']?'var(--purple)':'var(--border)' ?>;">
               <?php if($img['is_primary']): ?><div style="position:absolute;bottom:2px;left:50%;transform:translateX(-50%);background:var(--purple);color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:4px;white-space:nowrap;">Primary</div><?php endif; ?>
             </div>
             <?php endforeach; ?>

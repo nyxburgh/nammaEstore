@@ -14,6 +14,15 @@ abstract class Controller
 
     protected function view(string $view, array $data = [], string $layout = 'main'): void
     {
+        // One-shot "old input" flash: a controller can stash $_POST in
+        // $_SESSION['old_input'] before redirecting back on a validation
+        // failure (see back()With Input below); the very next view render
+        // picks it up as $old and clears it, so forms can fall back to
+        // `$old['field'] ?? $existingValue` instead of losing what the
+        // user typed.
+        $data['old'] = $_SESSION['old_input'] ?? [];
+        unset($_SESSION['old_input']);
+
         extract($data);
 
         // Convert dot notation → directory path
@@ -59,6 +68,20 @@ abstract class Controller
     {
         $ref = $_SERVER['HTTP_REFERER'] ?? APP_URL;
         $this->redirect($ref);
+    }
+
+    /** Same as back(), but flashes the current $_POST so the re-rendered form can restore what the user typed (see view()'s $old). */
+    protected function backWithInput(): void
+    {
+        $_SESSION['old_input'] = $_POST;
+        $this->back();
+    }
+
+    /** Same as redirect(), but flashes the current $_POST so the re-rendered form can restore what the user typed (see view()'s $old). */
+    protected function redirectWithInput(string $url): void
+    {
+        $_SESSION['old_input'] = $_POST;
+        $this->redirect($url);
     }
 
     // ── Input ─────────────────────────────────────────────────

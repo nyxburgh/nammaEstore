@@ -15,9 +15,9 @@
   <div class="col-lg-4">
     <div class="card mb-3"><div class="card-body">
       <?php $pri=null; foreach($product['images'] as $img){if($img['is_primary'])$pri=$img;} ?>
-      <?php if($pri): ?><img src="<?= UPLOAD_URL.'/'.$pri['image_path'] ?>" style="width:100%;border-radius:10px;object-fit:cover;aspect-ratio:1/1;margin-bottom:10px;">
+      <?php if($pri): ?><img src="<?= UPLOAD_URL.'/'.$pri['image_path'] ?>" alt="<?= e($product['name']) ?>" style="width:100%;border-radius:10px;object-fit:cover;aspect-ratio:1/1;margin-bottom:10px;">
       <?php else: ?><div style="width:100%;aspect-ratio:1/1;background:var(--bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:40px;margin-bottom:10px;"><i class="bi bi-image"></i></div><?php endif; ?>
-      <?php if(count($product['images'])>1): ?><div class="d-flex gap-2 flex-wrap"><?php foreach($product['images'] as $img): ?><img src="<?= UPLOAD_URL.'/'.$img['image_path'] ?>" style="width:52px;height:52px;border-radius:7px;object-fit:cover;border:2px solid <?= $img['is_primary']?'var(--purple)':'var(--border)' ?>;"><?php endforeach; ?></div><?php endif; ?>
+      <?php if(count($product['images'])>1): ?><div class="d-flex gap-2 flex-wrap"><?php foreach($product['images'] as $img): ?><img src="<?= UPLOAD_URL.'/'.$img['image_path'] ?>" alt="<?= e($product['name']) ?>" style="width:52px;height:52px;border-radius:7px;object-fit:cover;border:2px solid <?= $img['is_primary']?'var(--purple)':'var(--border)' ?>;"><?php endforeach; ?></div><?php endif; ?>
     </div></div>
     <div class="card"><div class="card-body">
       <?php foreach([['Status',statusBadge($product['status'])],['Featured',$product['is_featured']?'<span class="badge badge-warning">Yes</span>':'<span class="badge badge-secondary">No</span>'],['Views',number_format($product['views'])],['Added',formatDate($product['created_at'])]] as [$l,$v]): ?>

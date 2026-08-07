@@ -31,6 +31,14 @@ class SellerProductService
         return $p;
     }
 
+    /** Only these GST slabs are offered in the product form — reject anything else server-side. */
+    private const GST_RATES = [0.0, 5.0, 12.0, 18.0, 28.0];
+
+    private function normalizeGstRate(array $d): float {
+        $rate = isset($d['gst_rate']) ? (float)$d['gst_rate'] : 18.0;
+        return in_array($rate, self::GST_RATES, true) ? $rate : 18.0;
+    }
+
     public function create(int $sellerId, array $d, array $files = []): array {
         if (empty($d['name']))  return ['success'=>false,'message'=>'Product name is required.'];
         if (empty($d['price'])) return ['success'=>false,'message'=>'Price is required.'];
@@ -38,7 +46,7 @@ class SellerProductService
         $slug = \slugify($d['name']) . '-' . uniqid();
         $id = $this->db->insert(
             "INSERT INTO `".DB_PREFIX."products` (seller_id,category_id,name,slug,description,price,sale_price,stock,sku,barcode,hsn_code,gst_rate,weight,is_featured,status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [$sellerId,$d['category_id'],$d['name'],$slug,$d['description']??null,(float)$d['price'],!empty($d['sale_price'])?(float)$d['sale_price']:null,(int)($d['stock']??0),$d['sku']??null,$d['barcode']??null,$d['hsn_code']??null,isset($d['gst_rate'])?(float)$d['gst_rate']:18.00,!empty($d['weight'])?(float)$d['weight']:null,(int)!empty($d['is_featured']),$d['status']??'active']
+            [$sellerId,$d['category_id'],$d['name'],$slug,$d['description']??null,max(0,(float)$d['price']),!empty($d['sale_price'])?max(0,(float)$d['sale_price']):null,max(0,(int)($d['stock']??0)),$d['sku']??null,$d['barcode']??null,$d['hsn_code']??null,$this->normalizeGstRate($d),!empty($d['weight'])?max(0,(float)$d['weight']):null,(int)!empty($d['is_featured']),$d['status']??'active']
         );
         $this->handleImages($id, $files);
         $this->handleVariants($id, $d['variants'] ?? []);
@@ -50,9 +58,13 @@ class SellerProductService
         if (!$p) return ['success'=>false,'message'=>'Product not found.'];
         $this->db->execute(
             "UPDATE `".DB_PREFIX."products` SET category_id=?,name=?,description=?,price=?,sale_price=?,stock=?,sku=?,barcode=?,hsn_code=?,gst_rate=?,weight=?,is_featured=?,status=? WHERE id=? AND seller_id=?",
-            [$d['category_id'],$d['name'],$d['description']??null,(float)$d['price'],!empty($d['sale_price'])?(float)$d['sale_price']:null,(int)($d['stock']??0),$d['sku']??null,$d['barcode']??null,$d['hsn_code']??null,isset($d['gst_rate'])?(float)$d['gst_rate']:18.00,!empty($d['weight'])?(float)$d['weight']:null,(int)!empty($d['is_featured']),$d['status']??'active',$id,$sellerId]
+            [$d['category_id'],$d['name'],$d['description']??null,max(0,(float)$d['price']),!empty($d['sale_price'])?max(0,(float)$d['sale_price']):null,max(0,(int)($d['stock']??0)),$d['sku']??null,$d['barcode']??null,$d['hsn_code']??null,$this->normalizeGstRate($d),!empty($d['weight'])?max(0,(float)$d['weight']):null,(int)!empty($d['is_featured']),$d['status']??'active',$id,$sellerId]
         );
         $this->handleImages($id, $files);
+        if (isset($d['variants'])) {
+            $this->db->execute("DELETE FROM `".DB_PREFIX."product_variants` WHERE product_id=?", [$id]);
+            $this->handleVariants($id, $d['variants']);
+        }
         return ['success'=>true];
     }
 

@@ -13,7 +13,7 @@
         <?php foreach($order['items'] as $item): ?>
         <tr>
           <td><div class="d-flex align-items-center gap-2">
-            <?php if($item['product_image']): ?><img src="<?= UPLOAD_URL.'/'.$item['product_image'] ?>" style="width:36px;height:36px;border-radius:7px;object-fit:cover;border:1px solid var(--border);"><?php else: ?><div style="width:36px;height:36px;background:var(--bg);border-radius:7px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);"><i class="bi bi-image"></i></div><?php endif; ?>
+            <?php if($item['product_image']): ?><img src="<?= UPLOAD_URL.'/'.$item['product_image'] ?>" alt="<?= e($item['product_name']) ?>" style="width:36px;height:36px;border-radius:7px;object-fit:cover;border:1px solid var(--border);"><?php else: ?><div style="width:36px;height:36px;background:var(--bg);border-radius:7px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);"><i class="bi bi-image"></i></div><?php endif; ?>
             <div><div style="font-weight:600;font-size:13px;"><?= e($item['product_name']) ?></div><?php if($item['variant_label']): ?><div style="font-size:11px;color:var(--muted);"><?= e($item['variant_label']) ?></div><?php endif; ?></div>
           </div></td>
           <td style="font-size:13px;"><?= e($item['shop_name']??$item['seller_name']) ?></td>
