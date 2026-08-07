@@ -17,7 +17,7 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label fw-600">Product Name *</label>
-            <input type="text" name="name" class="form-control" required placeholder="e.g. Samsung 55-inch 4K Smart TV" value="<?= e($product['name'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)">
+            <input type="text" name="name" class="form-control" required placeholder="e.g. Samsung 55-inch 4K Smart TV" value="<?= e($old['name'] ?? $product['name'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)">
           </div>
           <div class="row g-3">
             <div class="col-md-6">
@@ -25,7 +25,7 @@
               <select name="seller_id" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
                 <option value="">Select seller</option>
                 <?php foreach($sellers as $v): ?>
-                <option value="<?= $v['id'] ?>" <?= ($product['seller_id']??'') == $v['id'] ? 'selected' : '' ?>>
+                <option value="<?= $v['id'] ?>" <?= ($old['seller_id'] ?? $product['seller_id'] ?? '') == $v['id'] ? 'selected' : '' ?>>
                   <?= e($v['shop_name'] ?: $v['name']) ?> (<?= e($v['email']) ?>)
                 </option>
                 <?php endforeach; ?>
@@ -36,7 +36,7 @@
               <select name="category_id" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
                 <option value="">Select category</option>
                 <?php foreach($categories as $cat): ?>
-                <option value="<?= $cat['id'] ?>" <?= ($product['category_id']??'') == $cat['id'] ? 'selected' : '' ?>><?= e($cat['name']) ?></option>
+                <option value="<?= $cat['id'] ?>" <?= ($old['category_id'] ?? $product['category_id'] ?? '') == $cat['id'] ? 'selected' : '' ?>><?= e($cat['name']) ?></option>
                 <?php endforeach; ?>
               </select>
             </div>
@@ -45,17 +45,17 @@
               <select name="brand_id" class="form-select">
                 <option value="">— none —</option>
                 <?php foreach(($brands ?? []) as $br): ?>
-                <option value="<?= $br['id'] ?>" <?= ($product['brand_id']??'') == $br['id'] ? 'selected' : '' ?>><?= e($br['name']) ?></option>
+                <option value="<?= $br['id'] ?>" <?= ($old['brand_id'] ?? $product['brand_id'] ?? '') == $br['id'] ? 'selected' : '' ?>><?= e($br['name']) ?></option>
                 <?php endforeach; ?>
               </select>
             </div>
             <div class="col-md-6">
               <label class="form-label fw-600">SKU / Model No.</label>
-              <input type="text" name="sku" class="form-control" placeholder="Unique product code" value="<?= e($product['sku'] ?? '') ?>">
+              <input type="text" name="sku" class="form-control" placeholder="Unique product code" value="<?= e($old['sku'] ?? $product['sku'] ?? '') ?>">
             </div>
             <div class="col-md-6">
               <label class="form-label fw-600">Barcode</label>
-              <input type="text" name="barcode" class="form-control" placeholder="EAN/UPC barcode" value="<?= e($product['barcode'] ?? '') ?>">
+              <input type="text" name="barcode" class="form-control" placeholder="EAN/UPC barcode" value="<?= e($old['barcode'] ?? $product['barcode'] ?? '') ?>">
             </div>
             <div class="col-md-6">
               <label class="form-label fw-600">Weight (kg)</label>
@@ -90,16 +90,16 @@
             <div class="col-md-4">
               <label class="form-label fw-600">Price (MRP) *</label>
               <div class="input-group"><span class="input-group-text">₹</span>
-              <input type="number" name="price" id="price" class="form-control" required step="0.01" min="0" placeholder="0.00" value="<?= e($product['price'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+              <input type="number" name="price" id="price" class="form-control" required step="0.01" min="0" placeholder="0.00" value="<?= e($old['price'] ?? $product['price'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
             </div>
             <div class="col-md-4">
               <label class="form-label fw-600">Sale Price</label>
               <div class="input-group"><span class="input-group-text">₹</span>
-              <input type="number" name="sale_price" class="form-control" step="0.01" min="0" placeholder="0.00 (optional)" value="<?= e($product['sale_price'] ?? '') ?>" data-lte-field="#price" oninput="validateField(this)" onblur="validateField(this)"></div>
+              <input type="number" name="sale_price" class="form-control" step="0.01" min="0" placeholder="0.00 (optional)" value="<?= e($old['sale_price'] ?? $product['sale_price'] ?? '') ?>" data-lte-field="#price" oninput="validateField(this)" onblur="validateField(this)"></div>
             </div>
             <div class="col-md-4">
               <label class="form-label fw-600">Stock Quantity *</label>
-              <input type="number" name="stock" class="form-control" required min="0" placeholder="0" value="<?= e($product['stock'] ?? '0') ?>" oninput="validateField(this)" onblur="validateField(this)">
+              <input type="number" name="stock" class="form-control" required min="0" placeholder="0" value="<?= e($old['stock'] ?? $product['stock'] ?? '0') ?>" oninput="validateField(this)" onblur="validateField(this)">
             </div>
           </div>
         </div>

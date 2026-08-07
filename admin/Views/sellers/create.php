@@ -5,16 +5,16 @@
     <form method="POST" action="<?= $p ?>/sellers" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
       <div class="card mb-3"><div class="card-header"><span class="card-title"><i class="bi bi-person me-2"></i>Account Details</span></div><div class="card-body"><div class="row g-3">
-        <div class="col-md-6"><label class="form-label">Full Name *</label><input type="text" name="name" class="form-control" required value="<?= e($_POST['name']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
-        <div class="col-md-6"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" required value="<?= e($_POST['email']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
-        <div class="col-md-6"><label class="form-label">Phone</label><input type="tel" name="phone" class="form-control" value="<?= e($_POST['phone']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+        <div class="col-md-6"><label class="form-label">Full Name *</label><input type="text" name="name" class="form-control" required value="<?= e($old['name']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+        <div class="col-md-6"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" required value="<?= e($old['email']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+        <div class="col-md-6"><label class="form-label">Phone</label><input type="tel" name="phone" class="form-control" value="<?= e($old['phone']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
         <div class="col-md-6"><label class="form-label">Password *</label><input type="password" name="password" class="form-control" required minlength="8" placeholder="Min 8 characters" oninput="validateField(this)" onblur="validateField(this)"></div>
       </div></div></div>
       <div class="card mb-3"><div class="card-header"><span class="card-title"><i class="bi bi-shop me-2"></i>Shop Details</span></div><div class="card-body"><div class="row g-3">
-        <div class="col-md-6"><label class="form-label">Shop Name *</label><input type="text" name="shop_name" class="form-control" required value="<?= e($_POST['shop_name']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
-        <div class="col-md-6"><label class="form-label">GST Number</label><input type="text" name="gst_number" class="form-control" value="<?= e($_POST['gst_number']??'') ?>"></div>
-        <div class="col-md-6"><label class="form-label">PAN Number</label><input type="text" name="pan_number" class="form-control" value="<?= e($_POST['pan_number']??'') ?>"></div>
-        <div class="col-12"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="3"><?= e($_POST['description']??'') ?></textarea></div>
+        <div class="col-md-6"><label class="form-label">Shop Name *</label><input type="text" name="shop_name" class="form-control" required value="<?= e($old['shop_name']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+        <div class="col-md-6"><label class="form-label">GST Number</label><input type="text" name="gst_number" class="form-control" value="<?= e($old['gst_number']??'') ?>"></div>
+        <div class="col-md-6"><label class="form-label">PAN Number</label><input type="text" name="pan_number" class="form-control" value="<?= e($old['pan_number']??'') ?>"></div>
+        <div class="col-12"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="3"><?= e($old['description']??'') ?></textarea></div>
       </div></div></div>
       <div class="d-flex gap-2"><button type="submit" class="btn btn-primary px-4"><i class="bi bi-check-lg me-1"></i>Create Seller</button><a href="<?= $p ?>/sellers" class="btn btn-outline-secondary">Cancel</a></div>
     </form>

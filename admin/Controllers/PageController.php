@@ -22,9 +22,9 @@ class PageController extends AdminController
         csrf_check();
         Middleware::can('pages','create');
         $e = $this->validate(['title'=>'required']);
-        if ($e) { $this->setFlash('error',reset($e)); $this->back(); return; }
+        if ($e) { $this->setFlash('error',reset($e)); $this->backWithInput(); return; }
         $r = $this->service->create($this->inputs(), Auth::adminId());
-        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->back(); return; }
+        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->backWithInput(); return; }
         $this->setFlash('success','Page created.'); $this->redirect(ADMIN_URL.'/pages');
     }
     public function edit(string $id): void {
@@ -37,7 +37,7 @@ class PageController extends AdminController
         csrf_check();
         Middleware::can('pages','edit');
         $r = $this->service->update((int)$id, $this->inputs(), Auth::adminId());
-        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->back(); return; }
+        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->backWithInput(); return; }
         $this->setFlash('success','Page updated.'); $this->redirect(ADMIN_URL.'/pages');
     }
     public function delete(string $id): void { Middleware::can('pages','delete'); csrf_check(); $this->service->delete((int)$id); $this->json(['success'=>true]); }

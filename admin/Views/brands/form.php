@@ -10,7 +10,7 @@
     <div class="row g-3">
       <div class="col-md-8">
         <label class="form-label">Brand Name *</label>
-        <input type="text" name="name" class="form-control" value="<?= e($b['name'] ?? '') ?>" required oninput="validateField(this)" onblur="validateField(this)">
+        <input type="text" name="name" class="form-control" value="<?= e($old['name'] ?? $b['name'] ?? '') ?>" required oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-4">
         <label class="form-label">Logo</label>
@@ -19,7 +19,7 @@
       </div>
       <div class="col-12">
         <label class="form-check">
-          <input type="checkbox" name="is_active" class="form-check-input" value="1" <?= ($b['is_active']??1)?'checked':'' ?>>
+          <input type="checkbox" name="is_active" class="form-check-input" value="1" <?= isset($old['is_active']) ? (!empty($old['is_active'])?'checked':'') : (($b['is_active']??1)?'checked':'') ?>>
           <span class="form-check-label">Active</span>
         </label>
       </div>

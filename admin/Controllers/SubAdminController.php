@@ -26,11 +26,11 @@ class SubAdminController extends AdminController
         csrf_check();
         Middleware::superAdmin();
         $e = $this->validate(['name'=>'required','email'=>'required|email','password'=>'required|min:8']);
-        if ($e) { $this->setFlash('error',reset($e)); $this->back(); return; }
+        if ($e) { $this->setFlash('error',reset($e)); $this->backWithInput(); return; }
         $d = $this->inputs();
         $d['permissions'] = $this->buildPerms($_POST['modules']??[]);
         $r = $this->service->create($d,Auth::adminId());
-        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->back(); return; }
+        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->backWithInput(); return; }
         $this->setFlash('success','Sub-admin created.'); $this->redirect(ADMIN_URL.'/sub-admins');
     }
     public function edit(string $id): void {

@@ -6,15 +6,15 @@ $moduleIcons=['products'=>'box-seam','payments'=>'credit-card','reports'=>'bar-c
   <?= csrf_field() ?>
 <div class="row g-3">
   <div class="col-lg-7"><div class="card"><div class="card-header"><span class="card-title">Account Details</span></div><div class="card-body"><div class="row g-3">
-    <div class="col-md-6"><label class="form-label">Full Name *</label><input type="text" name="name" class="form-control" required value="<?= e($_POST['name']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
-    <div class="col-md-6"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" required value="<?= e($_POST['email']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+    <div class="col-md-6"><label class="form-label">Full Name *</label><input type="text" name="name" class="form-control" required value="<?= e($old['name']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+    <div class="col-md-6"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" required value="<?= e($old['email']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
     <div class="col-md-6"><label class="form-label">Password *</label><input type="password" name="password" class="form-control" required minlength="8" placeholder="Min 8 characters" oninput="validateField(this)" onblur="validateField(this)"></div>
   </div></div></div></div>
   <div class="col-lg-5"><div class="card"><div class="card-header"><span class="card-title">Module Access</span></div><div class="card-body" data-min-checked="1">
     <?php foreach($modules as $m): ?>
     <div style="background:var(--bg);border-radius:9px;padding:11px 13px;margin-bottom:10px;">
       <label style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;cursor:pointer;margin:0;">
-        <input type="checkbox" name="modules[]" value="<?= $m ?>" class="module-check" data-module="<?= $m ?>" style="width:16px;height:16px;">
+        <input type="checkbox" name="modules[]" value="<?= $m ?>" class="module-check" data-module="<?= $m ?>" style="width:16px;height:16px;" <?= in_array($m, $old['modules']??[])?'checked':'' ?>>
         <i class="bi bi-<?= $moduleIcons[$m] ?>" style="color:var(--purple);"></i>
         <?= $moduleLabels[$m] ?>
       </label>

@@ -21,7 +21,7 @@ $noun = $isSub ? 'Sub Category' : 'Category';
           <?= csrf_field() ?>
           <div class="mb-3">
             <label class="form-label fw-600"><?= $noun ?> Name *</label>
-            <input type="text" name="name" class="form-control" required placeholder="e.g. Electronics" value="<?= e($category['name'] ?? $_POST['name'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)">
+            <input type="text" name="name" class="form-control" required placeholder="e.g. Electronics" value="<?= e($old['name'] ?? $category['name'] ?? '') ?>" oninput="validateField(this)" onblur="validateField(this)">
           </div>
           <?php if($isSub && !$isEdit): ?>
           <input type="hidden" name="parent_id" value="<?= (int)$parentCategory['id'] ?>">
@@ -31,24 +31,24 @@ $noun = $isSub ? 'Sub Category' : 'Category';
             <select name="parent_id" class="form-select">
               <option value="">None (Top Level)</option>
               <?php foreach($parents as $par): ?>
-              <option value="<?= $par['id'] ?>" <?= (($category['parent_id'] ?? $_GET['parent_id'] ?? '') == $par['id']) ? 'selected' : '' ?>><?= e($par['name']) ?></option>
+              <option value="<?= $par['id'] ?>" <?= (($old['parent_id'] ?? $category['parent_id'] ?? $_GET['parent_id'] ?? '') == $par['id']) ? 'selected' : '' ?>><?= e($par['name']) ?></option>
               <?php endforeach; ?>
             </select>
           </div>
           <?php endif; ?>
           <div class="mb-3">
             <label class="form-label fw-600">Description</label>
-            <textarea name="description" class="form-control" rows="3" placeholder="Optional description..."><?= e($category['description'] ?? '') ?></textarea>
+            <textarea name="description" class="form-control" rows="3" placeholder="Optional description..."><?= e($old['description'] ?? $category['description'] ?? '') ?></textarea>
           </div>
           <div class="row g-3 mb-3">
             <div class="col-md-6">
               <label class="form-label fw-600">Sort Order</label>
-              <input type="number" name="sort_order" class="form-control" value="<?= $category['sort_order'] ?? 0 ?>" min="0" oninput="validateField(this)" onblur="validateField(this)">
+              <input type="number" name="sort_order" class="form-control" value="<?= e($old['sort_order'] ?? $category['sort_order'] ?? 0) ?>" min="0" oninput="validateField(this)" onblur="validateField(this)">
               <div class="form-text">Lower number = appears first</div>
             </div>
             <div class="col-md-6 d-flex align-items-end pb-2">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="is_active" value="1" id="isActive" <?= ($category['is_active'] ?? 1) ? 'checked' : '' ?>>
+                <input class="form-check-input" type="checkbox" name="is_active" value="1" id="isActive" <?= isset($old['is_active']) ? (!empty($old['is_active'])?'checked':'') : (($category['is_active'] ?? 1) ? 'checked' : '') ?>>
                 <label class="form-check-label fw-600" for="isActive">Active (visible to customers)</label>
               </div>
             </div>

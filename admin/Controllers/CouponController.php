@@ -41,7 +41,7 @@ class CouponController extends AdminController
     {
         Middleware::can('coupons', 'create'); csrf_check();
         $r = $this->service->create($this->inputs(), Auth::adminId());
-        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->back(); return; }
+        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->backWithInput(); return; }
         $this->setFlash('success', 'Coupon created.');
         $this->redirect(ADMIN_URL . '/coupons');
     }
@@ -64,7 +64,7 @@ class CouponController extends AdminController
     {
         Middleware::can('coupons', 'edit'); csrf_check();
         $r = $this->service->update((int) $id, $this->inputs());
-        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->back(); return; }
+        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->backWithInput(); return; }
         $this->setFlash('success', 'Coupon updated.');
         $this->redirect(ADMIN_URL . '/coupons');
     }

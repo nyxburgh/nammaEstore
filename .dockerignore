@@ -31,6 +31,27 @@ database/
 /public/uploads/*
 !/public/uploads/.htaccess
 
+# Seed/demo product images ship with the repo/image so a fresh deploy
+# has sample product photos out of the box — mirrors the .gitignore
+# exception. NOTE: if a Coolify persistent volume is mounted at
+# public/uploads/, an empty volume shadows these baked-in files on
+# first deploy; seed the volume manually (or delete/recreate it) if
+# so, since a rebuild alone won't be enough in that case.
+!/public/uploads/products/
+/public/uploads/products/*
+!/public/uploads/products/adjustable-dumbbell-set-10kg.jpg
+!/public/uploads/products/electric-kettle-1-8l.jpg
+!/public/uploads/products/herbal-face-wash-combo-pack.jpg
+!/public/uploads/products/men-s-casual-denim-jacket.jpg
+!/public/uploads/products/organic-assorted-dry-fruits-box-500g.jpg
+!/public/uploads/products/smart-fitness-band.jpg
+!/public/uploads/products/stainless-steel-cookware-set-5-pcs.jpg
+!/public/uploads/products/the-art-of-clean-code-paperback.jpg
+!/public/uploads/products/wireless-bluetooth-headphones.jpg
+!/public/uploads/products/wireless-gaming-mouse-rgb.jpg
+!/public/uploads/products/women-s-floral-summer-dress.jpg
+!/public/uploads/products/yoga-mat-with-carry-strap.jpg
+
 # ── Logs / temp / local server artifacts ────────────────────────
 *.log
 /storage/

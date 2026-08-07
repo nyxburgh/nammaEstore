@@ -3,9 +3,9 @@
 <div class="row"><div class="col-lg-6"><div class="card"><div class="card-header"><span class="card-title">Customer Details</span></div><div class="card-body">
   <form method="POST" action="<?= $p ?>/customers" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
-    <div class="mb-3"><label class="form-label">Full Name *</label><input type="text" name="name" class="form-control" required value="<?= e($_POST['name']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
-    <div class="mb-3"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" required value="<?= e($_POST['email']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
-    <div class="mb-3"><label class="form-label">Phone</label><input type="tel" name="phone" class="form-control" value="<?= e($_POST['phone']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+    <div class="mb-3"><label class="form-label">Full Name *</label><input type="text" name="name" class="form-control" required value="<?= e($old['name']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+    <div class="mb-3"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" required value="<?= e($old['email']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
+    <div class="mb-3"><label class="form-label">Phone</label><input type="tel" name="phone" class="form-control" value="<?= e($old['phone']??'') ?>" oninput="validateField(this)" onblur="validateField(this)"></div>
     <div class="mb-4"><label class="form-label">Password *</label><input type="password" name="password" class="form-control" required minlength="8" placeholder="Min 8 characters" oninput="validateField(this)" onblur="validateField(this)"></div>
     <div class="d-flex gap-2"><button type="submit" class="btn btn-primary">Create Customer</button><a href="<?= $p ?>/customers" class="btn btn-outline-secondary">Cancel</a></div>
   </form>

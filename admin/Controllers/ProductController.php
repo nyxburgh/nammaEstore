@@ -59,9 +59,9 @@ class ProductController extends AdminController
         Middleware::adminAuth();
         Middleware::can('products', 'edit');
         csrf_check();
-        if (empty($_POST['name']))      { $this->setFlash('error', 'Product name is required.'); $this->redirect(ADMIN_URL . '/products/create'); return; }
-        if (empty($_POST['seller_id'])) { $this->setFlash('error', 'Seller is required.');        $this->redirect(ADMIN_URL . '/products/create'); return; }
-        if (empty($_POST['price']))     { $this->setFlash('error', 'Price is required.');         $this->redirect(ADMIN_URL . '/products/create'); return; }
+        if (empty($_POST['name']))      { $this->setFlash('error', 'Product name is required.'); $this->redirectWithInput(ADMIN_URL . '/products/create'); return; }
+        if (empty($_POST['seller_id'])) { $this->setFlash('error', 'Seller is required.');        $this->redirectWithInput(ADMIN_URL . '/products/create'); return; }
+        if (empty($_POST['price']))     { $this->setFlash('error', 'Price is required.');         $this->redirectWithInput(ADMIN_URL . '/products/create'); return; }
 
         $id = $this->products->save(null, $_POST, $_FILES);
         $this->setFlash('success', 'Product created successfully.');

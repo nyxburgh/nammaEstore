@@ -30,7 +30,7 @@ class BrandController extends AdminController
     {
         Middleware::can('brands', 'create'); csrf_check();
         $r = $this->service->create($this->inputs(), $_FILES);
-        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->back(); return; }
+        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->backWithInput(); return; }
         $this->setFlash('success', 'Brand created.');
         $this->redirect(ADMIN_URL . '/brands');
     }
@@ -47,7 +47,7 @@ class BrandController extends AdminController
     {
         Middleware::can('brands', 'edit'); csrf_check();
         $r = $this->service->update((int) $id, $this->inputs(), $_FILES);
-        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->back(); return; }
+        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->backWithInput(); return; }
         $this->setFlash('success', 'Brand updated.');
         $this->redirect(ADMIN_URL . '/brands');
     }

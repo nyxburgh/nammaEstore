@@ -11,9 +11,9 @@
       <div class="col-md-4">
         <label class="form-label">Type *</label>
         <select name="type" id="typeSelect" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
-          <option value="company">Company Gift Card</option>
-          <option value="seller">Seller Gift Card</option>
-          <option value="recharge">Recharge Gift Card</option>
+          <option value="company" <?= ($old['type']??'')==='company'?'selected':'' ?>>Company Gift Card</option>
+          <option value="seller" <?= ($old['type']??'')==='seller'?'selected':'' ?>>Seller Gift Card</option>
+          <option value="recharge" <?= ($old['type']??'')==='recharge'?'selected':'' ?>>Recharge Gift Card</option>
         </select>
       </div>
       <div class="col-md-4" id="sellerWrap" style="display:none;">
@@ -21,21 +21,21 @@
         <select name="seller_id" class="form-select">
           <option value="">— select seller —</option>
           <?php foreach(($sellers ?? []) as $v): ?>
-          <option value="<?= $v['id'] ?>"><?= e($v['shop_name'] ?: $v['name']) ?></option>
+          <option value="<?= $v['id'] ?>" <?= ($old['seller_id']??'')==$v['id']?'selected':'' ?>><?= e($v['shop_name'] ?: $v['name']) ?></option>
           <?php endforeach; ?>
         </select>
       </div>
       <div class="col-md-4">
         <label class="form-label">Amount (₹) *</label>
-        <input type="number" step="0.01" min="0" name="amount" class="form-control" required oninput="validateField(this)" onblur="validateField(this)">
+        <input type="number" step="0.01" min="0" name="amount" class="form-control" required value="<?= e($old['amount']??'') ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-6">
         <label class="form-label">Issue to (email, optional)</label>
-        <input type="email" name="issued_to_email" class="form-control" placeholder="customer@example.com" oninput="validateField(this)" onblur="validateField(this)">
+        <input type="email" name="issued_to_email" class="form-control" placeholder="customer@example.com" value="<?= e($old['issued_to_email']??'') ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-6">
         <label class="form-label">Expires</label>
-        <input type="datetime-local" name="expires_at" class="form-control" oninput="validateField(this)" onblur="validateField(this)">
+        <input type="datetime-local" name="expires_at" class="form-control" value="<?= e($old['expires_at']??'') ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
     </div>
   </div></div>

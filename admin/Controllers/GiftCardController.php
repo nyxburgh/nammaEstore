@@ -37,7 +37,7 @@ class GiftCardController extends AdminController
     {
         Middleware::can('gift_cards', 'create'); csrf_check();
         $r = $this->service->issue($this->inputs());
-        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->back(); return; }
+        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->backWithInput(); return; }
         $this->setFlash('success', 'Gift voucher issued: ' . $r['code']);
         $this->redirect(ADMIN_URL . '/gift-cards');
     }

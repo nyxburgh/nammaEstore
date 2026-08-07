@@ -10,38 +10,38 @@
     <div class="row g-3">
       <div class="col-md-4">
         <label class="form-label">Coupon Code *</label>
-        <input type="text" name="code" class="form-control text-uppercase" value="<?= e($c['code'] ?? '') ?>" <?= $isEdit?'readonly':'required' ?> pattern="[A-Za-z0-9_-]+" data-pattern-message="Letters, numbers, hyphens and underscores only." placeholder="SAVE20" oninput="validateField(this)" onblur="validateField(this)">
+        <input type="text" name="code" class="form-control text-uppercase" value="<?= e($old['code'] ?? $c['code'] ?? '') ?>" <?= $isEdit?'readonly':'required' ?> pattern="[A-Za-z0-9_-]+" data-pattern-message="Letters, numbers, hyphens and underscores only." placeholder="SAVE20" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-8">
         <label class="form-label">Label (internal note)</label>
-        <input type="text" name="label" class="form-control" value="<?= e($c['label'] ?? '') ?>" placeholder="Diwali Sale 2026">
+        <input type="text" name="label" class="form-control" value="<?= e($old['label'] ?? $c['label'] ?? '') ?>" placeholder="Diwali Sale 2026">
       </div>
 
       <div class="col-md-3">
         <label class="form-label">Value Type *</label>
         <select name="value_type" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
-          <option value="fixed" <?= ($c['value_type']??'')==='fixed'?'selected':'' ?>>Fixed Amount (₹)</option>
-          <option value="percentage" <?= ($c['value_type']??'')==='percentage'?'selected':'' ?>>Percentage (%)</option>
+          <option value="fixed" <?= ($old['value_type'] ?? $c['value_type'] ?? '')==='fixed'?'selected':'' ?>>Fixed Amount (₹)</option>
+          <option value="percentage" <?= ($old['value_type'] ?? $c['value_type'] ?? '')==='percentage'?'selected':'' ?>>Percentage (%)</option>
         </select>
       </div>
       <div class="col-md-3">
         <label class="form-label">Value *</label>
-        <input type="number" step="0.01" min="0" name="value" class="form-control" value="<?= e($c['value'] ?? '') ?>" required oninput="validateField(this)" onblur="validateField(this)">
+        <input type="number" step="0.01" min="0" name="value" class="form-control" value="<?= e($old['value'] ?? $c['value'] ?? '') ?>" required oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-3">
         <label class="form-label">Max Discount Cap (₹)</label>
-        <input type="number" step="0.01" min="0" name="max_discount_amount" class="form-control" value="<?= e($c['max_discount_amount'] ?? '') ?>" placeholder="For % coupons" oninput="validateField(this)" onblur="validateField(this)">
+        <input type="number" step="0.01" min="0" name="max_discount_amount" class="form-control" value="<?= e($old['max_discount_amount'] ?? $c['max_discount_amount'] ?? '') ?>" placeholder="For % coupons" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-3">
         <label class="form-label">Min Order Amount (₹)</label>
-        <input type="number" step="0.01" min="0" name="min_order_amount" class="form-control" value="<?= e($c['min_order_amount'] ?? 0) ?>" oninput="validateField(this)" onblur="validateField(this)">
+        <input type="number" step="0.01" min="0" name="min_order_amount" class="form-control" value="<?= e($old['min_order_amount'] ?? $c['min_order_amount'] ?? 0) ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
 
       <div class="col-md-4">
         <label class="form-label">Scope *</label>
         <select name="scope" id="scopeSelect" class="form-select" required oninput="validateField(this)" onblur="validateField(this)">
           <?php foreach(['platform'=>'Platform-wide','seller'=>'Seller-specific','category'=>'Category-specific','brand'=>'Brand-specific','product'=>'Product-specific','user'=>'Single User','first_order'=>'First Order Only','festival'=>'Festival (platform-wide)'] as $val=>$label): ?>
-          <option value="<?= $val ?>" <?= ($c['scope']??'platform')===$val?'selected':'' ?>><?= $label ?></option>
+          <option value="<?= $val ?>" <?= ($old['scope'] ?? $c['scope'] ?? 'platform')===$val?'selected':'' ?>><?= $label ?></option>
           <?php endforeach; ?>
         </select>
       </div>
@@ -62,24 +62,24 @@
 
       <div class="col-md-3">
         <label class="form-label">Total Usage Limit</label>
-        <input type="number" min="0" name="usage_limit_total" class="form-control" value="<?= e($c['usage_limit_total'] ?? '') ?>" placeholder="Unlimited" oninput="validateField(this)" onblur="validateField(this)">
+        <input type="number" min="0" name="usage_limit_total" class="form-control" value="<?= e($old['usage_limit_total'] ?? $c['usage_limit_total'] ?? '') ?>" placeholder="Unlimited" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-3">
         <label class="form-label">Per-User Limit</label>
-        <input type="number" min="0" name="usage_limit_per_user" class="form-control" value="<?= e($c['usage_limit_per_user'] ?? 1) ?>" oninput="validateField(this)" onblur="validateField(this)">
+        <input type="number" min="0" name="usage_limit_per_user" class="form-control" value="<?= e($old['usage_limit_per_user'] ?? $c['usage_limit_per_user'] ?? 1) ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-3">
         <label class="form-label">Starts</label>
-        <input type="datetime-local" name="starts_at" id="startsAt" class="form-control" value="<?= isset($c['starts_at']) ? date('Y-m-d\TH:i',strtotime($c['starts_at'])) : '' ?>" oninput="validateField(this)" onblur="validateField(this)">
+        <input type="datetime-local" name="starts_at" id="startsAt" class="form-control" value="<?= isset($old['starts_at']) ? e($old['starts_at']) : (isset($c['starts_at']) ? date('Y-m-d\TH:i',strtotime($c['starts_at'])) : '') ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
       <div class="col-md-3">
         <label class="form-label">Expires</label>
-        <input type="datetime-local" name="expires_at" class="form-control" data-gte-field="#startsAt" value="<?= isset($c['expires_at']) ? date('Y-m-d\TH:i',strtotime($c['expires_at'])) : '' ?>" oninput="validateField(this)" onblur="validateField(this)">
+        <input type="datetime-local" name="expires_at" class="form-control" data-gte-field="#startsAt" value="<?= isset($old['expires_at']) ? e($old['expires_at']) : (isset($c['expires_at']) ? date('Y-m-d\TH:i',strtotime($c['expires_at'])) : '') ?>" oninput="validateField(this)" onblur="validateField(this)">
       </div>
 
       <div class="col-12">
         <label class="form-check">
-          <input type="checkbox" name="is_active" class="form-check-input" value="1" <?= ($c['is_active']??1)?'checked':'' ?>>
+          <input type="checkbox" name="is_active" class="form-check-input" value="1" <?= isset($old['is_active']) ? (!empty($old['is_active'])?'checked':'') : (($c['is_active']??1)?'checked':'') ?>>
           <span class="form-check-label">Active</span>
         </label>
       </div>

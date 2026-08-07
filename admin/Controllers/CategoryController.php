@@ -48,7 +48,7 @@ class CategoryController extends AdminController
         $r = $this->service->create($this->inputs());
         if (!$r['success']) {
             $this->setFlash('error', $r['message']);
-            $this->redirect(ADMIN_URL . '/categories/create');
+            $this->redirectWithInput(ADMIN_URL . '/categories/create');
             return;
         }
         $this->setFlash('success', 'Category created successfully.');
@@ -86,7 +86,7 @@ class CategoryController extends AdminController
         $r = $this->service->update((int)$id, $this->inputs());
         if (!$r['success']) {
             $this->setFlash('error', $r['message']);
-            $this->redirect(ADMIN_URL . '/categories/' . $id . '/edit');
+            $this->redirectWithInput(ADMIN_URL . '/categories/' . $id . '/edit');
             return;
         }
         $this->setFlash('success', 'Category updated successfully.');

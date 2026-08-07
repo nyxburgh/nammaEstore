@@ -22,9 +22,9 @@ class BannerController extends AdminController
         csrf_check();
         Middleware::can('banners','create');
         $e = $this->validate(['title'=>'required','position'=>'required']);
-        if ($e) { $this->setFlash('error',reset($e)); $this->back(); return; }
+        if ($e) { $this->setFlash('error',reset($e)); $this->backWithInput(); return; }
         $r = $this->service->create($this->inputs(), $_FILES, Auth::adminId());
-        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->back(); return; }
+        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->backWithInput(); return; }
         $this->setFlash('success','Banner created.'); $this->redirect(ADMIN_URL.'/banners');
     }
     public function edit(string $id): void {

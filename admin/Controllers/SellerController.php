@@ -22,9 +22,9 @@ class SellerController extends AdminController
         csrf_check();
         Middleware::superAdmin();
         $e = $this->validate(['name'=>'required','email'=>'required|email','password'=>'required|min:8','shop_name'=>'required']);
-        if ($e) { $this->setFlash('error',reset($e)); $this->back(); return; }
+        if ($e) { $this->setFlash('error',reset($e)); $this->backWithInput(); return; }
         $r = $this->service->create($this->inputs(), Auth::adminId());
-        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->back(); return; }
+        if (!$r['success']) { $this->setFlash('error',$r['message']); $this->backWithInput(); return; }
         $this->setFlash('success','Seller created successfully.');
         $this->redirect(ADMIN_URL.'/sellers');
     }
@@ -44,7 +44,7 @@ class SellerController extends AdminController
         csrf_check();
         Middleware::superAdmin();
         $r = $this->service->update((int)$id, $this->inputs(), Auth::adminId());
-        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->redirect(ADMIN_URL.'/sellers/'.$id.'/edit'); return; }
+        if (!$r['success']) { $this->setFlash('error', $r['message']); $this->redirectWithInput(ADMIN_URL.'/sellers/'.$id.'/edit'); return; }
         $this->setFlash('success', 'Seller updated successfully.');
         $this->redirect(ADMIN_URL.'/sellers/'.$id);
     }
