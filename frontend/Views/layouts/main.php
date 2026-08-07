@@ -78,7 +78,6 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
     <a href="<?= APP_URL ?>" class="logo">Namma <span>E</span> Store</a>
     <div class="header-search">
       <form action="<?= APP_URL ?>/search" method="GET">
-        <select name="category"><option value="">All</option><?php foreach($cats as $cat): ?><option value="<?= $cat['id'] ?>" <?= (($filters['category']??$_GET['category']??'')==$cat['id'])?'selected':'' ?>><?= e($cat['name']) ?></option><?php endforeach; ?></select>
         <input type="text" name="q" placeholder="Search products, brands, sellers..." value="<?= e($_GET['q']??'') ?>">
         <button type="submit">🔍</button>
       </form>

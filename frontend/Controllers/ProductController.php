@@ -64,10 +64,12 @@ class ProductController extends FrontendController
         ];
 
         $this->view('products.index', [
-            'title'      => 'Search: "' . e($q) . '" — ' . SettingsService::get('site_name', 'Namma E Store'),
+            'title'      => $q
+                            ? 'Search: "' . e($q) . '" — ' . SettingsService::get('site_name', 'Namma E Store')
+                            : 'All Products — ' . SettingsService::get('site_name', 'Namma E Store'),
             'products'   => $q
                             ? $svc->search($q, (int)$this->input('page', 1), $filters)
-                            : ['data'=>[],'total'=>0,'total_pages'=>1,'current_page'=>1,'per_page'=>15,'from'=>0,'to'=>0],
+                            : $svc->getAll((int)$this->input('page', 1), $filters),
             'categories' => $svc->getCategories(),
             'filters'    => $filters,
             'searchQ'    => $q,

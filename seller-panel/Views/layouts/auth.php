@@ -12,7 +12,6 @@
 <header class="auth-header">
   <a href="<?= APP_URL ?>" class="ah-logo">Namma <span>E</span> Store</a>
   <nav class="ah-nav">
-    <a href="<?= APP_URL ?>" class="ah-link ah-home">← Back to Store</a>
     <a href="<?= APP_URL ?>/info/faq" class="ah-link">❓ Seller FAQ</a>
     <a href="<?= APP_URL ?>/info/contact-us" class="ah-link">📞 Support</a>
   </nav>

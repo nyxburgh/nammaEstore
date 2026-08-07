@@ -1,6 +1,6 @@
 <?php
 // Shared product card helper
-function productCard(array $p, string $baseUrl, bool $scroll = false): string {
+function productCard(array $p): string {
     $price     = (float)($p['sale_price'] ?: $p['price']);
     $origPrice = (float)$p['price'];
     $disc      = $origPrice > 0 && $price < $origPrice ? round((1-$price/$origPrice)*100).'% off' : '';
@@ -80,11 +80,13 @@ function productCard(array $p, string $baseUrl, bool $scroll = false): string {
       <?php $catIcons=['electronics'=>'📱','fashion'=>'👗','home-kitchen'=>'🏠','sports'=>'🏃','books'=>'📚','beauty'=>'💄','grocery'=>'🍎','gaming'=>'🎮'];
       foreach($categories as $cat): ?>
       <a href="<?= APP_URL ?>/category/<?= e($cat['slug']) ?>" class="cat-card">
-        <div class="cat-icon"><?= $catIcons[$cat['slug']] ?? '🛍️' ?></div>
+        <div class="cat-icon">
+          <?php if(!empty($cat['image'])): ?><img src="<?= UPLOAD_URL.'/'.e($cat['image']) ?>" alt="<?= e($cat['name']) ?>">
+          <?php else: ?><?= $catIcons[$cat['slug']] ?? '🛍️' ?><?php endif; ?>
+        </div>
         <span class="cat-name"><?= e($cat['name']) ?></span>
       </a>
       <?php endforeach; ?>
-      <a href="<?= APP_URL ?>/products" class="cat-card"><div class="cat-icon">🛒</div><span class="cat-name">All</span></a>
     </div>
   </section>
 
@@ -104,8 +106,8 @@ function productCard(array $p, string $baseUrl, bool $scroll = false): string {
       <div class="countdown"><div class="count-box" id="ch">04</div><span class="count-sep">:</span><div class="count-box" id="cm">27</div><span class="count-sep">:</span><div class="count-box" id="cs">45</div></div>
       <a href="<?= APP_URL ?>/products?sort=popular">View All →</a>
     </div>
-    <div class="products-scroll" id="flashProducts">
-      <?php foreach(array_slice($trending, 0, 6) as $p): echo productCard($p, APP_URL, true); endforeach; ?>
+    <div class="products-grid" id="flashProducts">
+      <?php foreach(array_slice($trending, 0, 6) as $p): echo productCard($p); endforeach; ?>
       <?php if(empty($trending)): ?>
       <?php for($i=0;$i<4;$i++): ?>
       <div class="product-card sk-card"><div class="product-img sk-img"></div><div class="product-info"><div class="sk-line"></div><div class="sk-line short"></div></div></div>
@@ -117,7 +119,7 @@ function productCard(array $p, string $baseUrl, bool $scroll = false): string {
   <section class="reveal home-sec">
     <div class="section-header"><h2 class="section-title">🔥 Trending Now</h2><a href="<?= APP_URL ?>/products?sort=popular" class="view-all">View All →</a></div>
     <div class="products-grid" id="trendingProducts">
-      <?php foreach($trending as $p): echo productCard($p, APP_URL); endforeach; ?>
+      <?php foreach($trending as $p): echo productCard($p); endforeach; ?>
       <?php if(empty($trending)): ?><div class="grid-empty">No products yet — check back soon!</div><?php endif; ?>
     </div>
   </section>
@@ -153,7 +155,7 @@ function productCard(array $p, string $baseUrl, bool $scroll = false): string {
   <section class="reveal home-sec">
     <div class="section-header"><h2 class="section-title">✨ New Arrivals</h2><a href="<?= APP_URL ?>/products?sort=newest" class="view-all">View All →</a></div>
     <div class="products-grid">
-      <?php foreach($newArrivals as $p): echo productCard($p, APP_URL); endforeach; ?>
+      <?php foreach($newArrivals as $p): echo productCard($p); endforeach; ?>
       <?php if(empty($newArrivals)): ?><div class="grid-empty">No new arrivals yet.</div><?php endif; ?>
     </div>
   </section>

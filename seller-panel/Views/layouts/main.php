@@ -204,7 +204,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f5f0f8;color:var(--d
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--pink-main);box-shadow:0 0 0 3px rgba(233,30,140,.08);}
 .form-textarea{resize:vertical;min-height:90px;}
 .form-hint{font-size:.68rem;color:var(--gray);}
-.upload-zone{border:2px dashed #e0c8e8;border-radius:11px;padding:28px;text-align:center;cursor:pointer;transition:all var(--transition);background:var(--pink-pale);}
+.upload-zone{display:block;border:2px dashed #e0c8e8;border-radius:11px;padding:28px;text-align:center;cursor:pointer;transition:all var(--transition);background:var(--pink-pale);}
 .upload-zone:hover{border-color:var(--pink-main);background:var(--pink-soft);}
 .upload-zone .up-icon{font-size:2.2rem;margin-bottom:8px;}
 .upload-zone h4{font-size:.85rem;font-weight:700;color:var(--dark);margin-bottom:4px;}
