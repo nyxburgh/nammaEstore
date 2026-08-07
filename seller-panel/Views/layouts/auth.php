@@ -31,7 +31,6 @@
       <?php endif; ?>
       <?= $content ?>
     </div>
-    <a href="<?= APP_URL ?>" class="auth-back">← Back to Store</a>
   </div>
 </main>
 

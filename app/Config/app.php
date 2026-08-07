@@ -84,15 +84,18 @@ define('SELLER_STORE_BASE', 'shop');   // used when mode = 'path'
 define('APP_PATH', BASE_PATH . '/app');
 
 // Uploaded files always physically live in public/uploads/ — regardless
-// of which entry point served this request. APP_URL, by contrast, DOES
-// vary by entry point (it's derived from SCRIPT_NAME): it already
-// includes "/public" when public/index.php served the request, but
-// doesn't when the deprecated root index.php did. So UPLOAD_URL adds
-// "/public" itself only when APP_URL hasn't already got it — otherwise
-// uploaded images would 404 under the root entry point even though the
-// files exist right there in public/uploads/.
+// of which entry point served this request. APP_URL, by contrast, does
+// NOT reliably tell us whether "/public" is already part of it: when the
+// document root points at public/ (the recommended setup — see
+// README.md), APP_URL never contains "/public" because the browser never
+// sees that segment, yet the deprecated root index.php run from a
+// subfolder installed as ".../public" would produce the same
+// coincidental APP_URL suffix. Checking WEB_ROOT (set by whichever
+// entry point actually ran, see public/index.php vs the root
+// index.php) is the only reliable signal: only the deprecated root
+// entry point needs "/public" appended here.
 define('UPLOAD_PATH', BASE_PATH . '/public/uploads');
-define('UPLOAD_URL',  APP_URL . (str_ends_with(APP_URL, '/public') ? '' : '/public') . '/uploads');
+define('UPLOAD_URL',  APP_URL . (WEB_ROOT === BASE_PATH ? '/public' : '') . '/uploads');
 
 // Panel asset URLs
 define('ADMIN_ASSETS',    APP_URL . '/assets/admin');

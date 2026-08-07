@@ -13,5 +13,3 @@
   <button type="submit" class="btn-auth">Sign In to Dashboard →</button>
 </form>
 <div class="auth-alt" style="margin-top:14px;">New seller? <a href="<?= SELLER_URL ?>/register">Create seller account</a></div>
-<div class="divider"><span>Or</span></div>
-<div class="auth-alt"><a href="<?= APP_URL ?>" style="color:var(--gray);font-weight:400;">← Back to Marketplace</a></div>

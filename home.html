@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Namma E Store — Multi-Seller Marketplace</title>
+<meta name="description" content="Shop from thousands of trusted sellers on Namma E Store — India&#039;s multi-seller marketplace.">
+<link rel="canonical" href="http://localhost/nammaestore/public/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Namma E Store — Multi-Seller Marketplace">
+<meta property="og:description" content="Shop from thousands of trusted sellers on Namma E Store — India&#039;s multi-seller marketplace.">
+<meta property="og:image" content="http://localhost/nammaestore/public/assets/frontend/images/og-default.jpg">
+<meta property="og:url" content="http://localhost/nammaestore/public/">
+<meta property="og:site_name" content="Namma E Store">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Namma E Store — Multi-Seller Marketplace">
+<meta name="twitter:description" content="Shop from thousands of trusted sellers on Namma E Store — India&#039;s multi-seller marketplace.">
+<meta name="twitter:image" content="http://localhost/nammaestore/public/assets/frontend/images/og-default.jpg">
+
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="http://localhost/nammaestore/public/assets/frontend/css/main.css?v=1784621476">
+<link rel="manifest" href="http://localhost/nammaestore/public/manifest.json">
+<meta name="theme-color" content="#e91e8c">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"Namma E Store","url":"http://localhost/nammaestore/public"}</script>
+</head>
+<body data-app-url="http://localhost/nammaestore/public" data-csrf-token="0eb246a692b05014edefb30ab9033d41c1a7a6d7d7b67e94edfdbd6a4d6b4027">
+
+<!-- FLASH TICKER -->
+<div class="flash-bar">
+  <div class="flash-ticker" id="ticker">
+    <span>Free delivery on orders above ₹499</span>
+    <span>Upto 70% off on Fashion</span>
+    <span><a href="http://localhost/nammaestore/public/sell">New sellers joining daily – Sell on Namma E Store</a></span>
+    <span>EMI available on products above ₹3000</span>
+    <span>Flash Sale: Extra 15% off with code NAMMA15</span>
+    <span>Free delivery on orders above ₹499</span>
+    <span>Upto 70% off on Fashion</span>
+    <span><a href="http://localhost/nammaestore/public/sell">New sellers joining daily – Sell on Namma E Store</a></span>
+    <span>EMI available on products above ₹3000</span>
+    <span>Flash Sale: Extra 15% off with code NAMMA15</span>
+  </div>
+</div>
+
+<!-- STICKY HEADER -->
+<header class="header">
+  <div class="header-top">
+    <a href="http://localhost/nammaestore/public" class="logo">Namma <span>E</span> Store</a>
+    <div class="header-search">
+      <form action="http://localhost/nammaestore/public/search" method="GET">
+        <select name="category"><option value="">All</option><option value="1" >Electronics</option><option value="2" >Fashion</option><option value="3" >Home &amp; Kitchen</option><option value="4" >Sports</option><option value="5" >Books</option><option value="6" >Beauty</option><option value="7" >Grocery</option><option value="8" >Gaming</option></select>
+        <input type="text" name="q" placeholder="Search products, brands, sellers..." value="">
+        <button type="submit">🔍</button>
+      </form>
+    </div>
+    <div class="header-actions">
+      <a href="http://localhost/nammaestore/public/sell" class="header-btn sell-header-btn"><span class="icon">🏪</span><span class="label">Sell on Namma E Store</span></a>
+      <div class="desk-account-wrap">
+                <button class="header-btn" data-action="toggle-desk-account"><span class="icon">👤</span><span class="label">Account</span></button>
+        <div class="desk-account-dropdown" id="deskAccDropdown">
+          <div class="desk-acc-header">
+            <div class="desk-acc-avatar">👤</div>
+            <div class="desk-acc-info">
+              <div class="acc-name">Hello, Guest!</div>
+              <div class="acc-email">Login to your account</div>
+            </div>
+          </div>
+          <ul class="desk-acc-list">
+                        <li><a href="http://localhost/nammaestore/public/login">🔐 Login</a></li>
+            <li><a href="http://localhost/nammaestore/public/register">✏️ Register</a></li>
+            <li><a href="http://localhost/nammaestore/public/track">🔍 Track Order</a></li>
+                      </ul>
+        </div>
+              </div>
+      <div class="btn-wrap" data-action="open-cart">
+        <button class="header-btn"><span class="icon">🛒</span><span class="label">Cart</span></button>
+        <span class="badge" id="cartBadgeTop"></span>
+      </div>
+    </div>
+  </div>
+  <nav class="header-nav">
+    <div class="header-nav-inner">
+      <a href="http://localhost/nammaestore/public" class="nav-link">🏠 Home</a>
+      <a href="http://localhost/nammaestore/public/category/electronics" class="nav-link">Electronics</a><a href="http://localhost/nammaestore/public/category/fashion" class="nav-link">Fashion</a><a href="http://localhost/nammaestore/public/category/home-kitchen" class="nav-link">Home &amp; Kitchen</a><a href="http://localhost/nammaestore/public/category/sports" class="nav-link">Sports</a><a href="http://localhost/nammaestore/public/category/books" class="nav-link">Books</a><a href="http://localhost/nammaestore/public/category/beauty" class="nav-link">Beauty</a><a href="http://localhost/nammaestore/public/category/grocery" class="nav-link">Grocery</a><a href="http://localhost/nammaestore/public/category/gaming" class="nav-link">Gaming</a>      <a href="http://localhost/nammaestore/public/products?sort=popular" class="nav-link">🔥 Trending</a>
+      <a href="http://localhost/nammaestore/public/track" class="nav-link">📦 Track Order</a>
+    </div>
+  </nav>
+</header>
+
+<!-- FLASH MESSAGE -->
+
+<!-- PAGE CONTENT -->
+<link rel="stylesheet" href="http://localhost/nammaestore/public/assets/frontend/css/home.css?v=1784621475">
+
+<!-- HERO BANNER -->
+<section class="hero-sec">
+  <div class="hero">
+    <div class="hero-slides" id="heroSlides">
+      <div class="hero-slide hero-slide-1">
+        <div class="hero-content">
+          <div class="hero-badge pulse">🔥 MEGA SALE</div>
+          <h1 class="hero-title">Style That<br>Speaks Volumes</h1>
+          <p class="hero-sub">Upto 70% off on top fashion brands</p>
+          <a href="http://localhost/nammaestore/public/category/fashion" class="hero-cta">Shop Fashion ›</a>
+        </div>
+        <div class="hero-deco">👗</div>
+      </div>
+      <div class="hero-slide hero-slide-2">
+        <div class="hero-content">
+          <div class="hero-badge blue">⚡ NEW ARRIVALS</div>
+          <h1 class="hero-title">Tech That<br>Changes Life</h1>
+          <p class="hero-sub">Latest gadgets at unbeatable prices</p>
+          <a href="http://localhost/nammaestore/public/category/electronics" class="hero-cta blue">Shop Electronics ›</a>
+        </div>
+        <div class="hero-deco">📱</div>
+      </div>
+      <div class="hero-slide hero-slide-3">
+        <div class="hero-content">
+          <div class="hero-badge light">🏠 HOME DECOR</div>
+          <h1 class="hero-title">Make Your<br>Home Beautiful</h1>
+          <p class="hero-sub">Transform your space with premium decor</p>
+          <a href="http://localhost/nammaestore/public/category/home-kitchen" class="hero-cta purple">Shop Home ›</a>
+        </div>
+        <div class="hero-deco">🛋️</div>
+      </div>
+    </div>
+    <div class="hero-dots">
+      <div class="hero-dot active" data-action="go-slide" data-slide="0"></div>
+      <div class="hero-dot" data-action="go-slide" data-slide="1"></div>
+      <div class="hero-dot" data-action="go-slide" data-slide="2"></div>
+    </div>
+  </div>
+</section>
+
+<div class="container home-container">
+  <!-- FEATURES STRIP -->
+  <div class="features-strip reveal">
+        <div class="feature-item"><div class="feature-icon">🚚</div><div><div class="f-title">Free Delivery</div><div class="f-sub">On orders above ₹499</div></div></div>
+        <div class="feature-item"><div class="feature-icon">🔄</div><div><div class="f-title">Easy Returns</div><div class="f-sub">7-day hassle-free</div></div></div>
+        <div class="feature-item"><div class="feature-icon">🔒</div><div><div class="f-title">Secure Payment</div><div class="f-sub">100% encrypted</div></div></div>
+        <div class="feature-item"><div class="feature-icon">💬</div><div><div class="f-title">24/7 Support</div><div class="f-sub">Always here to help</div></div></div>
+      </div>
+
+  <!-- SHOP BY CATEGORY -->
+  <section class="reveal home-sec">
+    <div class="section-header"><h2 class="section-title">Shop by Category</h2><a href="http://localhost/nammaestore/public/products" class="view-all">View All →</a></div>
+    <div class="cat-grid">
+            <a href="http://localhost/nammaestore/public/category/electronics" class="cat-card">
+        <div class="cat-icon">📱</div>
+        <span class="cat-name">Electronics</span>
+      </a>
+            <a href="http://localhost/nammaestore/public/category/fashion" class="cat-card">
+        <div class="cat-icon">👗</div>
+        <span class="cat-name">Fashion</span>
+      </a>
+            <a href="http://localhost/nammaestore/public/category/home-kitchen" class="cat-card">
+        <div class="cat-icon">🏠</div>
+        <span class="cat-name">Home &amp; Kitchen</span>
+      </a>
+            <a href="http://localhost/nammaestore/public/category/sports" class="cat-card">
+        <div class="cat-icon">🏃</div>
+        <span class="cat-name">Sports</span>
+      </a>
+            <a href="http://localhost/nammaestore/public/category/books" class="cat-card">
+        <div class="cat-icon">📚</div>
+        <span class="cat-name">Books</span>
+      </a>
+            <a href="http://localhost/nammaestore/public/category/beauty" class="cat-card">
+        <div class="cat-icon">💄</div>
+        <span class="cat-name">Beauty</span>
+      </a>
+            <a href="http://localhost/nammaestore/public/category/grocery" class="cat-card">
+        <div class="cat-icon">🍎</div>
+        <span class="cat-name">Grocery</span>
+      </a>
+            <a href="http://localhost/nammaestore/public/category/gaming" class="cat-card">
+        <div class="cat-icon">🎮</div>
+        <span class="cat-name">Gaming</span>
+      </a>
+            <a href="http://localhost/nammaestore/public/products" class="cat-card"><div class="cat-icon">🛒</div><span class="cat-name">All</span></a>
+    </div>
+  </section>
+
+  <!-- PROMO STRIP -->
+  <section class="reveal home-sec">
+    <div class="promo-strip">
+      <div class="promo-card promo-card-1" data-action="go" data-href="http://localhost/nammaestore/public/category/fashion"><div class="promo-text"><div class="label">Summer Sale</div><h3>Flat 40% off<br>on Fashion</h3><p>Limited time offer</p></div><div class="promo-emoji">👗</div></div>
+      <div class="promo-card promo-card-2" data-action="go" data-href="http://localhost/nammaestore/public/category/electronics"><div class="promo-text"><div class="label">Tech Week</div><h3>New Gadgets<br>Starting ₹999</h3><p>Top brands, best deals</p></div><div class="promo-emoji">💻</div></div>
+      <div class="promo-card promo-card-3" data-action="go" data-href="http://localhost/nammaestore/public/products"><div class="promo-text"><div class="label">Seller Offer</div><h3>Sell & Earn<br>Zero Commission</h3><p>First ₹20,000 free</p></div><div class="promo-emoji">🏪</div></div>
+    </div>
+  </section>
+
+  <!-- FLASH SALE -->
+  <section class="reveal home-sec">
+    <div class="flash-header">
+      <h2>⚡ Flash Sale</h2>
+      <div class="countdown"><div class="count-box" id="ch">04</div><span class="count-sep">:</span><div class="count-box" id="cm">27</div><span class="count-sep">:</span><div class="count-box" id="cs">45</div></div>
+      <a href="http://localhost/nammaestore/public/products?sort=popular">View All →</a>
+    </div>
+    <div class="products-scroll" id="flashProducts">
+      <div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/women-s-floral-summer-dress"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/women-s-floral-summer-dress.jpg" alt="Women&#039;s Floral Summer Dress"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="4">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Women&#039;s Floral Summer Dress</div><div class="product-price"><span class="price-current">₹1,299.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="4">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/smart-fitness-band"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/smart-fitness-band.jpg" alt="Smart Fitness Band"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="2">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Smart Fitness Band</div><div class="product-price"><span class="price-current">₹1,499.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="2">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/men-s-casual-denim-jacket"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/men-s-casual-denim-jacket.jpg" alt="Men&#039;s Casual Denim Jacket"><span class="product-discount-badge">18% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="3">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Men&#039;s Casual Denim Jacket</div><div class="product-price"><span class="price-current">₹1,799.00</span><span class="price-original">₹2,199.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="3">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/wireless-bluetooth-headphones"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/wireless-bluetooth-headphones.jpg" alt="Wireless Bluetooth Headphones"><span class="product-discount-badge">20% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="1">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Wireless Bluetooth Headphones</div><div class="product-price"><span class="price-current">₹1,599.00</span><span class="price-original">₹1,999.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="1">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/stainless-steel-cookware-set-5-pcs"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/stainless-steel-cookware-set-5-pcs.jpg" alt="Stainless Steel Cookware Set (5 Pcs)"><span class="product-discount-badge">14% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="5">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Stainless Steel Cookware Set (5 Pcs)</div><div class="product-price"><span class="price-current">₹2,999.00</span><span class="price-original">₹3,499.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="5">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/electric-kettle-1-8l"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/electric-kettle-1-8l.jpg" alt="Electric Kettle 1.8L"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="6">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Electric Kettle 1.8L</div><div class="product-price"><span class="price-current">₹899.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="6">+ Add to Cart</button></div></div>          </div>
+  </section>
+
+  <!-- TRENDING -->
+  <section class="reveal home-sec">
+    <div class="section-header"><h2 class="section-title">🔥 Trending Now</h2><a href="http://localhost/nammaestore/public/products?sort=popular" class="view-all">View All →</a></div>
+    <div class="products-grid" id="trendingProducts">
+      <div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/women-s-floral-summer-dress"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/women-s-floral-summer-dress.jpg" alt="Women&#039;s Floral Summer Dress"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="4">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Women&#039;s Floral Summer Dress</div><div class="product-price"><span class="price-current">₹1,299.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="4">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/smart-fitness-band"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/smart-fitness-band.jpg" alt="Smart Fitness Band"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="2">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Smart Fitness Band</div><div class="product-price"><span class="price-current">₹1,499.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="2">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/men-s-casual-denim-jacket"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/men-s-casual-denim-jacket.jpg" alt="Men&#039;s Casual Denim Jacket"><span class="product-discount-badge">18% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="3">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Men&#039;s Casual Denim Jacket</div><div class="product-price"><span class="price-current">₹1,799.00</span><span class="price-original">₹2,199.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="3">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/wireless-bluetooth-headphones"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/wireless-bluetooth-headphones.jpg" alt="Wireless Bluetooth Headphones"><span class="product-discount-badge">20% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="1">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Wireless Bluetooth Headphones</div><div class="product-price"><span class="price-current">₹1,599.00</span><span class="price-original">₹1,999.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="1">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/stainless-steel-cookware-set-5-pcs"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/stainless-steel-cookware-set-5-pcs.jpg" alt="Stainless Steel Cookware Set (5 Pcs)"><span class="product-discount-badge">14% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="5">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Stainless Steel Cookware Set (5 Pcs)</div><div class="product-price"><span class="price-current">₹2,999.00</span><span class="price-original">₹3,499.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="5">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/electric-kettle-1-8l"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/electric-kettle-1-8l.jpg" alt="Electric Kettle 1.8L"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="6">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Electric Kettle 1.8L</div><div class="product-price"><span class="price-current">₹899.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="6">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/yoga-mat-with-carry-strap"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/yoga-mat-with-carry-strap.jpg" alt="Yoga Mat with Carry Strap"><span class="product-discount-badge">21% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="7">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Yoga Mat with Carry Strap</div><div class="product-price"><span class="price-current">₹549.00</span><span class="price-original">₹699.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="7">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/adjustable-dumbbell-set-10kg"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/adjustable-dumbbell-set-10kg.jpg" alt="Adjustable Dumbbell Set 10kg"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="8">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Adjustable Dumbbell Set 10kg</div><div class="product-price"><span class="price-current">₹2,499.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="8">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/the-art-of-clean-code-paperback"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/the-art-of-clean-code-paperback.jpg" alt="The Art of Clean Code (Paperback)"><span class="product-discount-badge">20% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="9">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">The Art of Clean Code (Paperback)</div><div class="product-price"><span class="price-current">₹399.00</span><span class="price-original">₹499.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="9">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/herbal-face-wash-combo-pack"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/herbal-face-wash-combo-pack.jpg" alt="Herbal Face Wash Combo Pack"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="10">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Herbal Face Wash Combo Pack</div><div class="product-price"><span class="price-current">₹399.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="10">+ Add to Cart</button></div></div>          </div>
+  </section>
+
+  <!-- DEALS OF THE DAY -->
+    <section class="reveal home-sec">
+    <div class="section-header"><h2 class="section-title">🤑 Deals of the Day</h2><a href="http://localhost/nammaestore/public/products?sort=popular" class="view-all">View All →</a></div>
+    <div class="deals-grid">
+            <div class="deal-card" data-action="go" data-href="http://localhost/nammaestore/public/product/yoga-mat-with-carry-strap">
+        <div class="deal-img"><img src="http://localhost/nammaestore/public/uploads/products/yoga-mat-with-carry-strap.jpg" alt="Yoga Mat with Carry Strap"><span class="deal-pct">21% OFF</span></div>
+        <div class="deal-info">
+          <h4>Yoga Mat with Carry Strap</h4>
+          <div class="deal-progress">
+            <div class="progress-label"><span>Stock Limited</span><span>Hurry!</span></div>
+            <div class="progress-bar"><div class="progress-fill" data-pct="20"></div></div>
+          </div>
+          <div class="deal-price">₹549.00</div>
+        </div>
+      </div>
+            <div class="deal-card" data-action="go" data-href="http://localhost/nammaestore/public/product/the-art-of-clean-code-paperback">
+        <div class="deal-img"><img src="http://localhost/nammaestore/public/uploads/products/the-art-of-clean-code-paperback.jpg" alt="The Art of Clean Code (Paperback)"><span class="deal-pct">20% OFF</span></div>
+        <div class="deal-info">
+          <h4>The Art of Clean Code (Paperback)</h4>
+          <div class="deal-progress">
+            <div class="progress-label"><span>Stock Limited</span><span>Hurry!</span></div>
+            <div class="progress-bar"><div class="progress-fill" data-pct="20"></div></div>
+          </div>
+          <div class="deal-price">₹399.00</div>
+        </div>
+      </div>
+            <div class="deal-card" data-action="go" data-href="http://localhost/nammaestore/public/product/wireless-bluetooth-headphones">
+        <div class="deal-img"><img src="http://localhost/nammaestore/public/uploads/products/wireless-bluetooth-headphones.jpg" alt="Wireless Bluetooth Headphones"><span class="deal-pct">20% OFF</span></div>
+        <div class="deal-info">
+          <h4>Wireless Bluetooth Headphones</h4>
+          <div class="deal-progress">
+            <div class="progress-label"><span>Stock Limited</span><span>Hurry!</span></div>
+            <div class="progress-bar"><div class="progress-fill" data-pct="60"></div></div>
+          </div>
+          <div class="deal-price">₹1,599.00</div>
+        </div>
+      </div>
+            <div class="deal-card" data-action="go" data-href="http://localhost/nammaestore/public/product/men-s-casual-denim-jacket">
+        <div class="deal-img"><img src="http://localhost/nammaestore/public/uploads/products/men-s-casual-denim-jacket.jpg" alt="Men&#039;s Casual Denim Jacket"><span class="deal-pct">18% OFF</span></div>
+        <div class="deal-info">
+          <h4>Men&#039;s Casual Denim Jacket</h4>
+          <div class="deal-progress">
+            <div class="progress-label"><span>Stock Limited</span><span>Hurry!</span></div>
+            <div class="progress-bar"><div class="progress-fill" data-pct="75"></div></div>
+          </div>
+          <div class="deal-price">₹1,799.00</div>
+        </div>
+      </div>
+          </div>
+  </section>
+  
+  <!-- NEW ARRIVALS -->
+  <section class="reveal home-sec">
+    <div class="section-header"><h2 class="section-title">✨ New Arrivals</h2><a href="http://localhost/nammaestore/public/products?sort=newest" class="view-all">View All →</a></div>
+    <div class="products-grid">
+      <div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/wireless-gaming-mouse-rgb"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/wireless-gaming-mouse-rgb.jpg" alt="Wireless Gaming Mouse RGB"><span class="product-discount-badge">17% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="12">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Wireless Gaming Mouse RGB</div><div class="product-price"><span class="price-current">₹999.00</span><span class="price-original">₹1,199.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="12">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/organic-assorted-dry-fruits-box-500g"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/organic-assorted-dry-fruits-box-500g.jpg" alt="Organic Assorted Dry Fruits Box 500g"><span class="product-discount-badge">8% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="11">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Organic Assorted Dry Fruits Box 500g</div><div class="product-price"><span class="price-current">₹599.00</span><span class="price-original">₹649.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="11">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/herbal-face-wash-combo-pack"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/herbal-face-wash-combo-pack.jpg" alt="Herbal Face Wash Combo Pack"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="10">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Herbal Face Wash Combo Pack</div><div class="product-price"><span class="price-current">₹399.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="10">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/the-art-of-clean-code-paperback"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/the-art-of-clean-code-paperback.jpg" alt="The Art of Clean Code (Paperback)"><span class="product-discount-badge">20% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="9">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">The Art of Clean Code (Paperback)</div><div class="product-price"><span class="price-current">₹399.00</span><span class="price-original">₹499.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="9">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/adjustable-dumbbell-set-10kg"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/adjustable-dumbbell-set-10kg.jpg" alt="Adjustable Dumbbell Set 10kg"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="8">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Adjustable Dumbbell Set 10kg</div><div class="product-price"><span class="price-current">₹2,499.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="8">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/yoga-mat-with-carry-strap"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/yoga-mat-with-carry-strap.jpg" alt="Yoga Mat with Carry Strap"><span class="product-discount-badge">21% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="7">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Yoga Mat with Carry Strap</div><div class="product-price"><span class="price-current">₹549.00</span><span class="price-original">₹699.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="7">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/electric-kettle-1-8l"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/electric-kettle-1-8l.jpg" alt="Electric Kettle 1.8L"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="6">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Electric Kettle 1.8L</div><div class="product-price"><span class="price-current">₹899.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="6">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/stainless-steel-cookware-set-5-pcs"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/stainless-steel-cookware-set-5-pcs.jpg" alt="Stainless Steel Cookware Set (5 Pcs)"><span class="product-discount-badge">14% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="5">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Stainless Steel Cookware Set (5 Pcs)</div><div class="product-price"><span class="price-current">₹2,999.00</span><span class="price-original">₹3,499.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="5">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/women-s-floral-summer-dress"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/women-s-floral-summer-dress.jpg" alt="Women&#039;s Floral Summer Dress"><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="4">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Women&#039;s Floral Summer Dress</div><div class="product-price"><span class="price-current">₹1,299.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="4">+ Add to Cart</button></div></div><div class="product-card" data-action="go" data-href="http://localhost/nammaestore/public/product/men-s-casual-denim-jacket"><div class="product-img"><img src="http://localhost/nammaestore/public/uploads/products/men-s-casual-denim-jacket.jpg" alt="Men&#039;s Casual Denim Jacket"><span class="product-discount-badge">18% off</span><button class="product-wishlist" data-action="toggle-wishlist" data-product-id="3">🤍</button></div><div class="product-info"><div class="seller-tag">🏪 Namma E Store Demo Shop</div><div class="product-name">Men&#039;s Casual Denim Jacket</div><div class="product-price"><span class="price-current">₹1,799.00</span><span class="price-original">₹2,199.00</span><span class="tax-tag">incl. taxes</span></div><button class="product-add-btn" data-action="add-to-cart" data-product-id="3">+ Add to Cart</button></div></div>          </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="reveal home-sec">
+    <div class="newsletter">
+      <h2>Stay in the Loop 📬</h2>
+      <p>Get the latest deals, new arrivals and exclusive offers — straight to your inbox.</p>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Enter your email address" aria-label="Email address">
+        <button type="button" data-action="subscribe-newsletter">Subscribe →</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" data-action="close-cart"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header"><h3>🛒 Your Cart (<span id="cartCount">0</span>)</h3><button class="cart-close" data-action="close-cart">✕</button></div>
+  <div class="cart-body" id="cartBody"><div class="cart-empty"><div class="ce-icon">🛒</div><p>Your cart is empty</p><a href="http://localhost/nammaestore/public/products" class="btn-shop" data-action="close-cart">Start Shopping →</a></div></div>
+  <div class="cart-footer is-hidden" id="cartFooter">
+    <div class="free-ship" id="freeShipMsg"></div>
+    <div class="cart-total"><span class="label">Total</span><span class="amount" id="cartTotal">₹0</span></div>
+    <a href="http://localhost/nammaestore/public/checkout" class="checkout-btn">Proceed to Checkout →</a>
+  </div>
+</div>
+
+<!-- MOBILE OVERLAY -->
+<div class="mob-overlay" id="mobOverlay" data-action="close-all-popups"></div>
+
+<!-- MOBILE CATEGORIES POPUP -->
+<div class="mob-popup" id="mobCatsPopup">
+  <div class="mob-pop-title">🗂️ Categories<button data-action="close-all-popups">✕</button></div>
+  <div class="mob-cat-grid">
+    <a href="http://localhost/nammaestore/public/category/electronics" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🏷️</span><span class="c-name">Electronics</span></a><a href="http://localhost/nammaestore/public/category/fashion" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🏷️</span><span class="c-name">Fashion</span></a><a href="http://localhost/nammaestore/public/category/home-kitchen" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🏷️</span><span class="c-name">Home &amp; Kitchen</span></a><a href="http://localhost/nammaestore/public/category/sports" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🏷️</span><span class="c-name">Sports</span></a><a href="http://localhost/nammaestore/public/category/books" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🏷️</span><span class="c-name">Books</span></a><a href="http://localhost/nammaestore/public/category/beauty" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🏷️</span><span class="c-name">Beauty</span></a><a href="http://localhost/nammaestore/public/category/grocery" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🏷️</span><span class="c-name">Grocery</span></a><a href="http://localhost/nammaestore/public/category/gaming" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🏷️</span><span class="c-name">Gaming</span></a>    <a href="http://localhost/nammaestore/public/products" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🛍️</span><span class="c-name">All</span></a>
+  </div>
+</div>
+
+<!-- MOBILE ACCOUNT POPUP -->
+<div class="mob-popup" id="mobAccPopup">
+  <div class="mob-pop-title">👤 My Account<button data-action="close-all-popups">✕</button></div>
+  <ul class="mob-acc-list">
+        <li><a href="http://localhost/nammaestore/public/login" data-action="close-all-popups"><span class="da-icon">🔐</span> Login</a></li>
+    <li><a href="http://localhost/nammaestore/public/register" data-action="close-all-popups"><span class="da-icon">✏️</span> Register</a></li>
+    <li><a href="http://localhost/nammaestore/public/track" data-action="close-all-popups"><span class="da-icon">🔍</span> Track Order</a></li>
+    <li><a href="http://localhost/nammaestore/public/info" data-action="close-all-popups"><span class="da-icon">ℹ️</span> Info Center</a></li>
+    <li><a href="http://localhost/nammaestore/public/sell" data-action="close-all-popups"><span class="da-icon">🏪</span> Sell on Namma E Store</a></li>
+      </ul>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+<button class="back-top" id="backTop" data-action="scroll-top">↑</button>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <a href="http://localhost/nammaestore/public" class="mob-nav-btn nav-home"><span class="m-icon">🏠</span><span class="m-label">Home</span></a>
+    <button class="mob-nav-btn nav-cats" data-action="toggle-cats"><span class="m-icon">🗂️</span><span class="m-label">Categories</span></button>
+    <div class="mob-nav-center-wrap" data-action="open-cart"><div class="mob-nav-center">🛒<span class="mob-cart-badge" id="cartBadgeMob"></span></div><span class="mob-nav-center-label">Cart</span></div>
+        <button class="mob-nav-btn" data-action="toggle-account"><span class="m-icon">👤</span><span class="m-label">Account</span></button>
+        <button class="mob-nav-btn" data-action="toggle-menu"><span class="m-icon">☰</span><span class="m-label">Menu</span></button>
+  </div>
+</nav>
+
+<!-- MOBILE SLIDE MENU (replaces the top nav on mobile) -->
+<div class="mob-menu-drawer" id="mobMenuDrawer">
+  <div class="mmd-head">
+    <span class="mmd-logo">Namma <span>E</span> Store</span>
+    <button data-action="close-all-popups">✕</button>
+  </div>
+  <nav class="mmd-links">
+    <a href="http://localhost/nammaestore/public" data-action="close-all-popups"><span class="mmd-ic">🏠</span> Home</a>
+    <div class="mmd-sec">Categories</div>
+        <a href="http://localhost/nammaestore/public/category/electronics" data-action="close-all-popups"><span class="mmd-ic">🏷️</span> Electronics</a>
+        <a href="http://localhost/nammaestore/public/category/fashion" data-action="close-all-popups"><span class="mmd-ic">🏷️</span> Fashion</a>
+        <a href="http://localhost/nammaestore/public/category/home-kitchen" data-action="close-all-popups"><span class="mmd-ic">🏷️</span> Home &amp; Kitchen</a>
+        <a href="http://localhost/nammaestore/public/category/sports" data-action="close-all-popups"><span class="mmd-ic">🏷️</span> Sports</a>
+        <a href="http://localhost/nammaestore/public/category/books" data-action="close-all-popups"><span class="mmd-ic">🏷️</span> Books</a>
+        <a href="http://localhost/nammaestore/public/category/beauty" data-action="close-all-popups"><span class="mmd-ic">🏷️</span> Beauty</a>
+        <a href="http://localhost/nammaestore/public/category/grocery" data-action="close-all-popups"><span class="mmd-ic">🏷️</span> Grocery</a>
+        <a href="http://localhost/nammaestore/public/category/gaming" data-action="close-all-popups"><span class="mmd-ic">🏷️</span> Gaming</a>
+        <div class="mmd-sec">Explore</div>
+    <a href="http://localhost/nammaestore/public/products?sort=popular" data-action="close-all-popups"><span class="mmd-ic">🔥</span> Trending</a>
+    <a href="http://localhost/nammaestore/public/products" data-action="close-all-popups"><span class="mmd-ic">🛍️</span> All Products</a>
+    <a href="http://localhost/nammaestore/public/track" data-action="close-all-popups"><span class="mmd-ic">📦</span> Track Order</a>
+    <a href="http://localhost/nammaestore/public/info" data-action="close-all-popups"><span class="mmd-ic">ℹ️</span> Info Center</a>
+    <div class="mmd-sec">Sellers</div>
+    <a href="http://localhost/nammaestore/public/sell" data-action="close-all-popups"><span class="mmd-ic">🏪</span> Sell on Namma E Store</a>
+  </nav>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <nav class="footer-links">
+    <a href="http://localhost/nammaestore/public/sell">Sell on Namma E Store</a>
+        <a href="http://localhost/nammaestore/public/info/about-us">About Us</a>
+        <a href="http://localhost/nammaestore/public/info/contact-us">Contact Us</a>
+        <a href="http://localhost/nammaestore/public/info/faq">FAQ</a>
+        <a href="http://localhost/nammaestore/public/info/shipping-policy">Shipping Policy</a>
+        <a href="http://localhost/nammaestore/public/info/return-policy">Return Policy</a>
+        <a href="http://localhost/nammaestore/public/info/cancellation-refund">Cancellation &amp; Refund</a>
+        <a href="http://localhost/nammaestore/public/info/payment-methods">Payment Methods</a>
+        <a href="http://localhost/nammaestore/public/info/privacy-policy">Privacy Policy</a>
+        <a href="http://localhost/nammaestore/public/info/terms-conditions">Terms &amp; Conditions</a>
+        <a href="http://localhost/nammaestore/public/info/disclaimer">Disclaimer</a>
+      </nav>
+  <div class="footer-bottom"><span>&copy; 2026 Namma E Store. All rights reserved.</span></div>
+</footer>
+
+<script src="http://localhost/nammaestore/public/assets/frontend/js/form-validation.js?v=1784555014"></script>
+<script src="http://localhost/nammaestore/public/assets/frontend/js/main.js?v=1784621477"></script>
+<script src="http://localhost/nammaestore/public/assets/frontend/js/home.js?v=1784317878"></script></body>
+</html>

@@ -35,8 +35,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f5f0f8;color:var(--d
 .top-icon-btn{background:rgba(255,255,255,.15);border:none;color:white;width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;position:relative;transition:background var(--transition);text-decoration:none;}
 .top-icon-btn:hover{background:rgba(255,255,255,.28);}
 .notif-dot{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--gold);border:1.5px solid white;pointer-events:none;}
-.seller-avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;color:white;font-weight:700;transition:all var(--transition);}
+.avatar-wrap{position:relative;}
+.seller-avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;color:white;font-weight:700;transition:all var(--transition);font-family:'Plus Jakarta Sans',sans-serif;}
 .seller-avatar:hover{background:rgba(255,255,255,.35);}
+.avatar-menu{display:none;position:absolute;top:calc(100% + 10px);right:0;width:210px;background:white;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.18);border:1px solid #f0e6ef;overflow:hidden;z-index:2000;}
+.avatar-menu.open{display:block;animation:dropIn .2s ease;}
+.avatar-menu-head{padding:12px 14px;background:var(--pink-pale);border-bottom:1px solid #f0e6ef;}
+.avatar-menu-name{font-size:.82rem;font-weight:700;color:var(--dark);}
+.avatar-menu-email{font-size:.7rem;color:var(--gray);margin-top:2px;}
+.avatar-menu-item{display:block;padding:10px 14px;font-size:.8rem;color:var(--dark);text-decoration:none;transition:background var(--transition);}
+.avatar-menu-item:hover{background:var(--pink-pale);}
+.avatar-menu-item.avatar-menu-logout{color:var(--red);border-top:1px solid #f8f0f7;}
 .top-seller-name{color:white;font-size:.82rem;font-weight:600;}
 @media(max-width:600px){.top-seller-name,.seller-badge-top{display:none;}}
 
@@ -296,7 +305,17 @@ $planName = $vp['plan_name'] ?? 'Free Plan';
     <span class="top-seller-name"><?= e($vp['shop_name'] ?? $v['name']) ?></span>
     <button class="top-icon-btn" onclick="toggleNotif()" title="Notifications">🔔<span class="notif-dot"></span></button>
     <a href="<?= APP_URL ?>" class="top-icon-btn" title="View Store">🏬</a>
-    <div class="seller-avatar" title="My Account"><?= strtoupper(substr($v['name'],0,1)) ?></div>
+    <div class="avatar-wrap">
+      <button class="seller-avatar" id="avatarToggle" title="My Account" type="button"><?= strtoupper(substr($v['name'],0,1)) ?></button>
+      <div class="avatar-menu" id="avatarMenu">
+        <div class="avatar-menu-head">
+          <div class="avatar-menu-name"><?= e($vp['shop_name'] ?? $v['name']) ?></div>
+          <div class="avatar-menu-email"><?= e($v['email']) ?></div>
+        </div>
+        <a href="<?= SELLER_URL ?>/settings" class="avatar-menu-item">⚙️ Account Settings</a>
+        <a href="<?= SELLER_URL ?>/logout" class="avatar-menu-item avatar-menu-logout">🚪 Logout</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -380,7 +399,6 @@ $planName = $vp['plan_name'] ?? 'Free Plan';
 const SELLER_URL  = '<?= SELLER_URL ?>';
 const APP_URL     = '<?= APP_URL ?>';
 const CSRF_TOKEN  = '<?= csrf_token() ?>';
-const APP_URL    = '<?= APP_URL ?>';
 
 function toggleSidebar(){
   document.getElementById('sidebar').classList.toggle('open');
@@ -415,6 +433,7 @@ function toggleProductStatus(id){
   }).catch(()=>{showToast('⚠️ Session expired or network error — please refresh and try again.');});
 }
 </script>
+<script src="<?= asset('seller-panel/js/dashboard.js') ?>"></script>
 <?= $scripts ?? '' ?>
 </body>
 </html>
