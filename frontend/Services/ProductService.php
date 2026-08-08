@@ -190,6 +190,15 @@ class ProductService
         return $this->db->fetchOne("SELECT * FROM `" . DB_PREFIX . "products` WHERE id=?", [$id]);
     }
 
+    /** Fetches a variant, scoped to the given product so a variant_id can't be cross-applied to a different product's price. */
+    public function getVariant(int $variantId, int $productId): ?array
+    {
+        return $this->db->fetchOne(
+            "SELECT * FROM `" . DB_PREFIX . "product_variants` WHERE id=? AND product_id=? AND is_active=1",
+            [$variantId, $productId]
+        );
+    }
+
     public function getSellerStoreBySlug(string $slug): ?array
     {
         return $this->db->fetchOne(

@@ -1125,4 +1125,13 @@ CREATE TABLE IF NOT EXISTS `mc_pages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_pages_slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ═══ 012: Homepage newsletter signup ═══
+CREATE TABLE IF NOT EXISTS `mc_newsletter_subscribers` (
+  `id`           INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `email`        VARCHAR(150) NOT NULL,
+  `subscribed_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_newsletter_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 -- Seed default page content after install with: php scripts/seed_info_pages.php

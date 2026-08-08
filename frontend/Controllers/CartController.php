@@ -20,9 +20,15 @@ class CartController extends FrontendController
         $pid   = (int)$this->input('product_id');
         $qty   = max(1,(int)$this->input('qty',1));
         $vid   = $this->input('variant_id') ? (int)$this->input('variant_id') : null;
-        $prod  = (new ProductService())->getById($pid);
+        $productSvc = new ProductService();
+        $prod  = $productSvc->getById($pid);
         if (!$prod || $prod['status']!=='active') { $this->json(['success'=>false,'message'=>'Product unavailable.']); return; }
         $price = (float)($prod['sale_price'] ?: $prod['price']);
+        if ($vid) {
+            $variant = $productSvc->getVariant($vid, $pid);
+            if (!$variant) { $this->json(['success'=>false,'message'=>'Selected option is no longer available.']); return; }
+            $price += (float)$variant['price_modifier'];
+        }
         $r     = (new CartService())->add($pid, $qty, $vid, $price);
         $this->json($r);
     }

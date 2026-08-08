@@ -107,8 +107,8 @@ function productCard(array $p): string {
       <a href="<?= APP_URL ?>/products?sort=popular">View All →</a>
     </div>
     <div class="products-grid" id="flashProducts">
-      <?php foreach(array_slice($trending, 0, 6) as $p): echo productCard($p); endforeach; ?>
-      <?php if(empty($trending)): ?>
+      <?php foreach($flashDeals as $p): echo productCard($p); endforeach; ?>
+      <?php if(empty($flashDeals)): ?>
       <?php for($i=0;$i<4;$i++): ?>
       <div class="product-card sk-card"><div class="product-img sk-img"></div><div class="product-info"><div class="sk-line"></div><div class="sk-line short"></div></div></div>
       <?php endfor; endif; ?>

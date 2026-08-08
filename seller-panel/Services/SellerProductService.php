@@ -11,7 +11,17 @@ class SellerProductService
         $w = "p.seller_id=?"; $params = [$sellerId];
         if (!empty($f['status']) && $f['status'] !== 'all') { $w .= " AND p.status=?"; $params[] = $f['status']; }
         if (!empty($f['category']))  { $w .= " AND p.category_id=?"; $params[] = $f['category']; }
-        if (!empty($f['q']))         { $w .= " AND (p.name LIKE ? OR p.sku LIKE ?)"; $s = '%'.$f['q'].'%'; $params[] = $s; $params[] = $s; }
+        if (!empty($f['q'])) {
+            // Match each word independently (in any order) instead of requiring
+            // the whole query as one contiguous substring — "floral dress" should
+            // still find "Women's Floral Summer Dress".
+            foreach (preg_split('/\s+/', trim($f['q'])) as $word) {
+                if ($word === '') continue;
+                $w .= " AND (p.name LIKE ? OR p.sku LIKE ?)";
+                $s = '%'.$word.'%';
+                $params[] = $s; $params[] = $s;
+            }
+        }
         $sql = "SELECT p.*, c.name as cat_name, COALESCE(SUM(oi.quantity),0) as sold,
                        (SELECT image_path FROM `".DB_PREFIX."product_images` pi WHERE pi.product_id=p.id AND pi.is_primary=1 LIMIT 1) as image
                 FROM `".DB_PREFIX."products` p

@@ -335,7 +335,7 @@ $sec = $section ?? 'overview';
               <button class="btn-outline btn-sm" onclick="toggleProductStatus(<?= $p['id'] ?>)">
                 <?= $p['status']==='active'?'⏸️ Hide':'▶️ Show' ?>
               </button>
-              <button class="btn-danger btn-sm" onclick="confirmDelete('<?= SELLER_URL ?>/products/<?= $p['id'] ?>/delete','Delete this product?')">🗑️</button>
+              <button class="btn-danger btn-sm" onclick="confirmDelete('<?= SELLER_URL ?>/products/<?= $p['id'] ?>/delete','Delete this product?')">🗑️ Delete</button>
             </td>
           </tr>
           <?php endforeach; ?>
