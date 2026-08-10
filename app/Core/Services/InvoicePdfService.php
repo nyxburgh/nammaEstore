@@ -32,7 +32,7 @@ class InvoicePdfService
         $invoice = $this->invoices->findWithItems($invoiceId);
         if (!$invoice) return null;
 
-        if (!empty($invoice['pdf_path']) && is_file(UPLOAD_PATH . '/' . $invoice['pdf_path'])) {
+        if (!empty($invoice['pdf_path']) && is_file(INVOICE_STORAGE_PATH . '/' . basename($invoice['pdf_path']))) {
             return $invoice['pdf_path'];
         }
 
@@ -45,8 +45,7 @@ class InvoicePdfService
 
         $html = $this->renderHtml($invoice, $companyFlat);
 
-        $dir = UPLOAD_PATH . '/invoices';
-        if (!is_dir($dir)) mkdir($dir, 0755, true);
+        if (!is_dir(INVOICE_STORAGE_PATH)) mkdir(INVOICE_STORAGE_PATH, 0755, true);
 
         if (class_exists('\Dompdf\Dompdf')) {
             $dompdf = new \Dompdf\Dompdf(['isRemoteEnabled' => false]);
@@ -54,11 +53,11 @@ class InvoicePdfService
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
 
-            $relative = 'invoices/' . $invoice['invoice_number'] . '.pdf';
-            file_put_contents($dir . '/' . $invoice['invoice_number'] . '.pdf', $dompdf->output());
+            $relative = $invoice['invoice_number'] . '.pdf';
+            file_put_contents(INVOICE_STORAGE_PATH . '/' . $relative, $dompdf->output());
         } else {
-            $relative = 'invoices/' . $invoice['invoice_number'] . '.html';
-            file_put_contents($dir . '/' . $invoice['invoice_number'] . '.html', $html);
+            $relative = $invoice['invoice_number'] . '.html';
+            file_put_contents(INVOICE_STORAGE_PATH . '/' . $relative, $html);
         }
 
         $this->invoices->setPdfPath($invoiceId, $relative);
@@ -86,7 +85,7 @@ class InvoicePdfService
                 $invoice['customer_email'],
                 'Tax Invoice ' . $invoice['invoice_number'] . ' — Order #' . $invoice['order_number'],
                 '<p>Hi ' . e($invoice['customer_name']) . ',</p><p>Please find attached the tax invoice for your recent order.</p>',
-                [['path' => UPLOAD_PATH . '/' . $path, 'name' => basename($path)]]
+                [['path' => INVOICE_STORAGE_PATH . '/' . basename($path), 'name' => basename($path)]]
             );
         } catch (\Exception $e) {
             error_log('Invoice email failed for invoice ' . $invoiceId . ': ' . $e->getMessage());

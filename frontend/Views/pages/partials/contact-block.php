@@ -1,12 +1,15 @@
 <?php
 use App\Frontend\Services\SettingsService;
-$sEmail = e(SettingsService::get('site_email', 'info@nammaestore.com'));
-$sPhone = e(SettingsService::get('site_phone', '+91 9999999999'));
+$sEmail    = SettingsService::get('site_email', 'info@nammaestore.com');
+$sPhone    = SettingsService::get('site_phone', '+91 9999999999');
+$sPhoneRaw = preg_replace('/[^0-9]/', '', $sPhone);
+$gmailComposeUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=' . rawurlencode($sEmail) . '&su=' . rawurlencode('Query for ' . SettingsService::get('site_name', 'Namma E Store'));
+$whatsappUrl     = 'https://wa.me/' . $sPhoneRaw;
 ?>
 <div class="contact-grid">
   <div class="contact-info-box">
-    <div>📧 <strong>Email:</strong> <a href="mailto:<?= $sEmail ?>"><?= $sEmail ?></a></div>
-    <div>📱 <strong>Phone / WhatsApp:</strong> <a href="tel:<?= str_replace(' ','',$sPhone) ?>"><?= $sPhone ?></a></div>
+    <div>📧 <strong>Email:</strong> <a href="<?= e($gmailComposeUrl) ?>" target="_blank" rel="noopener"><?= e($sEmail) ?></a></div>
+    <div>📱 <strong>Call:</strong> <a href="tel:+<?= e($sPhoneRaw) ?>"><?= e($sPhone) ?></a> &nbsp;|&nbsp; <strong>WhatsApp:</strong> <a href="<?= e($whatsappUrl) ?>" target="_blank" rel="noopener">Message us</a></div>
     <div>🕘 <strong>Support hours:</strong> Mon–Sat, 9:00 AM – 8:00 PM IST</div>
     <div>📦 <strong>Order help:</strong> <a href="<?= APP_URL ?>/track">Track your order</a></div>
     <div>🏪 <strong>Seller support:</strong> <a href="<?= SELLER_URL ?>">Seller Panel</a></div>

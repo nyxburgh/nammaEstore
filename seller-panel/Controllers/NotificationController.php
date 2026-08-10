@@ -23,4 +23,12 @@ class NotificationController extends SellerController
         (new NotificationService())->markRead((int) $id, 'seller', Auth::sellerId());
         $this->json(['success' => true]);
     }
+
+    public function markAllRead(): void
+    {
+        csrf_check();
+        Middleware::sellerAuth();
+        (new NotificationService())->markAllRead('seller', Auth::sellerId());
+        $this->json(['success' => true]);
+    }
 }

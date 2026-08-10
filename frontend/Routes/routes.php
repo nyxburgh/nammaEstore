@@ -78,6 +78,7 @@ $router->get('/account',                            AccountController::class . '
 $router->get('/account/orders',                     AccountController::class . '@orders');
 $router->get('/account/orders/{id}',                AccountController::class . '@orderDetail');
 $router->post('/account/orders/return',             AccountController::class . '@requestReturn');
+$router->post('/account/orders/{id}/cancel',        AccountController::class . '@cancelOrder');
 $router->get('/account/returns',                    AccountController::class . '@returns');
 $router->get('/account/wishlist',                   AccountController::class . '@wishlist');
 $router->get('/account/addresses',                  AccountController::class . '@addresses');

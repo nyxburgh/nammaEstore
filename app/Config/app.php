@@ -97,6 +97,14 @@ define('APP_PATH', BASE_PATH . '/app');
 define('UPLOAD_PATH', BASE_PATH . '/public/uploads');
 define('UPLOAD_URL',  APP_URL . (WEB_ROOT === BASE_PATH ? '/public' : '') . '/uploads');
 
+// Tax invoices contain customer name/address/phone and must NOT be
+// directly fetchable by URL — unlike UPLOAD_PATH above, this sits
+// outside public/ (same reasoning as app/, admin/, frontend/, etc. in
+// "What this is" in CLAUDE.md), so a leaked/guessed invoice number
+// can't be used to pull the PDF without going through the
+// authenticated download/email controllers, which check ownership.
+define('INVOICE_STORAGE_PATH', BASE_PATH . '/storage/invoices');
+
 // Panel asset URLs
 define('ADMIN_ASSETS',    APP_URL . '/assets/admin');
 define('FRONTEND_ASSETS', APP_URL . '/assets/frontend');

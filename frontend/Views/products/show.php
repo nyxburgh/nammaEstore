@@ -153,6 +153,15 @@
       else: ?>
       <div class="rv-empty"><div class="re-icon">⭐</div><p>No reviews yet. Be the first!</p></div>
       <?php endif; ?>
+      <?php if(!empty($myReview) && !$myReview['is_approved']): ?>
+      <div class="review-card rv-pending">
+        <div class="rv-head"><div class="rv-av"><?= strtoupper(substr($myReview['user_name'],0,1)) ?></div><div><div class="rv-name"><?= e($myReview['user_name']) ?> (You)</div><div class="rv-date"><?= formatDate($myReview['created_at']) ?></div></div></div>
+        <div class="rv-stars"><?= str_repeat('★',$myReview['rating']).str_repeat('☆',5-$myReview['rating']) ?></div>
+        <?php if($myReview['title']): ?><div class="rv-title"><?= e($myReview['title']) ?></div><?php endif; ?>
+        <div class="rv-body"><?= e($myReview['body']) ?></div>
+        <div class="rv-pending-badge">⏳ Pending approval — only visible to you until reviewed</div>
+      </div>
+      <?php endif; ?>
     <?php if(\App\Core\Auth::isUserLoggedIn()): ?>
     <?php if($canReview ?? false): ?>
     <div class="rv-form">

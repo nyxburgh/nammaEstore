@@ -64,11 +64,13 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
     <span><a href="<?= APP_URL ?>/sell">New sellers joining daily – Sell on <?= e($siteName) ?></a></span>
     <span>EMI available on products above ₹3000</span>
     <span>Flash Sale: Extra 15% off with code NAMMA15</span>
+    <span>Gift Voucher worth ₹100 with code WELCOME100</span>
     <span>Free delivery on orders above ₹499</span>
     <span>Upto 70% off on Fashion</span>
     <span><a href="<?= APP_URL ?>/sell">New sellers joining daily – Sell on <?= e($siteName) ?></a></span>
     <span>EMI available on products above ₹3000</span>
     <span>Flash Sale: Extra 15% off with code NAMMA15</span>
+    <span>Gift Voucher worth ₹100 with code WELCOME100</span>
   </div>
 </div>
 

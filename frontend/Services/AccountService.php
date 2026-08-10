@@ -56,6 +56,77 @@ class AccountService
         return $o;
     }
 
+    /** Customer self-service cancellation — only while the order hasn't shipped yet. */
+    public function cancelOrder(int $orderId, int $userId, string $reason = ''): array
+    {
+        $order = $this->db->fetchOne(
+            "SELECT * FROM `".DB_PREFIX."orders` WHERE id = ? AND user_id = ?",
+            [$orderId, $userId]
+        );
+        if (!$order) return ['success' => false, 'message' => 'Order not found.'];
+        if (!in_array($order['order_status'], ['placed', 'processing'], true)) {
+            return ['success' => false, 'message' => 'This order can no longer be cancelled — it has already shipped.'];
+        }
+
+        $items = $this->db->fetchAll(
+            "SELECT product_id, quantity, seller_id FROM `".DB_PREFIX."order_items` WHERE order_id = ?",
+            [$orderId]
+        );
+
+        $this->db->beginTransaction();
+        try {
+            $this->db->execute(
+                "UPDATE `".DB_PREFIX."orders` SET order_status='cancelled' WHERE id = ?",
+                [$orderId]
+            );
+            $this->db->execute(
+                "UPDATE `".DB_PREFIX."order_items` SET status='cancelled' WHERE order_id = ?",
+                [$orderId]
+            );
+            $note = 'Cancelled by customer' . ($reason !== '' ? (': ' . $reason) : '.');
+            $this->db->insert(
+                "INSERT INTO `".DB_PREFIX."order_status_timeline`
+                 (order_id, status, note, changed_by_type, changed_by_id)
+                 VALUES (?,'cancelled',?,'customer',?)",
+                [$orderId, $note, $userId]
+            );
+            foreach ($items as $item) {
+                $this->db->execute(
+                    "UPDATE `".DB_PREFIX."products` SET stock = stock + ? WHERE id = ?",
+                    [(int) $item['quantity'], (int) $item['product_id']]
+                );
+            }
+            $this->db->commit();
+        } catch (\Exception $e) {
+            $this->db->rollBack();
+            return ['success' => false, 'message' => 'Could not cancel this order. Please try again.'];
+        }
+
+        // Refund an already-captured online payment to the customer's wallet.
+        if ($order['payment_status'] === 'paid' && (float) $order['total'] > 0) {
+            (new \App\Repositories\CustomerWalletRepository())->credit(
+                $userId, (float) $order['total'], 'order_refund', $orderId,
+                "Refund for cancelled order #{$order['order_number']}"
+            );
+            $this->db->execute(
+                "UPDATE `".DB_PREFIX."orders` SET payment_status='refunded' WHERE id = ?",
+                [$orderId]
+            );
+        }
+
+        $sellerIds = array_unique(array_map(fn($i) => (int) $i['seller_id'], $items));
+        foreach ($sellerIds as $sellerId) {
+            (new \App\Core\Services\NotificationService())->notify(
+                'seller', $sellerId, 'order_status',
+                'Order cancelled: #' . $order['order_number'],
+                'The customer cancelled this order.',
+                SELLER_URL . '/orders'
+            );
+        }
+
+        return ['success' => true, 'message' => 'Order cancelled successfully.'];
+    }
+
     public function getAddresses(int $userId): array
     {
         return $this->db->fetchAll(

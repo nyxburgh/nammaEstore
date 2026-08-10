@@ -1,6 +1,7 @@
 <?php
 namespace App\Frontend\Controllers;
 
+use App\Core\ProviderFactory;
 use App\Frontend\Services\{CartService, PageService, ProductService, SettingsService};
 
 class PageController extends FrontendController
@@ -94,7 +95,17 @@ class PageController extends FrontendController
         if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || $message === '') {
             $this->setFlash('error', 'Please fill in your name, a valid email and a message.');
         } else {
-            error_log(sprintf('[contact-form] %s <%s>: %s', $name, $email, mb_substr($message, 0, 500)));
+            $siteEmail = SettingsService::get('site_email', 'info@nammaestore.com');
+            $siteName  = SettingsService::get('site_name', 'Namma E Store');
+            try {
+                ProviderFactory::email()->send(
+                    $siteEmail,
+                    'New contact form message — ' . $siteName,
+                    '<p><strong>From:</strong> ' . e($name) . ' &lt;' . e($email) . '&gt;</p><p>' . nl2br(e($message)) . '</p>'
+                );
+            } catch (\Exception $e) {
+                error_log('Contact form email failed: ' . $e->getMessage());
+            }
             $this->setFlash('success', 'Thank you! Your message has been received — we will get back to you soon.');
         }
         $this->redirect(APP_URL . '/info/contact-us');

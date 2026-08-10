@@ -61,7 +61,8 @@ $router->post($vp . '/shipments/create',        ShipmentController::class . '@cr
 $router->post($vp . '/shipments/{id}/track',    ShipmentController::class . '@updateTracking');
 
 // ── Notifications ────────────────────────────────────────────
-$router->get( $vp . '/notifications',           NotificationController::class . '@index');
-$router->post($vp . '/notifications/{id}/read', NotificationController::class . '@markRead');
+$router->get( $vp . '/notifications',                 NotificationController::class . '@index');
+$router->post($vp . '/notifications/mark-all-read',   NotificationController::class . '@markAllRead');
+$router->post($vp . '/notifications/{id}/read',       NotificationController::class . '@markRead');
 
 return $router;

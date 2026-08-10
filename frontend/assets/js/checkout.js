@@ -150,4 +150,30 @@
   // Auto-select default address
   const firstAddr = document.querySelector('.addr-card');
   if (firstAddr) selectAddr(firstAddr);
+
+  // ── Stepper: reflect which section the user is currently on ──
+  const sections = Array.from(document.querySelectorAll('[data-checkout-section]'));
+  const steps = { 1: document.getElementById('step1'), 2: document.getElementById('step2'), 3: document.getElementById('step3') };
+
+  function setActiveStep(n) {
+    Object.keys(steps).forEach(function (k) {
+      const step = steps[k];
+      if (!step) return;
+      step.classList.toggle('active', Number(k) === n);
+      step.classList.toggle('completed', Number(k) < n);
+    });
+  }
+
+  if (sections.length && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          setActiveStep(Number(entry.target.dataset.checkoutSection));
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+    sections.forEach(function (s) { observer.observe(s); });
+  }
+
+  form.addEventListener('submit', function () { setActiveStep(3); });
 })();

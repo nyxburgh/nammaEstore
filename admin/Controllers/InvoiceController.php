@@ -36,7 +36,7 @@ class InvoiceController extends AdminController
         $path = (new InvoicePdfService())->render((int) $id);
         if (!$path) { http_response_code(500); echo 'Could not generate invoice.'; return; }
 
-        $fullPath = UPLOAD_PATH . '/' . $path;
+        $fullPath = INVOICE_STORAGE_PATH . '/' . basename($path);
         header('Content-Type: ' . (str_ends_with($path, '.pdf') ? 'application/pdf' : 'text/html'));
         header('Content-Disposition: attachment; filename="' . basename($path) . '"');
         header('Content-Length: ' . filesize($fullPath));

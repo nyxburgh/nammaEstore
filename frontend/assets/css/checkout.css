@@ -6,8 +6,10 @@
 .step:not(:last-child)::after{content:'';position:absolute;top:16px;left:60%;width:80%;height:2px;background:#f0e6ef;z-index:0;}
 .step-circle{width:32px;height:32px;border-radius:50%;border:2.5px solid #e0cce8;background:white;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;color:var(--gray);z-index:1;transition:all var(--transition);}
 .step.active .step-circle{border-color:var(--pink-main);background:var(--pink-main);color:white;box-shadow:0 0 0 4px rgba(233,30,140,.15);}
+.step.completed .step-circle{border-color:var(--pink-main);background:white;color:var(--pink-main);}
 .step-label{font-size:.68rem;font-weight:600;color:var(--gray);white-space:nowrap;}
 .step.active .step-label{color:var(--pink-deep);}
+.step.completed .step-label{color:var(--pink-main);}
 .checkout-layout{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start;}
 @media(max-width:900px){.checkout-layout{grid-template-columns:1fr;}}
 .card{background:white;border-radius:14px;border:1.5px solid #f0e6ef;margin-bottom:16px;}

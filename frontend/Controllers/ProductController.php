@@ -94,6 +94,7 @@ class ProductController extends FrontendController
                         ? (new WishlistService())->isWishlisted(Auth::userId(), $product['id'])
                         : false;
         $canReview = Auth::userId() ? !$reviewSvc->hasReviewed(Auth::userId(), $product['id']) : false;
+        $myReview  = Auth::userId() ? $reviewSvc->getMyReview(Auth::userId(), $product['id']) : null;
         $reviewStats = $reviewSvc->getStats($product['id']);
         $price = (float) ($product['sale_price'] ?: $product['price']);
         $productImage = !empty($product['images'][0]['image_path'])
@@ -135,6 +136,7 @@ class ProductController extends FrontendController
             'reviewStats'  => $reviewStats,
             'isWishlisted' => $isWishlisted,
             'canReview'    => $canReview,
+            'myReview'     => $myReview,
             'categories'   => $svc->getCategories(),
             'cartCount'    => (new CartService())->getCount(),
             'settings'     => SettingsService::all(),

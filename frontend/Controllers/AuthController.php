@@ -42,7 +42,7 @@ class AuthController extends FrontendController
             return;
         }
         unset($_SESSION['show_login_captcha']);
-        $this->redirect(APP_URL.'/account');
+        $this->redirect(APP_URL);
     }
     public function registerForm(): void {
         Middleware::userGuest();

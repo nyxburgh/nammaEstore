@@ -1,6 +1,7 @@
 <?php
 namespace App\SellerPanel\Controllers;
 use App\Core\{Controller, Auth};
+use App\Core\Services\NotificationService;
 use App\SellerPanel\Services\SellerDashboardService;
 
 abstract class SellerController extends Controller
@@ -17,8 +18,10 @@ abstract class SellerController extends Controller
     {
         $vid = Auth::sellerId();
         if (!$vid) return ['seller' => null, 'sellerProfile' => null, 'stats' => null,
-                           'recentOrders' => [], 'topProducts' => [], 'subInfo' => [], 'weeklyData' => []];
+                           'recentOrders' => [], 'topProducts' => [], 'subInfo' => [], 'weeklyData' => [],
+                           'notifUnread' => 0, 'notifRecent' => []];
         $svc = new SellerDashboardService();
+        $notif = new NotificationService();
         return [
             'seller'        => Auth::seller(),
             'sellerProfile' => $svc->getSellerProfile($vid),
@@ -28,6 +31,8 @@ abstract class SellerController extends Controller
             'topProducts'   => [],
             'weeklyData'    => [],
             'allPlans'      => $svc->getActivePlans(),
+            'notifUnread'   => $notif->unreadCount('seller', $vid),
+            'notifRecent'   => $notif->getForUser('seller', $vid, 1)['data'] ?? [],
         ];
     }
 }

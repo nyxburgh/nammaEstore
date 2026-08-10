@@ -2,9 +2,9 @@
 
 <div class="stepper-wrap">
   <div class="stepper">
-    <div class="step active"><div class="step-circle">1</div><span class="step-label">Address</span></div>
-    <div class="step"><div class="step-circle">2</div><span class="step-label">Payment</span></div>
-    <div class="step"><div class="step-circle">3</div><span class="step-label">Confirm</span></div>
+    <div class="step active" id="step1"><div class="step-circle">1</div><span class="step-label">Address</span></div>
+    <div class="step" id="step2"><div class="step-circle">2</div><span class="step-label">Payment</span></div>
+    <div class="step" id="step3"><div class="step-circle">3</div><span class="step-label">Confirm</span></div>
   </div>
 </div>
 
@@ -40,7 +40,7 @@
         <?php endif; ?>
 
         <!-- SHIPPING FORM -->
-        <div class="card">
+        <div class="card" data-checkout-section="1">
           <div class="card-head"><span class="card-title">🏠 Delivery Address</span></div>
           <div class="card-body">
             <div class="form-grid">
@@ -55,7 +55,7 @@
         </div>
 
         <!-- PAYMENT -->
-        <div class="card">
+        <div class="card" data-checkout-section="2">
           <div class="card-head"><span class="card-title">💳 Payment Method</span></div>
           <div class="card-body">
             <div class="payment-opts">
@@ -73,7 +73,7 @@
 
       <!-- RIGHT: Summary -->
       <div>
-        <div class="card sticky-summary">
+        <div class="card sticky-summary" data-checkout-section="3">
           <div class="card-head"><span class="card-title">📋 Order Summary</span></div>
           <div class="card-body">
             <div class="summary-items-list">

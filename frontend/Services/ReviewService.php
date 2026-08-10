@@ -32,6 +32,11 @@ class ReviewService
         return $this->reviews->hasReviewed($userId, $productId);
     }
 
+    public function getMyReview(int $userId, int $productId): ?array
+    {
+        return $this->reviews->findByUserAndProduct($userId, $productId);
+    }
+
     public function submit(int $userId, int $productId, int $rating, string $title, string $body): array
     {
         if ($this->reviews->hasReviewed($userId, $productId)) {

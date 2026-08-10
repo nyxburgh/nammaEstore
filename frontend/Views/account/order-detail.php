@@ -7,6 +7,23 @@
     <span class="status-badge status-<?= e($order['order_status']) ?>"><?= ucfirst($order['order_status']) ?></span>
   </div>
   <div class="card-body">
+    <?php if (in_array($order['order_status'], ['placed', 'processing'], true)): ?>
+    <div class="cancel-order-wrap">
+      <button type="button" class="return-toggle-btn" data-action="show-cancel-form">✖ Cancel Order</button>
+      <form id="cancel-order-form" class="return-form" method="POST" action="<?= APP_URL ?>/account/orders/<?= $order['id'] ?>/cancel" onsubmit="return validateForm(this)">
+        <?= csrf_field() ?>
+        <select name="reason" required oninput="validateField(this)" onblur="validateField(this)">
+          <option value="">Select a reason...</option>
+          <option value="Ordered by mistake">Ordered by mistake</option>
+          <option value="Found a better price">Found a better price</option>
+          <option value="Delivery taking too long">Delivery taking too long</option>
+          <option value="Changed my mind">Changed my mind</option>
+          <option value="Other">Other</option>
+        </select>
+        <button type="submit" class="btn-save">Confirm Cancellation</button>
+      </form>
+    </div>
+    <?php endif; ?>
     <div class="order-info-grid">
       <div class="info-box"><h4>📍 Delivery Address</h4><p><strong><?= e($order['shipping_name']) ?></strong><br><?= e($order['shipping_address']) ?><br><?= e($order['shipping_city'].', '.$order['shipping_state'].' - '.$order['shipping_pincode']) ?><br>📞 <?= e($order['shipping_phone']) ?></p></div>
       <div class="info-box"><h4>💳 Payment</h4><p><strong><?= ucfirst($order['payment_method']) ?></strong><br>Status: <?= ucfirst($order['payment_status']) ?><br>Order Date: <?= formatDate($order['placed_at']) ?><br>Total: <strong class="total-amt"><?= currency($order['total']) ?></strong></p></div>
@@ -19,7 +36,12 @@
       <div class="oi-body">
         <div class="oi-name"><?= e($item['product_name']) ?></div>
         <div class="oi-qty">Qty: <?= $item['quantity'] ?> × <?= currency($item['unit_price']) ?></div>
-        <?php if($order['order_status']==='delivered'): ?>
+        <?php if(in_array($item['return_status'] ?? null, ['refunded', 'completed'], true)): ?>
+        <span class="status-badge status-returned"><?= $item['return_type'] === 'replacement' ? '🔄 Replaced' : '✅ Returned & Refunded' ?></span>
+        <?php elseif(!empty($item['return_status'])): ?>
+        <span class="status-badge status-return-pending">⏳ Return Requested</span>
+        <?php endif; ?>
+        <?php if($order['order_status']==='delivered' && empty($item['return_status'])): ?>
         <button type="button" class="return-toggle-btn" data-action="show-return-form" data-item-id="<?= $item['id'] ?>">↩️ Return / Replace</button>
         <form id="ret-<?= $item['id'] ?>" class="return-form" method="POST" action="<?= APP_URL ?>/account/orders/return" onsubmit="return validateForm(this)">
           <?= csrf_field() ?>

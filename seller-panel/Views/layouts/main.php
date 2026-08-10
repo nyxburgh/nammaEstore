@@ -35,6 +35,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f5f0f8;color:var(--d
 .top-icon-btn{background:rgba(255,255,255,.15);border:none;color:white;width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;position:relative;transition:background var(--transition);text-decoration:none;}
 .top-icon-btn:hover{background:rgba(255,255,255,.28);}
 .notif-dot{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--gold);border:1.5px solid white;pointer-events:none;}
+.notif-count{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 3px;border-radius:9px;background:var(--gold);color:#5a4300;font-size:.62rem;font-weight:800;display:flex;align-items:center;justify-content:center;border:1.5px solid white;pointer-events:none;}
 .avatar-wrap{position:relative;}
 .seller-avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;color:white;font-weight:700;transition:all var(--transition);font-family:'Plus Jakarta Sans',sans-serif;}
 .seller-avatar:hover{background:rgba(255,255,255,.35);}
@@ -132,7 +133,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f5f0f8;color:var(--d
 
 /* ═══ SUBSCRIPTION BANNER ═══════════════════════════════════ */
 .sub-banner{background:linear-gradient(135deg,var(--dark) 0%,var(--dark2) 100%);border-radius:var(--radius);padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;overflow:hidden;flex-wrap:wrap;}
-.sub-banner::after{content:'⭐';position:absolute;right:-10px;top:-10px;font-size:100px;opacity:.04;}
+.sub-banner::after{content:'⭐';position:absolute;right:-10px;top:-10px;font-size:100px;opacity:.04;pointer-events:none;}
 .sub-info{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
 .sub-plan-badge{background:linear-gradient(90deg,var(--gold),#ffb300);color:var(--dark);font-size:.72rem;font-weight:800;padding:4px 14px;border-radius:50px;letter-spacing:.5px;white-space:nowrap;}
 .sub-text h4{color:white;font-size:.9rem;font-weight:700;margin-bottom:3px;}
@@ -268,10 +269,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f5f0f8;color:var(--d
 .notif-panel{display:none;position:fixed;top:calc(var(--header-h) + 6px);right:16px;width:300px;background:white;border-radius:var(--radius);box-shadow:0 12px 40px rgba(0,0,0,.15);z-index:2000;border:1px solid #f0e6ef;overflow:hidden;}
 .notif-panel.open{display:block;animation:dropIn .2s ease;}
 @keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-.notif-head{padding:12px 16px;background:var(--pink-pale);border-bottom:1px solid #f0e6ef;font-weight:700;font-size:.85rem;display:flex;justify-content:space-between;}
+.notif-head{padding:12px 16px;background:var(--pink-pale);border-bottom:1px solid #f0e6ef;font-weight:700;font-size:.85rem;display:flex;justify-content:space-between;align-items:center;}
+.notif-markall{background:none;border:none;color:var(--pink-main);font-size:.75rem;font-weight:700;cursor:pointer;padding:0;}
 .notif-item{display:flex;gap:10px;padding:11px 16px;border-bottom:1px solid #fdf8fc;}
 .notif-item:last-child{border-bottom:none;}
+.notif-item.notif-read{opacity:.7;}
 .notif-dot-item{width:8px;height:8px;border-radius:50%;background:var(--pink-main);flex-shrink:0;margin-top:5px;}
+.notif-dot-item.notif-dot-read{background:var(--gray);}
 .notif-item h5{font-size:.78rem;font-weight:600;margin-bottom:2px;}
 .notif-item p{font-size:.7rem;color:var(--gray);}
 
@@ -303,7 +307,7 @@ $planName = $vp['plan_name'] ?? 'Free Plan';
   </div>
   <div class="top-bar-right">
     <span class="top-seller-name"><?= e($vp['shop_name'] ?? $v['name']) ?></span>
-    <button class="top-icon-btn" onclick="toggleNotif()" title="Notifications">🔔<span class="notif-dot"></span></button>
+    <button class="top-icon-btn" id="notifToggle" data-action="toggle-notif" title="Notifications">🔔<?php if(!empty($notifUnread)): ?><span class="notif-count"><?= $notifUnread > 99 ? '99+' : $notifUnread ?></span><?php endif; ?></button>
     <a href="<?= APP_URL ?>" class="top-icon-btn" title="View Store">🏬</a>
     <div class="avatar-wrap">
       <button class="seller-avatar" id="avatarToggle" title="My Account" type="button"><?= strtoupper(substr($v['name'],0,1)) ?></button>
@@ -321,11 +325,14 @@ $planName = $vp['plan_name'] ?? 'Free Plan';
 
 <!-- NOTIFICATION PANEL -->
 <div class="notif-panel" id="notifPanel">
-  <div class="notif-head"><span>🔔 Notifications</span><span style="color:var(--pink-main);font-size:.75rem;cursor:pointer;">Mark all read</span></div>
-  <?php if(is_array($stats) && !empty($stats['pending'])): ?>
-  <div class="notif-item"><div class="notif-dot-item"></div><div><h5>📦 <?= $stats['pending'] ?> order<?= $stats['pending']>1?'s':'' ?> awaiting action</h5><p>Review and process your pending orders</p></div></div>
+  <div class="notif-head"><span>🔔 Notifications</span><?php if(!empty($notifUnread)): ?><button type="button" class="notif-markall" id="notifMarkAll">Mark all read</button><?php endif; ?></div>
+  <?php $recentNotifs = array_slice($notifRecent ?? [], 0, 5); ?>
+  <?php foreach($recentNotifs as $n): ?>
+  <div class="notif-item<?= $n['is_read'] ? ' notif-read' : '' ?>"><div class="notif-dot-item<?= $n['is_read'] ? ' notif-dot-read' : '' ?>"></div><div><h5><?= e($n['title']) ?></h5><p><?= e($n['message']) ?></p></div></div>
+  <?php endforeach; ?>
+  <?php if(empty($recentNotifs)): ?>
+  <div class="notif-item notif-read"><div class="notif-dot-item notif-dot-read"></div><div><h5>Welcome to Namma E Store Seller Panel! 🎉</h5><p>Complete your shop profile to attract buyers.</p></div></div>
   <?php endif; ?>
-  <div class="notif-item" style="opacity:.7"><div class="notif-dot-item" style="background:var(--gray)"></div><div><h5>Welcome to Namma E Store Seller Panel! 🎉</h5><p>Complete your shop profile to attract buyers.</p></div></div>
 </div>
 
 <div class="dash-layout">
@@ -408,13 +415,6 @@ function closeSidebar(){
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('open');
 }
-function toggleNotif(){
-  document.getElementById('notifPanel').classList.toggle('open');
-}
-document.addEventListener('click',function(e){
-  const p=document.getElementById('notifPanel');
-  if(p&&p.classList.contains('open')&&!p.contains(e.target)&&!e.target.closest('.top-icon-btn')) p.classList.remove('open');
-});
 let toastTimer;
 function showToast(msg){
   const t=document.getElementById('toast');

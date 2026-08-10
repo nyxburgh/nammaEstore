@@ -48,6 +48,15 @@ class ReviewRepository extends Repository
         return (bool) $this->db->fetchOne("SELECT id FROM `{$this->t()}` WHERE user_id=? AND product_id=?", [$userId, $productId]);
     }
 
+    /** The current user's own review for this product, approved or not — so they can see their own pending submission. */
+    public function findByUserAndProduct(int $userId, int $productId): ?array
+    {
+        return $this->db->fetchOne(
+            "SELECT r.*, u.name as user_name, u.avatar FROM `{$this->t()}` r JOIN `{$this->t('users')}` u ON u.id=r.user_id WHERE r.user_id=? AND r.product_id=?",
+            [$userId, $productId]
+        );
+    }
+
     public function create(array $data): int
     {
         $cols = implode(',', array_keys($data));

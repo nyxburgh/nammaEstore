@@ -112,6 +112,8 @@
 .rv-bar-fill{width:0;height:100%;background:var(--gold);border-radius:3px;}
 .rv-empty{text-align:center;padding:30px;color:var(--gray);}
 .rv-empty .re-icon{font-size:2.5rem;}
+.rv-pending{background:#fffaf0;border-radius:10px;border:1px dashed #ffd58a;margin-bottom:8px;}
+.rv-pending-badge{margin-top:8px;font-size:.72rem;font-weight:700;color:#b8860b;}
 .rv-form{padding:16px;border-top:1px solid #f0e6ef;}
 .rv-form-title{font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:12px;}
 .star-picker{display:flex;gap:6px;margin-bottom:10px;}

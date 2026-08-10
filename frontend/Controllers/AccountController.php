@@ -37,6 +37,13 @@ class AccountController extends FrontendController
         $this->setFlash($r['success'] ? 'success' : 'error', $r['message']);
         $this->redirect(APP_URL . '/account/orders/' . $this->input('order_id'));
     }
+    public function cancelOrder(string $id): void {
+        csrf_check();
+        Middleware::userAuth();
+        $r = (new AccountService())->cancelOrder((int) $id, Auth::userId(), $this->input('reason', ''));
+        $this->setFlash($r['success'] ? 'success' : 'error', $r['message']);
+        $this->redirect(APP_URL . '/account/orders/' . $id);
+    }
     public function returns(): void {
         Middleware::userAuth();
         $this->view('account.returns', array_merge($this->base(), [

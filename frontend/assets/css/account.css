@@ -64,6 +64,8 @@
 .status-shipped{background:#fff3e0;color:#e65100;}
 .status-delivered{background:var(--green-pale);color:var(--green);}
 .status-cancelled{background:var(--red-pale);color:var(--red);}
+.status-returned{background:var(--green-pale);color:var(--green);display:inline-block;margin-top:6px;}
+.status-return-pending{background:#fff3e0;color:#e65100;display:inline-block;margin-top:6px;}
 .order-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #fdf0f7;align-items:start;}
 .order-item:last-child{border-bottom:none;}
 .order-item .oi-body{flex:1;}
@@ -86,6 +88,8 @@
 
 /* Return/replacement request form */
 .return-toggle-btn{background:none;border:none;color:var(--pink-deep);font-size:.75rem;font-weight:700;cursor:pointer;padding:4px 0;}
+.cancel-order-wrap{margin-bottom:16px;}
+.cancel-order-wrap .return-toggle-btn{color:#c0392b;}
 .return-form{display:none;margin-top:8px;background:var(--pink-pale);padding:10px;border-radius:8px;}
 .return-form.open{display:block;}
 .return-form select,.return-form textarea{width:100%;margin-bottom:6px;padding:6px;border-radius:6px;border:1px solid #f0d6e6;font-size:.78rem;}

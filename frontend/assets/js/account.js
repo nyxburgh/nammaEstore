@@ -1,12 +1,27 @@
 /* Namma E Store — account sub-page behaviour: toggling the return/replacement
    request form (extracted from order-detail.php per the no-inline-JS rule) */
 
+document.addEventListener('submit', function (e) {
+  const form = e.target.closest('#cancel-order-form');
+  if (form && !confirm('Cancel this order? This cannot be undone.')) {
+    e.preventDefault();
+  }
+});
+
 document.addEventListener('click', function (e) {
   const btn = e.target.closest('[data-action="show-return-form"]');
   if (btn) {
     const form = document.getElementById('ret-' + btn.dataset.itemId);
     if (form) form.classList.add('open');
     btn.classList.add('is-hidden');
+    return;
+  }
+
+  const cancelBtn = e.target.closest('[data-action="show-cancel-form"]');
+  if (cancelBtn) {
+    const form = document.getElementById('cancel-order-form');
+    if (form) form.classList.add('open');
+    cancelBtn.classList.add('is-hidden');
     return;
   }
 
