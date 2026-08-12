@@ -46,16 +46,25 @@ class CustomerReturnService
             return ['success' => false, 'message' => 'A request for this item is already in progress.'];
         }
 
+        $type = in_array($type, ['return', 'replacement', 'cancel'], true) ? $type : 'return';
+
         $this->returns->insert([
             'order_id'      => $orderId,
             'order_item_id' => $orderItemId,
             'user_id'       => $userId,
             'seller_id'     => $item['seller_id'],
-            'type'          => in_array($type, ['return', 'replacement', 'cancel'], true) ? $type : 'return',
+            'type'          => $type,
             'reason'        => $reason,
             'note'          => $note,
             'status'        => 'requested',
         ]);
+
+        (new \App\Core\Services\NotificationService())->notify(
+            'seller', (int) $item['seller_id'], 'return_request',
+            ucfirst($type) . ' request: #' . $order['order_number'],
+            'A customer requested a ' . $type . ' for ' . ($item['product_name'] ?? 'a product') . '.',
+            SELLER_URL . '/returns'
+        );
 
         return ['success' => true, 'message' => 'Your request has been submitted and will be reviewed shortly.'];
     }

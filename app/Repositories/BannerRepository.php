@@ -29,4 +29,16 @@ class BannerRepository extends Repository
     {
         $this->db->execute("UPDATE `{$this->t()}` SET is_active=!is_active WHERE id=?", [$id]);
     }
+
+    /** Active, currently-scheduled banners for a storefront placement, e.g. the homepage hero. */
+    public function getActiveByPosition(string $position): array
+    {
+        return $this->db->fetchAll(
+            "SELECT * FROM `{$this->t()}` WHERE position=? AND is_active=1
+             AND (starts_at IS NULL OR starts_at <= NOW())
+             AND (ends_at IS NULL OR ends_at >= NOW())
+             ORDER BY sort_order ASC, id ASC",
+            [$position]
+        );
+    }
 }

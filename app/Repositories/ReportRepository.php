@@ -36,7 +36,7 @@ class ReportRepository extends Repository
              JOIN `{$this->t('users')}` u ON u.id=c.seller_id
              LEFT JOIN `{$this->t('seller_profiles')}` vp ON vp.user_id=c.seller_id
              WHERE DATE(c.calculated_at) BETWEEN ? AND ?
-             GROUP BY c.seller_id, c.plan_name ORDER BY total_commission DESC",
+             GROUP BY c.seller_id, c.plan_name, u.name, vp.shop_name ORDER BY total_commission DESC",
             [$from, $to]
         );
     }
@@ -54,7 +54,7 @@ class ReportRepository extends Repository
              LEFT JOIN `{$this->t('seller_subscriptions')}` vs ON vs.seller_id=u.id AND vs.status='active'
              LEFT JOIN `{$this->t('subscription_plans')}` sp ON sp.id=vs.plan_id
              LEFT JOIN `{$this->t('order_seller_splits')}` ovs ON ovs.seller_id=u.id
-             WHERE u.role='seller' GROUP BY u.id ORDER BY gross_sales DESC"
+             WHERE u.role='seller' GROUP BY u.id, u.name, vp.shop_name, sp.name ORDER BY gross_sales DESC"
         );
     }
 }

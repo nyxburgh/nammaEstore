@@ -37,7 +37,6 @@
 </div>
 
 <script>
-const CSRF_TOKEN = '<?= csrf_token() ?>';
 function post(url){ const fd=new FormData(); fd.append('_csrf_token',CSRF_TOKEN); return fetch(url,{method:'POST',body:fd}).then(r=>r.json()); }
 function toggleBrand(id){ post('<?= $p ?>/brands/'+id+'/toggle').then(d=>{ if(!d.success) location.reload(); }); }
 function deleteBrand(id){ if(!confirm('Delete this brand?')) return; post('<?= $p ?>/brands/'+id+'/delete').then(d=>{ if(d.success) location.reload(); }); }

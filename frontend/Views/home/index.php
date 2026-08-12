@@ -26,9 +26,16 @@ function productCard(array $p): string {
 <link rel="stylesheet" href="<?= asset('frontend/css/home.css') ?>">
 
 <!-- HERO BANNER -->
+<?php $heroBanners = $heroBanners ?? []; ?>
 <section class="hero-sec">
   <div class="hero">
     <div class="hero-slides" id="heroSlides">
+      <?php if(!empty($heroBanners)): foreach($heroBanners as $b): ?>
+      <a class="hero-slide hero-slide-banner" href="<?= $b['link_url'] ? e($b['link_url']) : 'javascript:void(0)' ?>">
+        <img class="hero-banner-img" src="<?= UPLOAD_URL . '/' . e($b['image_path']) ?>" alt="<?= e($b['title']) ?>">
+        <?php if($b['title']): ?><span class="hero-banner-title"><?= e($b['title']) ?></span><?php endif; ?>
+      </a>
+      <?php endforeach; else: ?>
       <div class="hero-slide hero-slide-1">
         <div class="hero-content">
           <div class="hero-badge pulse">🔥 MEGA SALE</div>
@@ -56,11 +63,13 @@ function productCard(array $p): string {
         </div>
         <div class="hero-deco">🛋️</div>
       </div>
+      <?php endif; ?>
     </div>
     <div class="hero-dots">
-      <div class="hero-dot active" data-action="go-slide" data-slide="0"></div>
-      <div class="hero-dot" data-action="go-slide" data-slide="1"></div>
-      <div class="hero-dot" data-action="go-slide" data-slide="2"></div>
+      <?php $heroSlideCount = !empty($heroBanners) ? count($heroBanners) : 3; ?>
+      <?php for($hi = 0; $hi < $heroSlideCount; $hi++): ?>
+      <div class="hero-dot <?= $hi === 0 ? 'active' : '' ?>" data-action="go-slide" data-slide="<?= $hi ?>"></div>
+      <?php endfor; ?>
     </div>
   </div>
 </section>

@@ -64,7 +64,7 @@ class AccountService
             [$orderId, $userId]
         );
         if (!$order) return ['success' => false, 'message' => 'Order not found.'];
-        if (!in_array($order['order_status'], ['placed', 'processing'], true)) {
+        if (!in_array($order['order_status'], ['placed', 'confirmed', 'processing'], true)) {
             return ['success' => false, 'message' => 'This order can no longer be cancelled — it has already shipped.'];
         }
 

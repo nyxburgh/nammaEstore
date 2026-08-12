@@ -72,9 +72,20 @@ class OrderRepository extends Repository
             // SettlementService — without it, no order can ever become
             // settlement-eligible. Set it exactly once, the first time
             // status becomes 'delivered' (won't overwrite on re-saves).
+            //
+            // COD orders collect payment at the door, not through the online
+            // gateway, so nothing else ever flips payment_status to 'paid'
+            // for them — leaving every COD order (the default checkout
+            // choice) permanently excluded from revenue/sales reporting.
+            // Delivery is the moment cash actually changes hands, so mark
+            // it paid then (only from 'pending', so a failed/refunded COD
+            // order is never silently overwritten).
             $this->db->execute(
-                "UPDATE `{$this->t()}` SET order_status=?, delivered_at=IF(?='delivered' AND delivered_at IS NULL, NOW(), delivered_at) WHERE id=?",
-                [$status, $status, $id]
+                "UPDATE `{$this->t()}` SET order_status=?,
+                    delivered_at=IF(?='delivered' AND delivered_at IS NULL, NOW(), delivered_at),
+                    payment_status=IF(?='delivered' AND payment_method='cod' AND payment_status='pending', 'paid', payment_status)
+                 WHERE id=?",
+                [$status, $status, $status, $id]
             );
             $this->db->insert("INSERT INTO `{$this->t('order_status_timeline')}` (order_id,status,note,changed_by_type,changed_by_id) VALUES(?,?,?,?,?)", [$id, $status, $note, $byType, $byId]);
             $this->db->commit();

@@ -45,7 +45,6 @@
 </div>
 
 <script>
-const CSRF_TOKEN = '<?= csrf_token() ?>';
 function advanceShipment(id, status){
   if(!status) return;
   const fd = new FormData(); fd.append('_csrf_token',CSRF_TOKEN); fd.append('status',status);

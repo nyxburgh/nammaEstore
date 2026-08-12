@@ -46,7 +46,6 @@
 </div>
 
 <script>
-const CSRF_TOKEN = '<?= csrf_token() ?>';
 function post(url){ const fd=new FormData(); fd.append('_csrf_token',CSRF_TOKEN); return fetch(url,{method:'POST',body:fd}).then(r=>r.json()); }
 function toggleCoupon(id){ post('<?= $p ?>/coupons/'+id+'/toggle').then(d=>{ if(!d.success) location.reload(); }); }
 function deleteCoupon(id){ if(!confirm('Delete this coupon?')) return; post('<?= $p ?>/coupons/'+id+'/delete').then(d=>{ if(d.success) location.reload(); }); }

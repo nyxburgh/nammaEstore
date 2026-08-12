@@ -51,7 +51,6 @@
 </div>
 
 <script>
-const CSRF_TOKEN = '<?= csrf_token() ?>';
 function rAction(id, action){
   if(action==='reject' && !confirm('Reject this request?')) return;
   const fd = new FormData(); fd.append('_csrf_token', CSRF_TOKEN);

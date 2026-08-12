@@ -25,6 +25,7 @@ use App\Admin\Controllers\BrandController;
 use App\Admin\Controllers\InvoiceController;
 use App\Admin\Controllers\ShipmentController;
 use App\Admin\Controllers\PageController;
+use App\Admin\Controllers\NotificationController;
 
 $router = new Router();
 $p = '/' . ADMIN_PREFIX; // /mc-admin
@@ -39,6 +40,9 @@ $router->get("$p/logout", AuthController::class . '@logout');
 
 // ── Dashboard ─────────────────────────────────────────────────
 $router->get("$p/dashboard", DashboardController::class . '@index');
+
+// ── Notifications (header bell) ─────────────────────────────────
+$router->get("$p/notifications/summary", NotificationController::class . '@summary');
 
 // ── Sellers ───────────────────────────────────────────────────
 $router->get("$p/sellers",                 SellerController::class . '@index');

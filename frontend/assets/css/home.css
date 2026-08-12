@@ -28,6 +28,9 @@
 .hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:all var(--transition);}
 .hero-dot.active{background:white;width:20px;border-radius:4px;}
 .hero-sec{padding:0;}
+.hero-slide-banner{display:block;background:var(--dark);text-decoration:none;}
+.hero-banner-img{width:100%;height:100%;object-fit:cover;display:block;}
+.hero-banner-title{position:absolute;left:24px;bottom:24px;color:white;font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.5);z-index:2;}
 .home-container{padding-top:20px;}
 .home-sec{margin-bottom:32px;}
 

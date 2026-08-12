@@ -43,7 +43,6 @@
 <?php if($banners['total_pages']>1): ?><div class="mt-3"><?= paginate($banners,$p.'/banners') ?></div><?php endif; ?>
 
 <script>
-const CSRF_TOKEN = '<?= csrf_token() ?>';
 function deleteBanner(id){
   if(!confirm('Delete this banner?')) return;
   const fd = new FormData(); fd.append('_csrf_token', CSRF_TOKEN);

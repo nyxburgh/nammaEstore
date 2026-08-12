@@ -40,7 +40,6 @@
 </div>
 
 <script>
-const CSRF_TOKEN = '<?= csrf_token() ?>';
 function resolveDispute(id){
   const note = prompt('Resolution note:');
   if(note===null) return;

@@ -14,6 +14,12 @@ class SidebarRepository extends Repository
             'pending_reviews' => (int) ($this->db->fetchOne(
                 "SELECT COUNT(*) c FROM `{$this->t('reviews')}` WHERE is_approved=0 AND is_flagged=0"
             )['c'] ?? 0),
+            'pending_returns' => (int) ($this->db->fetchOne(
+                "SELECT COUNT(*) c FROM `{$this->t('returns')}` WHERE status='requested'"
+            )['c'] ?? 0),
+            'pending_withdrawals' => (int) ($this->db->fetchOne(
+                "SELECT COUNT(*) c FROM `{$this->t('seller_withdrawals')}` WHERE status='pending'"
+            )['c'] ?? 0),
         ];
     }
 }

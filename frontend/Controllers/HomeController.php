@@ -1,7 +1,7 @@
 <?php
 namespace App\Frontend\Controllers;
 use App\Core\Database;
-use App\Frontend\Services\{ProductService, SettingsService, CartService};
+use App\Frontend\Services\{ProductService, SettingsService, CartService, BannerService};
 
 class HomeController extends FrontendController
 {
@@ -10,6 +10,7 @@ class HomeController extends FrontendController
         $svc = new ProductService();
         $this->view('home.index', [
             'title'       => SettingsService::get('site_name', 'Namma E Store') . ' — Multi-Seller Marketplace',
+            'heroBanners' => (new BannerService())->getByPosition('hero'),
             'trending'    => $svc->getTrending(10),
             'newArrivals' => $svc->getNewArrivals(10),
             'flashDeals'  => $svc->getDeals(6),

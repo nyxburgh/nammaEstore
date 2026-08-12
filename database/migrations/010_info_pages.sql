@@ -1,6 +1,6 @@
 -- 010: Info Center pages become admin-manageable.
 -- Content supports tokens replaced at render time:
---   {{app_url}} {{vendor_url}} {{site_name}} {{site_email}} {{site_phone}}
+--   {{app_url}} {{seller_url}} {{site_name}} {{site_email}} {{site_phone}}
 CREATE TABLE IF NOT EXISTS `mc_pages` (
   `id`                INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `slug`              VARCHAR(100) NOT NULL,

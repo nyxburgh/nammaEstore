@@ -83,6 +83,14 @@ body:not(.sb-ready) #sidebar,body:not(.sb-ready) #main{transition:none!important
 .tb-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:16px;transition:all .16s;position:relative;}
 .tb-btn:hover{background:var(--purple-soft);color:var(--purple);}
 .tb-btn .dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--pink);border-radius:50%;border:2px solid #fff;}
+.tb-notif-wrap{position:relative;}
+.tb-notif-panel{display:none;position:absolute;top:44px;right:0;width:300px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-md);z-index:1100;overflow:hidden;}
+.tb-notif-panel.open{display:block;}
+.tb-notif-head{padding:12px 16px;font-weight:700;font-size:13px;border-bottom:1px solid var(--border);background:var(--purple-soft);}
+.tb-notif-item{display:block;padding:11px 16px;font-size:12.5px;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border);}
+.tb-notif-item:last-child{border-bottom:none;}
+.tb-notif-item:hover{background:var(--purple-soft);}
+.tb-notif-empty{padding:20px 16px;text-align:center;color:var(--muted);font-size:12.5px;}
 .tb-admin{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 5px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:all .16s;}
 .tb-admin:hover{background:var(--purple-soft);}
 .tb-av{width:28px;height:28px;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
@@ -292,7 +300,13 @@ img,.card,.table-responsive{max-width:100%;}
       </div>
     </div>
     <div class="tb-right">
-      <div class="tb-btn"><i class="bi bi-bell"></i><span class="dot"></span></div>
+      <div class="tb-notif-wrap">
+        <button type="button" class="tb-btn" id="notifBtn"><i class="bi bi-bell"></i><span class="dot" id="notifDot" hidden></span></button>
+        <div class="tb-notif-panel" id="notifPanel">
+          <div class="tb-notif-head">Notifications</div>
+          <div id="notifList"><div class="tb-notif-empty">Loading…</div></div>
+        </div>
+      </div>
       <div class="tb-admin dropdown" data-bs-toggle="dropdown">
         <div class="tb-av"><?= strtoupper(substr($admin['name']??'A',0,1)) ?></div>
         <div><div class="tb-aname"><?= e($admin['name']) ?></div><div class="tb-arole"><?= str_replace('_',' ',$admin['role']??'') ?></div></div>
@@ -305,6 +319,11 @@ img,.card,.table-responsive{max-width:100%;}
     </div>
   </div>
 
+  <script>
+const CSRF_TOKEN = "<?= csrf_token() ?>";
+const APP_URL = "<?= APP_URL ?>";
+const ADMIN_URL = "<?= ADMIN_URL ?>";
+  </script>
   <div class="page-body">
     <?php if(!empty($_SESSION['flash'])): $fl=$_SESSION['flash']; unset($_SESSION['flash']);
       $fc=$fl['type']==='success'?'#dcfce7':'#fee2e2'; $ft=$fl['type']==='success'?'#15803d':'#b91c1c';
@@ -314,8 +333,6 @@ img,.card,.table-responsive{max-width:100%;}
       <button onclick="this.closest('#flash-toast').remove()" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:20px;line-height:1;color:inherit;">&times;</button>
     </div>
     <script>
-const CSRF_TOKEN = "<?= csrf_token() ?>";
-const APP_URL = "<?= APP_URL ?>";
 setTimeout(()=>{const t=document.getElementById('flash-toast');if(t){t.style.animation='toastOut .3s ease forwards';setTimeout(()=>t.remove(),300);}},4500);</script>
     <?php endif; ?>
     <?= $content ?>
@@ -336,6 +353,49 @@ document.querySelectorAll('.toggle-status').forEach(el=>{
 document.querySelectorAll('[data-confirm]').forEach(el=>{
   el.addEventListener('click',function(e){if(!confirm(this.dataset.confirm||'Are you sure?'))e.preventDefault();});
 });
+
+(function(){
+  const btn = document.getElementById('notifBtn');
+  const panel = document.getElementById('notifPanel');
+  const dot = document.getElementById('notifDot');
+  const list = document.getElementById('notifList');
+  if (!btn || !panel) return;
+
+  let loaded = false;
+  function loadNotifications(){
+    fetch(ADMIN_URL + '/notifications/summary')
+      .then(r => r.json())
+      .then(d => {
+        if (!d.success) return;
+        dot.hidden = !d.total;
+        list.innerHTML = '';
+        if (!d.items.length) {
+          const empty = document.createElement('div');
+          empty.className = 'tb-notif-empty';
+          empty.textContent = 'Nothing needs your attention right now.';
+          list.appendChild(empty);
+          return;
+        }
+        d.items.forEach(item => {
+          const a = document.createElement('a');
+          a.className = 'tb-notif-item';
+          a.href = item.link;
+          a.textContent = item.icon + ' ' + item.text;
+          list.appendChild(a);
+        });
+      });
+  }
+
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    panel.classList.toggle('open');
+    if (panel.classList.contains('open') && !loaded) { loaded = true; loadNotifications(); }
+  });
+  document.addEventListener('click', function(e){
+    if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) panel.classList.remove('open');
+  });
+  loadNotifications();
+})();
 
 (function(){
   const SB_KEY='admin_sb_collapsed';

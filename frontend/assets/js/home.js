@@ -5,14 +5,18 @@
   if (!slides) return;
 
   const dots = document.querySelectorAll('.hero-dot');
+  const slideCount = slides.children.length;
   let slide = 0;
 
+  slides.style.width = (slideCount * 100) + '%';
+  Array.from(slides.children).forEach(s => { s.style.width = (100 / slideCount) + '%'; });
+
   function goSlide(n) {
-    slide = n;
-    slides.style.transform = 'translateX(-' + n * 33.333 + '%)';
-    dots.forEach((d, i) => d.classList.toggle('active', i === n));
+    slide = ((n % slideCount) + slideCount) % slideCount;
+    slides.style.transform = 'translateX(-' + (slide * (100 / slideCount)) + '%)';
+    dots.forEach((d, i) => d.classList.toggle('active', i === slide));
   }
-  setInterval(() => goSlide((slide + 1) % 3), 4000);
+  if (slideCount > 1) setInterval(() => goSlide(slide + 1), 4000);
 
   // Flash-sale countdown
   let secs = 4 * 3600 + 27 * 60 + 45;

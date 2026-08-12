@@ -41,7 +41,6 @@
 </div>
 
 <script>
-const CSRF_TOKEN = '<?= csrf_token() ?>';
 function wAction(id, action){
   if(action==='reject' && !confirm('Reject this withdrawal request?')) return;
   const fd = new FormData(); fd.append('_csrf_token', CSRF_TOKEN);

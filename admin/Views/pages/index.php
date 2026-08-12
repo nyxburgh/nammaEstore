@@ -36,7 +36,6 @@
 <?php if($pages['total_pages']>1): ?><div class="mt-3"><?= paginate($pages,$p.'/pages') ?></div><?php endif; ?>
 
 <script>
-const CSRF_TOKEN = '<?= csrf_token() ?>';
 function deletePage(id){
   if(!confirm('Delete this page? The storefront link will stop working.')) return;
   const fd = new FormData(); fd.append('_csrf_token', CSRF_TOKEN);

@@ -88,7 +88,6 @@
 </div>
 
 <script>
-const CSRF_TOKEN = '<?= csrf_token() ?>';
 function regenInvoices(orderId){
   const fd = new FormData(); fd.append('_csrf_token', CSRF_TOKEN);
   fetch('<?= ADMIN_URL ?>/invoices/order/'+orderId+'/regenerate', {method:'POST', body:fd})

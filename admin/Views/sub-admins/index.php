@@ -31,7 +31,6 @@
 <div class="alert alert-info mt-3"><i class="bi bi-info-circle-fill me-2"></i><strong>Restrictions:</strong> Sub-admins cannot change passwords, access system settings, or manage admin roles. Access is strictly limited to assigned modules.</div>
 
 <script>
-const CSRF_TOKEN = '<?= csrf_token() ?>';
 function deleteSubAdmin(id, name){
   if(!confirm('Delete '+name+'?')) return;
   const fd = new FormData(); fd.append('_csrf_token', CSRF_TOKEN);

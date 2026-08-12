@@ -7,7 +7,7 @@
     <span class="status-badge status-<?= e($order['order_status']) ?>"><?= ucfirst($order['order_status']) ?></span>
   </div>
   <div class="card-body">
-    <?php if (in_array($order['order_status'], ['placed', 'processing'], true)): ?>
+    <?php if (in_array($order['order_status'], ['placed', 'confirmed', 'processing'], true)): ?>
     <div class="cancel-order-wrap">
       <button type="button" class="return-toggle-btn" data-action="show-cancel-form">✖ Cancel Order</button>
       <form id="cancel-order-form" class="return-form" method="POST" action="<?= APP_URL ?>/account/orders/<?= $order['id'] ?>/cancel" onsubmit="return validateForm(this)">
