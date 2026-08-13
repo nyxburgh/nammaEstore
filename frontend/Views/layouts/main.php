@@ -32,6 +32,8 @@ $canonical = $canonicalUrl ?? (APP_URL . $reqUri);
 <meta name="twitter:description" content="<?= e($metaDesc) ?>">
 <meta name="twitter:image" content="<?= e($metaImg) ?>">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?= asset('frontend/css/main.css') ?>">
 <link rel="manifest" href="<?= APP_URL ?>/manifest.json">
