@@ -192,6 +192,32 @@ function toggleCats() {
 // ── Back to Top ───────────────────────────────────────────
 window.addEventListener('scroll', () => document.getElementById('backTop').classList.toggle('show', window.scrollY > 400));
 
+// ── Dev/Test Version Floating Notice ────────────────────────
+// Appears while the user scrolls (desktop and mobile), hides near the
+// top of the page, and stays dismissed for the rest of the tab session
+// once closed.
+(function () {
+  const banner = document.getElementById('devBanner');
+  if (!banner) return;
+  if (sessionStorage.getItem('devBannerDismissed') === '1') return;
+
+  let hideTimer = null;
+  const fadeOutAfter = () => {
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => banner.classList.remove('show'), 4000);
+  };
+
+  // Visible by default on load, fades out after a few seconds.
+  banner.classList.add('show');
+  fadeOutAfter();
+
+  // Fades back in while scrolling, fades out again once scrolling stops.
+  window.addEventListener('scroll', () => {
+    banner.classList.add('show');
+    fadeOutAfter();
+  }, { passive: true });
+})();
+
 // ── Scroll Reveal ─────────────────────────────────────────
 const revObs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
@@ -224,6 +250,10 @@ document.addEventListener('click', function (e) {
     case 'toggle-account':      toggleAccount(); break;
     case 'toggle-menu':         toggleMenu(); break;
     case 'scroll-top':          window.scrollTo({ top: 0, behavior: 'smooth' }); break;
+    case 'close-dev-banner':
+      document.getElementById('devBanner').classList.remove('show');
+      sessionStorage.setItem('devBannerDismissed', '1');
+      break;
     case 'remove-cart-item':    removeCartItem(el.dataset.itemId); break;
     case 'update-cart-qty':     updateCartQty(el.dataset.itemId, el.dataset.qty); break;
     case 'drawer-qty':          drawerQty(el.dataset.itemId, parseInt(el.dataset.delta, 10)); break;

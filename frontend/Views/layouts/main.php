@@ -194,6 +194,17 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
 <div class="toast" id="toast"></div>
 <button class="back-top" id="backTop" data-action="scroll-top">↑</button>
 
+<!-- FLOATING SITE NOTICE — editable from Admin → Settings without a code change -->
+<?php if(\App\Frontend\Services\SettingsService::get('site_banner_enabled','1') === '1'):
+  $bannerMsg = \App\Frontend\Services\SettingsService::get('site_banner_message','This site is under development and is currently a test version.');
+  if($bannerMsg !== ''): ?>
+<div class="dev-banner" id="devBanner" role="status">
+  <span class="db-icon">🚧</span>
+  <span class="db-text"><?= e($bannerMsg) ?></span>
+  <button class="db-close" data-action="close-dev-banner" aria-label="Dismiss notice">✕</button>
+</div>
+<?php endif; endif; ?>
+
 <!-- MOBILE BOTTOM NAV -->
 <nav class="mobile-nav">
   <div class="mobile-nav-inner">
