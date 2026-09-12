@@ -32,7 +32,7 @@ class CustomerService
             'name'       => $d['name'],
             'email'      => $d['email'],
             'phone'      => $d['phone'] ?? null,
-            'password'   => password_hash($d['password'], PASSWORD_DEFAULT),
+            'password'   => hashPassword($d['password']),
             'role'       => 'customer',
             'is_active'  => 1,
             'is_verified'=> 1,
@@ -61,7 +61,7 @@ class CustomerService
         ]);
         if (!empty($d['password'])) {
             if (strlen($d['password']) < 8) return ['success' => false, 'message' => 'Password must be at least 8 characters.'];
-            $this->users->update($id, ['password' => password_hash($d['password'], PASSWORD_DEFAULT)]);
+            $this->users->update($id, ['password' => hashPassword($d['password'])]);
         }
         return ['success' => true];
     }

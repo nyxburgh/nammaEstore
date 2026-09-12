@@ -87,6 +87,11 @@
         <?php else: ?><span class="stock-tag out">✕ Out of Stock</span><?php endif; ?>
       </div>
 
+      <div class="product-desc-inline">
+        <div class="option-label">Description</div>
+        <div class="desc-text"><?= nl2br(e($product['description']??'No description available.')) ?></div>
+      </div>
+
       <?php if($product['stock']>0): ?>
       <div class="action-btns">
         <button class="btn-cart" data-action="add-detail">🛒 Add to Cart</button>
@@ -112,14 +117,10 @@
   <!-- TABS -->
   <div class="tabs-wrap">
     <div class="tabs-bar">
-      <button class="tab-btn active" data-action="switch-tab" data-tab="tab-desc">Description</button>
-      <button class="tab-btn" data-action="switch-tab" data-tab="tab-spec">Specifications</button>
+      <button class="tab-btn active" data-action="switch-tab" data-tab="tab-spec">Specifications</button>
       <button class="tab-btn" data-action="switch-tab" data-tab="tab-reviews">Reviews (<?= $reviewStats['total'] ?? 0 ?>)</button>
     </div>
-    <div class="tab-content active" id="tab-desc">
-      <div class="desc-text"><?= nl2br(e($product['description']??'No description available.')) ?></div>
-    </div>
-    <div class="tab-content" id="tab-spec">
+    <div class="tab-content active" id="tab-spec">
       <?php $specs=[['Category',$product['category_name']??'—'],['SKU',$product['sku']??'—'],['HSN Code',$product['hsn_code']?:'—'],['GST Rate',rtrim(rtrim(number_format((float)($product['gst_rate']??18),2,'.',''),'0'),'.').'% (included in price)'],['Weight',$product['weight']?$product['weight'].' kg':'—'],['Stock',$product['stock'].' units'],['Seller',$product['shop_name']??$product['seller_name']]]; ?>
       <div class="spec-grid">
         <?php foreach($specs as [$k,$v]): ?><div class="spec-row"><span class="spec-key"><?= $k ?></span><span class="spec-val"><?= e($v) ?></span></div><?php endforeach; ?>

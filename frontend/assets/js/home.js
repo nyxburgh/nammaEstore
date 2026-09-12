@@ -16,7 +16,12 @@
     slides.style.transform = 'translateX(-' + (slide * (100 / slideCount)) + '%)';
     dots.forEach((d, i) => d.classList.toggle('active', i === slide));
   }
-  if (slideCount > 1) setInterval(() => goSlide(slide + 1), 4000);
+  let autoSlideTimer;
+  function restartAutoSlide() {
+    clearInterval(autoSlideTimer);
+    if (slideCount > 1) autoSlideTimer = setInterval(() => goSlide(slide + 1), 4000);
+  }
+  restartAutoSlide();
 
   // Flash-sale countdown
   let secs = 4 * 3600 + 27 * 60 + 45;
@@ -58,7 +63,9 @@
     const el = e.target.closest('[data-action]');
     if (!el) return;
     switch (el.dataset.action) {
-      case 'go-slide':             goSlide(parseInt(el.dataset.slide, 10)); break;
+      case 'go-slide':             goSlide(parseInt(el.dataset.slide, 10)); restartAutoSlide(); break;
+      case 'hero-prev':            goSlide(slide - 1); restartAutoSlide(); break;
+      case 'hero-next':            goSlide(slide + 1); restartAutoSlide(); break;
       case 'subscribe-newsletter': subscribeNewsletter(el); break;
     }
   });

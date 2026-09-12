@@ -29,6 +29,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135de
 .form-group{margin-bottom:14px;}
 .form-label{display:block;font-size:.78rem;font-weight:700;color:var(--dark);margin-bottom:5px;}
 .form-control{width:100%;padding:10px 13px;border:1.5px solid #e8dff0;border-radius:9px;font-size:.88rem;font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color var(--transition);}
+.password-field-wrap{position:relative;}
+.password-field-wrap .form-control{padding-right:40px;}
+.password-toggle-btn{position:absolute;top:0;right:0;height:100%;width:40px;background:none;border:none;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;color:var(--gray);}
+.password-toggle-btn:hover{color:var(--dark);}
 .form-control:focus{border-color:var(--pink-main);}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .form-grid .form-group{margin-bottom:0;}

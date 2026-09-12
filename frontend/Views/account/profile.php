@@ -2,12 +2,22 @@
 <div class="card">
   <div class="card-head"><span class="card-title">👤 Personal Information</span></div>
   <div class="card-body">
-    <div class="avatar-section">
-      <div class="av-circle"><?= strtoupper(substr($user['name'],0,1)) ?></div>
-      <div class="av-info"><div class="av-name"><?= e($user['name']) ?></div><div class="av-email"><?= e($user['email']) ?></div><div class="av-joined">Member since <?= date('M Y',strtotime($user['created_at']??'now')) ?></div></div>
-    </div>
-    <form method="POST" action="<?= APP_URL ?>/account/profile" onsubmit="return validateForm(this)">
+    <form method="POST" action="<?= APP_URL ?>/account/profile" enctype="multipart/form-data" onsubmit="return validateForm(this)">
   <?= csrf_field() ?>
+    <div class="avatar-section">
+      <div class="av-circle" id="avatarPreviewCircle">
+        <?php if(!empty($user['avatar'])): ?><img src="<?= UPLOAD_URL.'/'.e($user['avatar']) ?>" alt="<?= e($user['name']) ?>'s profile picture" id="avatarPreviewImg">
+        <?php else: ?><span id="avatarPreviewLetter"><?= strtoupper(substr($user['name'],0,1)) ?></span><img id="avatarPreviewImg" class="is-hidden" alt="New profile picture preview">
+        <?php endif; ?>
+      </div>
+      <div class="av-info">
+        <div class="av-name"><?= e($user['name']) ?></div>
+        <div class="av-email"><?= e($user['email']) ?></div>
+        <div class="av-joined">Member since <?= date('M Y',strtotime($user['created_at']??'now')) ?></div>
+        <label class="av-upload-btn" for="avatarInput">📷 Change Photo</label>
+        <input type="file" id="avatarInput" name="avatar" accept="image/png,image/jpeg,image/gif,image/webp" class="is-hidden">
+      </div>
+    </div>
       <div class="form-grid">
         <div class="form-group"><label class="form-label">Full Name</label><input type="text" name="name" class="form-control" value="<?= e($old['name'] ?? $user['name']) ?>" required oninput="validateField(this)" onblur="validateField(this)"></div>
         <div class="form-group"><label class="form-label">Email Address</label><input type="email" name="email" class="form-control" value="<?= e($old['email'] ?? $user['email']) ?>" required oninput="validateField(this)" onblur="validateField(this)"></div>

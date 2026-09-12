@@ -108,10 +108,28 @@ class ProductService
         return $this->db->paginate($sql, $params, $page);
     }
 
+    /** Lightweight name/shop match for the header search-as-you-type dropdown. */
+    public function suggest(string $q, int $limit = 8): array
+    {
+        $s = '%' . $q . '%';
+        return $this->db->fetchAll(
+            $this->baseSelect() . " WHERE p.status='active' AND (p.name LIKE ? OR vp.shop_name LIKE ?)
+              ORDER BY p.views DESC LIMIT ?",
+            [$s, $s, $limit]
+        );
+    }
+
     public function getAll(int $page = 1, array $filters = []): array
     {
         $where  = "p.status = 'active'";
         $params = [];
+
+        // The homepage's Flash Sale / Deals-of-the-day "View All" links land
+        // here with sort=deals — restrict to products that actually carry an
+        // active discount so it doesn't show regular, non-offer products.
+        if (($filters['sort'] ?? '') === 'deals') {
+            $where .= " AND p.sale_price IS NOT NULL AND p.sale_price < p.price";
+        }
 
         if (!empty($filters['categories']) && is_array($filters['categories'])) {
             $catIds = array_map('intval', $filters['categories']);

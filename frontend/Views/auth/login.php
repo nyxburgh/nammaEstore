@@ -8,7 +8,10 @@
   </div>
   <div class="form-group">
     <label class="form-label">Password</label>
-    <input type="password" name="password" id="login_password" class="form-control" required placeholder="Your password" oninput="validateField(this)" onblur="validateField(this)">
+    <div class="password-field-wrap">
+      <input type="password" name="password" id="login_password" class="form-control" required placeholder="Your password" oninput="validateField(this)" onblur="validateField(this)">
+      <button type="button" class="password-toggle-btn" data-action="toggle-password" data-target="login_password" aria-label="Show password">👁️</button>
+    </div>
   </div>
   <?php if(!empty($showCaptcha)): ?>
   <div class="form-group"><?= \App\Core\Captcha::field() ?></div>

@@ -93,6 +93,21 @@ class ReturnRepository extends Repository
         );
     }
 
+    /**
+     * The seller's own approve/reject action on a 'requested' return.
+     * Kept in separate seller_resolved_at/by columns (rather than
+     * reusing resolved_at/resolved_by) so a later admin refund action
+     * doesn't overwrite the record of when/who approved it on the
+     * seller side.
+     */
+    public function updateSellerStatus(int $id, string $status, int $sellerId): void
+    {
+        $this->db->execute(
+            "UPDATE `{$this->t()}` SET status=?, seller_resolved_at=NOW(), seller_resolved_by=? WHERE id=?",
+            [$status, $sellerId, $id]
+        );
+    }
+
     /** Restores stock for an order item back to the product — used for cancellations and physical returns. */
     public function restockItem(int $orderItemId): void
     {

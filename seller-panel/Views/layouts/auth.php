@@ -46,5 +46,6 @@
   </nav>
   <div class="af-copy">&copy; <?= date('Y') ?> Namma E Store. All rights reserved.</div>
 </footer>
+<script src="<?= asset('seller-panel/js/auth.js') ?>"></script>
 </body>
 </html>

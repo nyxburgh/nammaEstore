@@ -78,6 +78,24 @@ class ProductController extends FrontendController
         ]);
     }
 
+    public function suggest(): void
+    {
+        $q = trim($this->input('q', ''));
+        if (mb_strlen($q) < 2) {
+            $this->json(['items' => []]);
+            return;
+        }
+        $items = (new ProductService())->suggest($q, 8);
+        $this->json([
+            'items' => array_map(fn($p) => [
+                'name'  => $p['name'],
+                'slug'  => $p['slug'],
+                'price' => (float) ($p['sale_price'] ?: $p['price']),
+                'image' => !empty($p['image']) ? UPLOAD_URL . '/' . $p['image'] : null,
+            ], $items),
+        ]);
+    }
+
     public function show(string $slug): void
     {
         $svc     = new ProductService();

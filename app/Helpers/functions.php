@@ -21,6 +21,16 @@ function seller_asset(string $path): string {
     return SELLER_ASSETS . '/' . ltrim($path, '/');
 }
 
+// ── Password hashing ─────────────────────────────────────────
+// Argon2id when the running PHP build supports it (memory-hard,
+// the stronger of the two per OWASP), falling back to PASSWORD_DEFAULT
+// (bcrypt) otherwise. password_verify() reads the algorithm from the
+// hash itself, so existing bcrypt hashes keep working unchanged —
+// only new/changed passwords pick up Argon2id.
+function hashPassword(string $plain): string {
+    return password_hash($plain, defined('PASSWORD_ARGON2ID') ? PASSWORD_ARGON2ID : PASSWORD_DEFAULT);
+}
+
 // ── Output helpers ────────────────────────────────────────────
 function e(mixed $v): string {
     return htmlspecialchars((string) ($v ?? ''), ENT_QUOTES, 'UTF-8');

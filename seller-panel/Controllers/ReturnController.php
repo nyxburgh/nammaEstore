@@ -16,4 +16,18 @@ class ReturnController extends SellerController
             'filters'     => $f,
         ]));
     }
+
+    public function approve(string $id): void
+    {
+        Middleware::sellerAuth(); csrf_check();
+        $r = (new SellerReturnService())->approve((int) $id, Auth::sellerId());
+        $this->json($r);
+    }
+
+    public function reject(string $id): void
+    {
+        Middleware::sellerAuth(); csrf_check();
+        $r = (new SellerReturnService())->reject((int) $id, Auth::sellerId());
+        $this->json($r);
+    }
 }

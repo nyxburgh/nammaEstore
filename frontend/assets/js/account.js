@@ -1,6 +1,22 @@
 /* Namma E Store — account sub-page behaviour: toggling the return/replacement
    request form (extracted from order-detail.php per the no-inline-JS rule) */
 
+// Live-preview a newly chosen avatar file before the form is submitted.
+document.addEventListener('change', function (e) {
+  const input = e.target.closest('#avatarInput');
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (!file.type.startsWith('image/')) { showToast('⚠️ Please choose an image file.'); input.value = ''; return; }
+  const reader = new FileReader();
+  reader.onload = function (ev) {
+    const img    = document.getElementById('avatarPreviewImg');
+    const letter = document.getElementById('avatarPreviewLetter');
+    if (img) { img.src = ev.target.result; img.classList.remove('is-hidden'); }
+    if (letter) letter.classList.add('is-hidden');
+  };
+  reader.readAsDataURL(file);
+});
+
 document.addEventListener('submit', function (e) {
   const form = e.target.closest('#cancel-order-form');
   if (form && !confirm('Cancel this order? This cannot be undone.')) {

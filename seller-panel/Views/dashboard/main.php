@@ -742,12 +742,12 @@ $sec = $section ?? 'overview';
 <!-- ══════════════════════════════════════
      RETURNS
 ══════════════════════════════════════ -->
-<div class="page-hd"><div><h1>↩️ Returns & Replacements</h1><p>Requests on your orders — approval is handled by the platform</p></div></div>
+<div class="page-hd"><div><h1>↩️ Returns & Replacements</h1><p>Review requests on your orders — approved requests then go to the platform for the refund</p></div></div>
 
 <div class="card">
   <div class="card-body" style="padding:0;">
     <table class="data-table">
-      <thead><tr><th>Order</th><th>Product</th><th>Customer</th><th>Type</th><th>Reason</th><th>Status</th><th>Requested</th></tr></thead>
+      <thead><tr><th>Order</th><th>Product</th><th>Customer</th><th>Type</th><th>Reason</th><th>Status</th><th>Requested</th><th></th></tr></thead>
       <tbody>
       <?php foreach(($returnsData['data'] ?? []) as $r): ?>
         <tr>
@@ -758,10 +758,18 @@ $sec = $section ?? 'overview';
           <td><?= e($r['reason']) ?></td>
           <td><span class="status <?= ($r['status']==='refunded'||$r['status']==='completed')?'delivered':($r['status']==='rejected'?'cancelled':'pending') ?>"><?= ucfirst($r['status']) ?></span></td>
           <td><?= date('d M Y', strtotime($r['requested_at'])) ?></td>
+          <td>
+          <?php if($r['status']==='requested'): ?>
+            <button class="btn-pink btn-sm" data-action="approve-return" data-return-id="<?= $r['id'] ?>">✓ Approve</button>
+            <button class="btn-danger btn-sm" data-action="reject-return" data-return-id="<?= $r['id'] ?>">✕ Reject</button>
+          <?php elseif($r['status']==='approved'): ?>
+            <span style="font-size:12px;color:#999;">Awaiting platform refund</span>
+          <?php endif; ?>
+          </td>
         </tr>
       <?php endforeach; ?>
       <?php if(empty($returnsData['data'])): ?>
-        <tr><td colspan="7" style="text-align:center;padding:24px;color:#999;">No return requests on your orders.</td></tr>
+        <tr><td colspan="8" style="text-align:center;padding:24px;color:#999;">No return requests on your orders.</td></tr>
       <?php endif; ?>
       </tbody>
     </table>

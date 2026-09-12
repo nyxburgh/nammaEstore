@@ -48,7 +48,7 @@ $canonical = $canonicalUrl ?? (APP_URL . $reqUri);
 </script>
 <?= $structuredData ?? '' ?>
 </head>
-<body data-app-url="<?= APP_URL ?>" data-csrf-token="<?= csrf_token() ?>">
+<body data-app-url="<?= APP_URL ?>" data-csrf-token="<?= csrf_token() ?>" data-logged-in="<?= \App\Core\Auth::isUserLoggedIn() ? '1' : '0' ?>">
 <?php
 $siteName = \App\Frontend\Services\SettingsService::get('site_name','Namma E Store');
 $isLogged = \App\Core\Auth::isUserLoggedIn();
@@ -56,33 +56,25 @@ $user     = \App\Core\Auth::user();
 $cats     = $categories ?? [];
 $cartCnt  = $cartCount ?? 0;
 $sellerLoggedIn = $sellerLoggedIn ?? false;
+$selectedCat = $_GET['category'] ?? '';
 ?>
-
-<!-- FLASH TICKER -->
-<div class="flash-bar">
-  <div class="flash-ticker" id="ticker">
-    <span>Free delivery on orders above ₹499</span>
-    <span>Upto 70% off on Fashion</span>
-    <span><a href="<?= APP_URL ?>/sell">New sellers joining daily – Sell on <?= e($siteName) ?></a></span>
-    <span>EMI available on products above ₹3000</span>
-    <span>Flash Sale: Extra 15% off with code NAMMA15</span>
-    <span>Gift Voucher worth ₹100 with code WELCOME100</span>
-    <span>Free delivery on orders above ₹499</span>
-    <span>Upto 70% off on Fashion</span>
-    <span><a href="<?= APP_URL ?>/sell">New sellers joining daily – Sell on <?= e($siteName) ?></a></span>
-    <span>EMI available on products above ₹3000</span>
-    <span>Flash Sale: Extra 15% off with code NAMMA15</span>
-    <span>Gift Voucher worth ₹100 with code WELCOME100</span>
-  </div>
-</div>
 
 <!-- STICKY HEADER -->
 <header class="header">
   <div class="header-top">
     <a href="<?= APP_URL ?>" class="logo">Namma <span>E</span> Store</a>
     <div class="header-search">
-      <form action="<?= APP_URL ?>/search" method="GET">
-        <input type="text" name="q" placeholder="Search products, brands, sellers..." value="<?= e($_GET['q']??'') ?>">
+      <form action="<?= APP_URL ?>/search" method="GET" class="header-search-form" autocomplete="off">
+        <select name="category" class="header-cat-select" aria-label="All Categories">
+          <option value="">All Categories</option>
+          <?php foreach($cats as $cat): ?>
+          <option value="<?= (int)$cat['id'] ?>" <?= (string)$selectedCat === (string)$cat['id'] ? 'selected' : '' ?>><?= e($cat['name']) ?></option>
+          <?php endforeach; ?>
+        </select>
+        <div class="header-search-input-wrap">
+          <input type="text" name="q" id="headerSearchInput" placeholder="Search products, brands, sellers..." value="<?= e($_GET['q']??'') ?>" autocomplete="off">
+          <div class="search-suggest" id="searchSuggest"></div>
+        </div>
         <button type="submit">🔍</button>
       </form>
     </div>
@@ -95,7 +87,7 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
         <button class="header-btn" data-action="toggle-desk-account"><span class="icon">👤</span><span class="label"><?= $isLogged?e($user['name']):'Account' ?></span></button>
         <div class="desk-account-dropdown" id="deskAccDropdown">
           <div class="desk-acc-header">
-            <div class="desk-acc-avatar"><?= $isLogged?strtoupper(substr($user['name'],0,1)):'👤' ?></div>
+            <div class="desk-acc-avatar"><?php if($isLogged && !empty($user['avatar'])): ?><img src="<?= UPLOAD_URL.'/'.e($user['avatar']) ?>" alt="<?= e($user['name']) ?>'s profile picture"><?php else: ?><?= $isLogged?strtoupper(substr($user['name'],0,1)):'👤' ?><?php endif; ?></div>
             <div class="desk-acc-info">
               <div class="acc-name"><?= $isLogged?e($user['name']):'Hello, Guest!' ?></div>
               <div class="acc-email"><?= $isLogged?e($user['email']):'Login to your account' ?></div>
@@ -113,7 +105,6 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
             <li><a href="<?= APP_URL ?>/logout" class="logout-link">🚪 Logout</a></li>
             <?php else: ?>
             <li><a href="<?= APP_URL ?>/login">🔐 Login</a></li>
-            <li><a href="<?= APP_URL ?>/register">✏️ Register</a></li>
             <li><a href="<?= APP_URL ?>/track">🔍 Track Order</a></li>
             <?php endif; ?>
           </ul>
@@ -129,9 +120,24 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
   <nav class="header-nav">
     <div class="header-nav-inner">
       <a href="<?= APP_URL ?>" class="nav-link">🏠 Home</a>
-      <?php foreach($cats as $cat): ?><a href="<?= APP_URL ?>/category/<?= e($cat['slug']) ?>" class="nav-link"><?= e($cat['name']) ?></a><?php endforeach; ?>
       <a href="<?= APP_URL ?>/products?sort=popular" class="nav-link">🔥 Trending</a>
       <a href="<?= APP_URL ?>/track" class="nav-link">📦 Track Order</a>
+      <div class="flash-ticker-wrap">
+        <div class="flash-ticker" id="ticker">
+          <span>Free delivery on orders above ₹499</span>
+          <span>Upto 70% off on Fashion</span>
+          <span><a href="<?= APP_URL ?>/sell">New sellers joining daily – Sell on <?= e($siteName) ?></a></span>
+          <span>EMI available on products above ₹3000</span>
+          <span>Flash Sale: Extra 15% off with code NAMMA15</span>
+          <span>Gift Voucher worth ₹100 with code WELCOME100</span>
+          <span>Free delivery on orders above ₹499</span>
+          <span>Upto 70% off on Fashion</span>
+          <span><a href="<?= APP_URL ?>/sell">New sellers joining daily – Sell on <?= e($siteName) ?></a></span>
+          <span>EMI available on products above ₹3000</span>
+          <span>Flash Sale: Extra 15% off with code NAMMA15</span>
+          <span>Gift Voucher worth ₹100 with code WELCOME100</span>
+        </div>
+      </div>
     </div>
   </nav>
 </header>
@@ -148,7 +154,7 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
 <div class="cart-overlay" id="cartOverlay" data-action="close-cart"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-header"><h3>🛒 Your Cart (<span id="cartCount"><?= $cartCnt ?></span>)</h3><button class="cart-close" data-action="close-cart">✕</button></div>
-  <div class="cart-body" id="cartBody"><div class="cart-empty"><div class="ce-icon">🛒</div><p>Your cart is empty</p><a href="<?= APP_URL ?>/products" class="btn-shop" data-action="close-cart">Start Shopping →</a></div></div>
+  <div class="cart-body" id="cartBody"><div class="cart-empty"><div class="ce-icon">🛒</div><p>Your cart is empty</p><?php if($isLogged): ?><a href="<?= APP_URL ?>/products" class="btn-shop" data-action="close-cart">Start Shopping →</a><?php else: ?><a href="<?= APP_URL ?>/login" class="btn-shop" data-action="close-cart">Sign in →</a><?php endif; ?></div></div>
   <div class="cart-footer is-hidden" id="cartFooter">
     <div class="free-ship" id="freeShipMsg"></div>
     <div class="cart-total"><span class="label">Total</span><span class="amount" id="cartTotal">₹0</span></div>
@@ -158,15 +164,6 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
 
 <!-- MOBILE OVERLAY -->
 <div class="mob-overlay" id="mobOverlay" data-action="close-all-popups"></div>
-
-<!-- MOBILE CATEGORIES POPUP -->
-<div class="mob-popup" id="mobCatsPopup">
-  <div class="mob-pop-title">🗂️ Categories<button data-action="close-all-popups">✕</button></div>
-  <div class="mob-cat-grid">
-    <?php foreach($cats as $cat): ?><a href="<?= APP_URL ?>/category/<?= e($cat['slug']) ?>" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🏷️</span><span class="c-name"><?= e($cat['name']) ?></span></a><?php endforeach; ?>
-    <a href="<?= APP_URL ?>/products" class="mob-cat-item" data-action="close-all-popups"><span class="c-icon">🛍️</span><span class="c-name">All</span></a>
-  </div>
-</div>
 
 <!-- MOBILE ACCOUNT POPUP -->
 <div class="mob-popup" id="mobAccPopup">
@@ -182,7 +179,6 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
     <li><a href="<?= APP_URL ?>/logout" data-action="close-all-popups"><span class="da-icon">🚪</span> Logout</a></li>
     <?php else: ?>
     <li><a href="<?= APP_URL ?>/login" data-action="close-all-popups"><span class="da-icon">🔐</span> Login</a></li>
-    <li><a href="<?= APP_URL ?>/register" data-action="close-all-popups"><span class="da-icon">✏️</span> Register</a></li>
     <li><a href="<?= APP_URL ?>/track" data-action="close-all-popups"><span class="da-icon">🔍</span> Track Order</a></li>
     <li><a href="<?= APP_URL ?>/info" data-action="close-all-popups"><span class="da-icon">ℹ️</span> Info Center</a></li>
     <li><a href="<?= APP_URL ?>/sell" data-action="close-all-popups"><span class="da-icon">🏪</span> Sell on <?= e($siteName) ?></a></li>
@@ -209,13 +205,13 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
 <nav class="mobile-nav">
   <div class="mobile-nav-inner">
     <a href="<?= APP_URL ?>" class="mob-nav-btn nav-home"><span class="m-icon">🏠</span><span class="m-label">Home</span></a>
-    <button class="mob-nav-btn nav-cats" data-action="toggle-cats"><span class="m-icon">🗂️</span><span class="m-label">Categories</span></button>
-    <div class="mob-nav-center-wrap" data-action="open-cart"><div class="mob-nav-center">🛒<span class="mob-cart-badge" id="cartBadgeMob"><?= $cartCnt ?: '' ?></span></div><span class="mob-nav-center-label">Cart</span></div>
+    <a href="<?= APP_URL ?>/account/wishlist" class="mob-nav-btn nav-wishlist"><span class="m-icon">❤️</span><span class="m-label">Wishlist</span></a>
     <?php if($sellerLoggedIn): ?>
-    <a href="<?= SELLER_URL ?>/dashboard" class="mob-nav-btn"><span class="m-icon">👤</span><span class="m-label">Account</span></a>
+    <a href="<?= SELLER_URL ?>/dashboard" class="mob-nav-center-wrap"><div class="mob-nav-center">👤</div><span class="mob-nav-center-label">Account</span></a>
     <?php else: ?>
-    <button class="mob-nav-btn" data-action="toggle-account"><span class="m-icon">👤</span><span class="m-label">Account</span></button>
+    <div class="mob-nav-center-wrap" data-action="toggle-account"><div class="mob-nav-center">👤</div><span class="mob-nav-center-label">Account</span></div>
     <?php endif; ?>
+    <div class="mob-nav-btn mob-nav-cart-wrap" data-action="open-cart"><span class="m-icon">🛒<span class="mob-cart-badge-sm" id="cartBadgeMob"><?= $cartCnt ?: '' ?></span></span><span class="m-label">Cart</span></div>
     <button class="mob-nav-btn" data-action="toggle-menu"><span class="m-icon">☰</span><span class="m-label">Menu</span></button>
   </div>
 </nav>
@@ -243,7 +239,32 @@ $sellerLoggedIn = $sellerLoggedIn ?? false;
 </div>
 
 <!-- FOOTER -->
+<?php
+$fEmail   = \App\Frontend\Services\SettingsService::get('site_email', 'info@nammaestore.com');
+$fPhone   = \App\Frontend\Services\SettingsService::get('site_phone', '+91 9999999999');
+$fPhoneRaw= preg_replace('/[^0-9]/', '', $fPhone);
+$fAddress = \App\Frontend\Services\SettingsService::get('site_address', '');
+$socials  = [
+    'facebook'  => ['📘', \App\Frontend\Services\SettingsService::get('social_facebook', '')],
+    'instagram' => ['📷', \App\Frontend\Services\SettingsService::get('social_instagram', '')],
+    'twitter'   => ['🐦', \App\Frontend\Services\SettingsService::get('social_twitter', '')],
+    'youtube'   => ['▶️', \App\Frontend\Services\SettingsService::get('social_youtube', '')],
+    'whatsapp'  => ['💬', $fPhoneRaw ? 'https://wa.me/' . $fPhoneRaw : ''],
+];
+?>
 <footer class="footer">
+  <div class="footer-top">
+    <div class="footer-contact">
+      <?php if($fAddress): ?><div class="footer-contact-item">📍 <span><?= e($fAddress) ?></span></div><?php endif; ?>
+      <div class="footer-contact-item">📞 <a href="tel:+<?= e($fPhoneRaw) ?>"><?= e($fPhone) ?></a></div>
+      <div class="footer-contact-item">✉️ <a href="mailto:<?= e($fEmail) ?>"><?= e($fEmail) ?></a></div>
+    </div>
+    <div class="footer-social">
+      <?php foreach($socials as $key => [$icon, $link]): if(!$link) continue; ?>
+      <a href="<?= e($link) ?>" class="footer-social-link" target="_blank" rel="noopener" aria-label="<?= e(ucfirst($key)) ?>"><?= $icon ?></a>
+      <?php endforeach; ?>
+    </div>
+  </div>
   <nav class="footer-links">
     <a href="<?= APP_URL ?>/sell">Sell on <?= e($siteName) ?></a>
     <?php foreach (\App\Frontend\Services\PageService::all() as $pgSlug => $pg): ?>

@@ -337,3 +337,19 @@
     return allValid;
   };
 })();
+
+// ── Password show/hide toggle ──────────────────────────────────
+// Shared across every storefront form with a password field (login,
+// register, reset-password, account password change). Toggling
+// visibility isn't validation, so per the no-inline-JS rule it's
+// wired here via data-action rather than an inline handler.
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest('[data-action="toggle-password"]');
+  if (!btn) return;
+  var input = document.getElementById(btn.dataset.target);
+  if (!input) return;
+  var showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  btn.textContent = showing ? '👁️' : '🙈';
+  btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+});

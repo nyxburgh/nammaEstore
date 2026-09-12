@@ -37,8 +37,8 @@
     <td style="font-size:11.5px;color:var(--muted);"><?= formatDateTime($r['requested_at']) ?></td>
     <td>
       <?php if($r['status']==='requested'): ?>
-      <button class="btn btn-sm btn-success" onclick="rAction(<?= $r['id'] ?>,'approve')"><i class="bi bi-check-lg"></i></button>
-      <button class="btn btn-sm btn-outline-danger" onclick="rAction(<?= $r['id'] ?>,'reject')"><i class="bi bi-x-lg"></i></button>
+      <span class="text-muted" style="font-size:12px;">⏳ Awaiting seller decision</span>
+      <button class="btn btn-sm btn-outline-danger" onclick="rAction(<?= $r['id'] ?>,'reject')" title="Override: reject without waiting for the seller"><i class="bi bi-x-lg"></i></button>
       <?php elseif(in_array($r['status'],['approved','picked_up'])): ?>
       <button class="btn btn-sm btn-primary" onclick="rRefund(<?= $r['id'] ?>)">Mark Refunded</button>
       <?php endif; ?>

@@ -96,6 +96,37 @@ class Middleware
         }
     }
 
+    // ── API guard (JWT bearer token, not the session cookie) ───
+    /**
+     * Verifies the Authorization: Bearer <token> header and returns
+     * its claims (sub/role/email/...). Emits a 401 JSON response and
+     * exits on failure — callers can assume they get valid claims back
+     * or the request already ended.
+     */
+    public static function apiAuth(): array
+    {
+        $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        if ($header === '' && function_exists('apache_request_headers')) {
+            $header = apache_request_headers()['Authorization'] ?? '';
+        }
+        if (!preg_match('/^Bearer\s+(.+)$/i', $header, $m)) {
+            self::jsonError('Missing or malformed Authorization header.');
+        }
+        $claims = \App\Core\Services\JwtService::decode($m[1]);
+        if (!$claims) {
+            self::jsonError('Invalid or expired token.');
+        }
+        return $claims;
+    }
+
+    private static function jsonError(string $message): never
+    {
+        http_response_code(401);
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => $message]);
+        exit;
+    }
+
     // ── Shared ────────────────────────────────────────────────
     private static function forbidden(string $viewFile): void
     {

@@ -42,6 +42,7 @@ class AuthController extends FrontendController
             return;
         }
         unset($_SESSION['show_login_captcha']);
+        $this->setFlash('success', 'Logged in successfully! Welcome back.');
         $this->redirect(APP_URL);
     }
     public function registerForm(): void {

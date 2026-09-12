@@ -43,6 +43,7 @@ $router->post('/reset-password',                    AuthController::class . '@re
 // ── Products ─────────────────────────────────────────────────
 $router->get('/products',                           ProductController::class . '@index');
 $router->get('/search',                             ProductController::class . '@search');
+$router->get('/search/suggest',                     ProductController::class . '@suggest');
 $router->get('/category/{slug}',                    ProductController::class . '@category');
 $router->get('/product/{slug}',                     ProductController::class . '@show');
 $router->post('/product/{id}/review',               ProductController::class . '@submitReview');

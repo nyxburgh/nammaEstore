@@ -51,6 +51,8 @@ $router->post($vp . '/wallet/withdraw',         WalletController::class . '@requ
 
 // ── Returns ───────────────────────────────────────────────────
 $router->get( $vp . '/returns',                 ReturnController::class . '@index');
+$router->post($vp . '/returns/{id}/approve',    ReturnController::class . '@approve');
+$router->post($vp . '/returns/{id}/reject',     ReturnController::class . '@reject');
 
 // ── GST Invoices ──────────────────────────────────────────────
 $router->get( $vp . '/invoices',                InvoiceController::class . '@index');

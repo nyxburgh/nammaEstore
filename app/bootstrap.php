@@ -68,6 +68,16 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// ── Force HTTPS in production ──────────────────────────────────
+// Local XAMPP has no TLS cert, so this only kicks in once APP_ENV is
+// flipped to 'production' (see .env.example) — never redirects a
+// local dev request. Skips CLI (no $_SERVER['REQUEST_METHOD']).
+if (APP_ENV === 'production' && !HTTPS && isset($_SERVER['REQUEST_METHOD'])) {
+    $httpsUrl = 'https://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '/');
+    header('Location: ' . $httpsUrl, true, 301);
+    exit;
+}
+
 // ── Security headers ──────────────────────────────────────────
 // Applied to every response. CSP allows 'unsafe-inline' for both
 // style and script because the admin/seller panels still rely
@@ -79,7 +89,10 @@ if (session_status() === PHP_SESSION_NONE) {
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: strict-origin-when-cross-origin');
-header("Content-Security-Policy: default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; frame-ancestors 'self';");
+// script-src/frame-src/connect-src allow Razorpay's checkout.js overlay
+// (script tag + its own iframe + the XHR calls it makes to Razorpay's API)
+// — required for the online-payment step at /payment/{id} to work at all.
+header("Content-Security-Policy: default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://checkout.razorpay.com; frame-src https://api.razorpay.com https://checkout.razorpay.com; connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com; frame-ancestors 'self';");
 if (HTTPS) {
     header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 }

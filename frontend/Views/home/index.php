@@ -65,8 +65,12 @@ function productCard(array $p): string {
       </div>
       <?php endif; ?>
     </div>
+    <?php $heroSlideCount = !empty($heroBanners) ? count($heroBanners) : 3; ?>
+    <?php if($heroSlideCount > 1): ?>
+    <button class="hero-arrow hero-arrow-prev" data-action="hero-prev" aria-label="Previous banner">‹</button>
+    <button class="hero-arrow hero-arrow-next" data-action="hero-next" aria-label="Next banner">›</button>
+    <?php endif; ?>
     <div class="hero-dots">
-      <?php $heroSlideCount = !empty($heroBanners) ? count($heroBanners) : 3; ?>
       <?php for($hi = 0; $hi < $heroSlideCount; $hi++): ?>
       <div class="hero-dot <?= $hi === 0 ? 'active' : '' ?>" data-action="go-slide" data-slide="<?= $hi ?>"></div>
       <?php endfor; ?>
@@ -108,12 +112,22 @@ function productCard(array $p): string {
     </div>
   </section>
 
+  <!-- POPULAR PRODUCTS -->
+  <?php $popular = !empty($featured) ? $featured : $trending; ?>
+  <section class="reveal home-sec">
+    <div class="section-header"><h2 class="section-title">🌟 Popular Products</h2><a href="<?= APP_URL ?>/products?sort=popular" class="view-all">View All →</a></div>
+    <div class="products-grid" id="popularProducts">
+      <?php foreach($popular as $p): echo productCard($p); endforeach; ?>
+      <?php if(empty($popular)): ?><div class="grid-empty">No products yet — check back soon!</div><?php endif; ?>
+    </div>
+  </section>
+
   <!-- FLASH SALE -->
   <section class="reveal home-sec">
     <div class="flash-header">
       <h2>⚡ Flash Sale</h2>
       <div class="countdown"><div class="count-box" id="ch">04</div><span class="count-sep">:</span><div class="count-box" id="cm">27</div><span class="count-sep">:</span><div class="count-box" id="cs">45</div></div>
-      <a href="<?= APP_URL ?>/products?sort=popular">View All →</a>
+      <a href="<?= APP_URL ?>/products?sort=deals">View All →</a>
     </div>
     <div class="products-grid" id="flashProducts">
       <?php foreach($flashDeals as $p): echo productCard($p); endforeach; ?>
@@ -124,9 +138,9 @@ function productCard(array $p): string {
     </div>
   </section>
 
-  <!-- TRENDING -->
+  <!-- TRENDING SALES -->
   <section class="reveal home-sec">
-    <div class="section-header"><h2 class="section-title">🔥 Trending Now</h2><a href="<?= APP_URL ?>/products?sort=popular" class="view-all">View All →</a></div>
+    <div class="section-header"><h2 class="section-title">🔥 Trending Sales</h2><a href="<?= APP_URL ?>/products?sort=popular" class="view-all">View All →</a></div>
     <div class="products-grid" id="trendingProducts">
       <?php foreach($trending as $p): echo productCard($p); endforeach; ?>
       <?php if(empty($trending)): ?><div class="grid-empty">No products yet — check back soon!</div><?php endif; ?>
@@ -136,7 +150,7 @@ function productCard(array $p): string {
   <!-- DEALS OF THE DAY -->
   <?php if(!empty($deals)): ?>
   <section class="reveal home-sec">
-    <div class="section-header"><h2 class="section-title">🤑 Deals of the Day</h2><a href="<?= APP_URL ?>/products?sort=popular" class="view-all">View All →</a></div>
+    <div class="section-header"><h2 class="section-title">🤑 Deals of the Day</h2><a href="<?= APP_URL ?>/products?sort=deals" class="view-all">View All →</a></div>
     <div class="deals-grid">
       <?php foreach($deals as $d):
         $price = (float)($d['sale_price'] ?: $d['price']);

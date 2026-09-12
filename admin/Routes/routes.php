@@ -150,7 +150,6 @@ $router->post("$p/settlements/withdrawals/{id}/mark-paid", SettlementController:
 
 // ── Returns / Replacements / Cancellations ───────────────────
 $router->get("$p/returns",                  ReturnController::class . '@index');
-$router->post("$p/returns/{id}/approve",    ReturnController::class . '@approve');
 $router->post("$p/returns/{id}/reject",     ReturnController::class . '@reject');
 $router->post("$p/returns/{id}/refund",     ReturnController::class . '@markRefunded');
 

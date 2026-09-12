@@ -17,7 +17,8 @@
           <input type="hidden" name="razorpay_signature"  value="">
         </form>
 
-        <script type="application/json" id="rzpConfig"><?= json_encode([
+        <?php
+        $rzpConfig = [
           'key'         => $gatewayOrder['key'],
           'amount'      => $gatewayOrder['amount'],
           'currency'    => $gatewayOrder['currency'],
@@ -28,7 +29,14 @@
             'name'    => $order['shipping_name'],
             'contact' => $order['shipping_phone'],
           ],
-        ], JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?></script>
+        ];
+        // Opens Razorpay's checkout directly on the method the customer
+        // picked on the checkout page, instead of showing every tab.
+        if (in_array($order['preferred_method'] ?? '', ['upi','card','netbanking','wallet'], true)) {
+            $rzpConfig['method'] = [$order['preferred_method'] => true];
+        }
+        ?>
+        <script type="application/json" id="rzpConfig"><?= json_encode($rzpConfig, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?></script>
         <?php $scripts = '<script src="https://checkout.razorpay.com/v1/checkout.js"></script>'
                        . '<script src="'.asset('frontend/js/payment.js').'"></script>'; ?>
       <?php else: ?>

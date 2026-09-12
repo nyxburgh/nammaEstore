@@ -11,14 +11,14 @@ class SubAdminService
 
     public function create(array $d, int $byAdmin): array {
         if ($this->model->findByEmail($d['email'])) return ['success'=>false,'message'=>'Email already in use.'];
-        $id=$this->model->insert(['name'=>$d['name'],'email'=>$d['email'],'password'=>password_hash($d['password'],PASSWORD_DEFAULT),'role'=>'sub_admin','is_active'=>1,'created_by'=>$byAdmin]);
+        $id=$this->model->insert(['name'=>$d['name'],'email'=>$d['email'],'password'=>hashPassword($d['password']),'role'=>'sub_admin','is_active'=>1,'created_by'=>$byAdmin]);
         if (!empty($d['permissions'])) $this->model->savePermissions($id,$d['permissions']);
         (new ActivityService())->log('admin',$byAdmin,'create_sub_admin','admin_roles',"Created: {$d['name']}");
         return ['success'=>true,'admin_id'=>$id];
     }
     public function update(int $id, array $d, int $byAdmin): array {
         $upd=['name'=>$d['name']];
-        if (!empty($d['password'])) $upd['password']=password_hash($d['password'],PASSWORD_DEFAULT);
+        if (!empty($d['password'])) $upd['password']=hashPassword($d['password']);
         $this->model->update($id,$upd);
         if (isset($d['permissions'])) $this->model->savePermissions($id,$d['permissions']);
         (new ActivityService())->log('admin',$byAdmin,'update_sub_admin','admin_roles',"Updated #$id");

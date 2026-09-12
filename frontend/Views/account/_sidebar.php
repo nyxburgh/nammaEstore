@@ -3,8 +3,9 @@
 
 <div class="acc-hero">
   <div class="acc-hero-inner">
-    <div class="acc-hero-avatar"><?= strtoupper(substr($user['name'],0,1)) ?></div>
-    <div><h1><?= e($title) ?></h1><p>Welcome back, <?= e($user['name']) ?>!</p></div>
+    <div class="acc-hero-avatar"><?php if(!empty($user['avatar'])): ?><img src="<?= UPLOAD_URL.'/'.e($user['avatar']) ?>" alt="<?= e($user['name']) ?>'s profile picture"><?php else: ?><?= strtoupper(substr($user['name'],0,1)) ?><?php endif; ?></div>
+    <div class="acc-hero-text"><h1><?= e($title) ?></h1><p>Welcome back, <?= e($user['name']) ?>!</p></div>
+    <a href="<?= APP_URL ?>/account/profile" class="acc-hero-profile-btn">✏️ Edit Profile</a>
   </div>
 </div>
 
@@ -13,7 +14,7 @@
   <div class="acc-layout">
     <aside class="acc-sidebar">
       <div class="acc-sidebar-header">
-        <div class="acc-av"><?= strtoupper(substr($user['name'],0,1)) ?></div>
+        <div class="acc-av"><?php if(!empty($user['avatar'])): ?><img src="<?= UPLOAD_URL.'/'.e($user['avatar']) ?>" alt="<?= e($user['name']) ?>'s profile picture"><?php else: ?><?= strtoupper(substr($user['name'],0,1)) ?><?php endif; ?></div>
         <div class="acc-uname"><?= e($user['name']) ?></div>
         <div class="acc-uemail"><?= e($user['email']) ?></div>
       </div>
@@ -29,7 +30,7 @@
           [APP_URL.'/account/payments','💳','Payments'],
           [APP_URL.'/account/notifications','🔔','Notifications'],
           [APP_URL.'/account/reviews','⭐','My Reviews'],
-          [APP_URL.'/account/profile','⚙️','Settings'],
+          [APP_URL.'/account/profile','👤','Profile'],
           [APP_URL.'/logout','🚪','Logout'],
         ]; foreach($links as [$href,$ic,$lbl]):
           $isActive = rtrim($currentPath,'/') === rtrim(parse_url($href,PHP_URL_PATH),'/');

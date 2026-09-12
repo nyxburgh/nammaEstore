@@ -59,7 +59,7 @@ class SellerAuthService
                 'name'      => $d['name'],
                 'email'     => $d['email'],
                 'phone'     => $d['phone'] ?? null,
-                'password'  => password_hash($d['password'], PASSWORD_DEFAULT),
+                'password'  => hashPassword($d['password']),
                 'role'      => 'seller',
                 'is_active' => 1,
             ]);

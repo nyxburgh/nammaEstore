@@ -2,6 +2,7 @@
 
 const APP_URL    = document.body.dataset.appUrl;
 const CSRF_TOKEN  = document.body.dataset.csrfToken;
+const IS_LOGGED_IN = document.body.dataset.loggedIn === '1';
 
 // ── Cart State ────────────────────────────────────────────
 function loadCart() {
@@ -65,9 +66,11 @@ function fetchCartItems() {
     const footer = document.getElementById('cartFooter');
     const body   = document.getElementById('cartBody');
     if (d.count === 0 || !d.items.length) {
+      const emptyCta = IS_LOGGED_IN
+        ? '<a href="' + APP_URL + '/products" class="btn-shop" data-action="close-cart">Start Shopping →</a>'
+        : '<a href="' + APP_URL + '/login" class="btn-shop" data-action="close-cart">Sign in →</a>';
       body.innerHTML =
-        '<div class="cart-empty"><div class="ce-icon">🛒</div><p>Your cart is empty</p>' +
-        '<a href="' + APP_URL + '/products" class="btn-shop" data-action="close-cart">Start Shopping →</a></div>';
+        '<div class="cart-empty"><div class="ce-icon">🛒</div><p>Your cart is empty</p>' + emptyCta + '</div>';
       footer.classList.add('is-hidden');
     } else {
       body.innerHTML = d.items.map(cartItemRow).join('');
@@ -163,7 +166,6 @@ document.addEventListener('click', function (e) {
 // ── Mobile Popups ─────────────────────────────────────────
 function closeAllPopups() {
   document.getElementById('mobAccPopup').classList.remove('open');
-  document.getElementById('mobCatsPopup').classList.remove('open');
   const menu = document.getElementById('mobMenuDrawer');
   if (menu) menu.classList.remove('open');
   document.getElementById('mobOverlay').classList.remove('open');
@@ -172,22 +174,66 @@ function closeAllPopups() {
 function toggleMenu() {
   const menu = document.getElementById('mobMenuDrawer'), ov = document.getElementById('mobOverlay');
   document.getElementById('mobAccPopup').classList.remove('open');
-  document.getElementById('mobCatsPopup').classList.remove('open');
   if (menu.classList.contains('open')) { closeAllPopups(); }
   else { menu.classList.add('open'); ov.classList.add('open'); document.body.classList.add('no-scroll'); }
 }
 function toggleAccount() {
   const acc = document.getElementById('mobAccPopup'), ov = document.getElementById('mobOverlay');
-  document.getElementById('mobCatsPopup').classList.remove('open');
   if (acc.classList.contains('open')) { closeAllPopups(); }
   else { acc.classList.add('open'); ov.classList.add('open'); document.body.classList.add('no-scroll'); }
 }
-function toggleCats() {
-  const cats = document.getElementById('mobCatsPopup'), ov = document.getElementById('mobOverlay');
-  document.getElementById('mobAccPopup').classList.remove('open');
-  if (cats.classList.contains('open')) { closeAllPopups(); }
-  else { cats.classList.add('open'); ov.classList.add('open'); document.body.classList.add('no-scroll'); }
-}
+
+// ── Header Search Autosuggest ─────────────────────────────
+(function () {
+  const input = document.getElementById('headerSearchInput');
+  const box   = document.getElementById('searchSuggest');
+  if (!input || !box) return;
+
+  let debounceTimer, activeIndex = -1, currentItems = [];
+
+  function render(items) {
+    currentItems = items;
+    activeIndex = -1;
+    if (!items.length) { box.innerHTML = '<div class="ss-empty">No matching products</div>'; box.classList.add('open'); return; }
+    box.innerHTML = items.map(p =>
+      '<a class="ss-item" href="' + APP_URL + '/product/' + encodeURIComponent(p.slug) + '">' +
+        '<span class="ss-item-img">' + (p.image ? '<img src="' + p.image + '" alt="' + escapeHtml(p.name) + '">' : '🛍️') + '</span>' +
+        '<span class="ss-item-name">' + escapeHtml(p.name) + '</span>' +
+        '<span class="ss-item-price">' + currencyFmt(p.price) + '</span>' +
+      '</a>'
+    ).join('');
+    box.classList.add('open');
+  }
+
+  function close() { box.classList.remove('open'); box.innerHTML = ''; currentItems = []; activeIndex = -1; }
+
+  input.addEventListener('input', function () {
+    clearTimeout(debounceTimer);
+    const q = input.value.trim();
+    if (q.length < 2) { close(); return; }
+    debounceTimer = setTimeout(function () {
+      fetch(APP_URL + '/search/suggest?q=' + encodeURIComponent(q))
+        .then(r => r.json())
+        .then(d => render(d.items || []))
+        .catch(() => {});
+    }, 250);
+  });
+
+  input.addEventListener('keydown', function (e) {
+    const links = box.querySelectorAll('.ss-item');
+    if (!links.length) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); activeIndex = Math.min(activeIndex + 1, links.length - 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); activeIndex = Math.max(activeIndex - 1, 0); }
+    else if (e.key === 'Enter' && activeIndex >= 0) { e.preventDefault(); links[activeIndex].click(); return; }
+    else if (e.key === 'Escape') { close(); return; }
+    else return;
+    links.forEach((l, i) => l.classList.toggle('active', i === activeIndex));
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.header-search-input-wrap')) close();
+  });
+})();
 
 // ── Back to Top ───────────────────────────────────────────
 window.addEventListener('scroll', () => document.getElementById('backTop').classList.toggle('show', window.scrollY > 400));
@@ -246,7 +292,6 @@ document.addEventListener('click', function (e) {
     case 'open-cart':           openCart(); break;
     case 'close-cart':          closeCart(); break;
     case 'close-all-popups':    closeAllPopups(); break;
-    case 'toggle-cats':         toggleCats(); break;
     case 'toggle-account':      toggleAccount(); break;
     case 'toggle-menu':         toggleMenu(); break;
     case 'scroll-top':          window.scrollTo({ top: 0, behavior: 'smooth' }); break;

@@ -125,6 +125,14 @@ define('DB_PREFIX', 'mc_');
 define('SESSION_NAME',     'mycart_session');
 define('SESSION_LIFETIME', 7200);
 
+// ── JWT (api/ — the future React frontend authenticates here with a
+// bearer token instead of the session cookie the server-rendered
+// admin/seller/customer dashboards use; those are untouched) ───────
+// Set a real JWT_SECRET in .env before exposing api/ publicly — the
+// fallback below is fine for local XAMPP only.
+define('JWT_SECRET', getenv('JWT_SECRET') ?: 'dev-insecure-secret-change-me-in-.env');
+define('JWT_TTL',    (int) (getenv('JWT_TTL') ?: 3600)); // seconds
+
 // ── Pagination ────────────────────────────────────────────────
 define('ITEMS_PER_PAGE', 15);
 

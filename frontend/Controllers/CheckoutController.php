@@ -66,14 +66,21 @@ class CheckoutController extends FrontendController
         foreach ($address as $k => $v) {
             if (empty($v)) { $this->setFlash('error','All address fields are required.'); $this->redirect(APP_URL.'/checkout'); return; }
         }
-        $paymentMethod = $this->input('payment_method','cod');
-        if (!in_array($paymentMethod, ['cod','online'], true)) $paymentMethod = 'cod';
+        // The checkout form shows separate cards for COD / UPI / Card /
+        // Net Banking / Wallet, but every non-COD card still routes
+        // through the same Razorpay "online" flow — the sub-method is
+        // only kept as a preference so the gateway page can open
+        // directly on that tab (see PaymentController::page()).
+        $submitted = $this->input('payment_method','cod');
+        $preferredMethod = in_array($submitted, ['upi','card','netbanking','wallet'], true) ? $submitted : null;
+        $paymentMethod   = $submitted === 'cod' ? 'cod' : 'online';
         $result = (new CheckoutService())->placeOrder(
             $summary['items'], $address, $paymentMethod, Auth::userId(),
             $this->input('coupon_code') ?: null,
             $this->input('gift_card_code') ?: null,
             (float) $this->input('wallet_amount', 0),
-            (int) $this->input('loyalty_points', 0)
+            (int) $this->input('loyalty_points', 0),
+            $preferredMethod
         );
         if (!$result['success']) { $this->setFlash('error', $result['message']); $this->redirect(APP_URL.'/checkout'); return; }
         $cart->clear();

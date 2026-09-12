@@ -18,7 +18,7 @@ class CheckoutService
     public function placeOrder(
         array $items, array $address, string $paymentMethod, int $userId,
         ?string $couponCode = null, ?string $giftCardCode = null, float $useWalletAmount = 0,
-        int $useLoyaltyPoints = 0
+        int $useLoyaltyPoints = 0, ?string $preferredMethod = null
     ): array {
         if (empty($items)) return ['success' => false, 'message' => 'Cart is empty.'];
 
@@ -90,16 +90,16 @@ class CheckoutService
                 "INSERT INTO `".DB_PREFIX."orders`
                  (order_number, user_id, shipping_name, shipping_phone,
                   shipping_address, shipping_city, shipping_state, shipping_pincode,
-                  payment_method, payment_status, order_status,
+                  payment_method, preferred_method, payment_status, order_status,
                   subtotal, shipping_charge, discount, coupon_id, coupon_code,
                   gift_card_amount, wallet_amount, loyalty_points_used, total, placed_at)
-                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())",
+                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())",
                 [
                     $orderNumber, $userId,
                     $address['name'],    $address['phone'],
                     $address['address'], $address['city'],
                     $address['state'],   $address['pincode'],
-                    $paymentMethod, 'pending', 'placed',
+                    $paymentMethod, $preferredMethod, 'pending', 'placed',
                     $subtotal, $shipping, $couponDiscount,
                     $coupon['id'] ?? null, $coupon['code'] ?? null,
                     $giftCardApply, $walletApply, $loyaltyPointsToRedeem, $total,
@@ -241,6 +241,14 @@ class CheckoutService
                 // Order already exists — log rather than fail the
                 // whole checkout at this point.
                 error_log('Post-order discount redemption failed for order ' . $orderId . ': ' . $e->getMessage());
+            }
+
+            // COD orders are confirmed the moment they're placed, so the
+            // email goes out now. Online orders aren't genuinely
+            // confirmed until payment clears — that email is sent from
+            // PaymentController::callback() instead.
+            if ($paymentMethod === 'cod') {
+                (new OrderEmailService())->sendConfirmation($orderId);
             }
 
             return [

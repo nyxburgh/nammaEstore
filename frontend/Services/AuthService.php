@@ -79,7 +79,7 @@ class AuthService
             'name'        => $d['name'],
             'email'       => $d['email'],
             'phone'       => $d['phone'] ?? null,
-            'password'    => password_hash($d['password'], PASSWORD_DEFAULT),
+            'password'    => hashPassword($d['password']),
             'role'        => 'customer',
             'is_active'   => 1,
             'is_verified' => 0,
@@ -136,7 +136,7 @@ class AuthService
         if (!$user) return ['success' => false, 'message' => 'Account not found.'];
 
         $this->users->update($user['id'], [
-            'password'              => password_hash($newPassword, PASSWORD_DEFAULT),
+            'password'              => hashPassword($newPassword),
             'failed_login_attempts' => 0,
             'locked_until'          => null,
             'remember_token'        => null,

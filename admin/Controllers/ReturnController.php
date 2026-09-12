@@ -24,13 +24,6 @@ class ReturnController extends AdminController
         ]);
     }
 
-    public function approve(string $id): void
-    {
-        Middleware::adminAuth(); csrf_check();
-        $this->service->approve((int) $id, Auth::adminId());
-        $this->json(['success' => true]);
-    }
-
     public function reject(string $id): void
     {
         Middleware::adminAuth(); csrf_check();
@@ -41,7 +34,7 @@ class ReturnController extends AdminController
     public function markRefunded(string $id): void
     {
         Middleware::adminAuth(); csrf_check();
-        $this->service->markRefunded((int) $id, Auth::adminId(), (float) $this->input('refund_amount', 0));
-        $this->json(['success' => true]);
+        $r = $this->service->markRefunded((int) $id, Auth::adminId(), (float) $this->input('refund_amount', 0));
+        $this->json($r);
     }
 }

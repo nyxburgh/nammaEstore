@@ -1,7 +1,7 @@
 <?php
 namespace App\Frontend\Controllers;
 use App\Core\{Auth, Middleware, Database, ProviderFactory};
-use App\Frontend\Services\{CartService, SettingsService};
+use App\Frontend\Services\{CartService, SettingsService, OrderEmailService};
 
 /**
  * Online-payment step after checkout. The order already exists with
@@ -90,6 +90,7 @@ class PaymentController extends FrontendController
             "UPDATE `".DB_PREFIX."orders` SET payment_status='paid' WHERE id=?",
             [$order['id']]
         );
+        (new OrderEmailService())->sendConfirmation((int) $order['id']);
         $this->setFlash('success', 'Payment received — thank you!');
         $this->redirect(APP_URL.'/checkout/success/'.$order['id']);
     }
@@ -109,6 +110,7 @@ class PaymentController extends FrontendController
             "UPDATE `".DB_PREFIX."payments` SET status='failed', gateway_response=? WHERE order_id=? AND status='pending'",
             [json_encode(['note' => 'Customer switched to COD']), $order['id']]
         );
+        (new OrderEmailService())->sendConfirmation((int) $order['id']);
         $this->setFlash('success', 'Order switched to Cash on Delivery.');
         $this->redirect(APP_URL.'/checkout/success/'.$order['id']);
     }

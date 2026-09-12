@@ -102,7 +102,7 @@ class AccountController extends FrontendController
     public function updateProfile(): void {
         csrf_check();
         Middleware::userAuth();
-        $r = (new AccountService())->updateProfile(Auth::userId(), $_POST);
+        $r = (new AccountService())->updateProfile(Auth::userId(), $_POST, $_FILES['avatar'] ?? null);
         $this->setFlash($r['success']?'success':'error', $r['success']?'Profile updated.':$r['message']);
         if (!$r['success']) { $this->redirectWithInput(APP_URL.'/account/profile'); return; }
         $this->redirect(APP_URL.'/account/profile');

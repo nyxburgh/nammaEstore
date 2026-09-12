@@ -8,7 +8,10 @@
   </div>
   <div class="form-group">
     <label class="form-label">Password</label>
-    <input type="password" name="password" class="form-control" required placeholder="Your password">
+    <div class="password-field-wrap">
+      <input type="password" name="password" id="login_password" class="form-control" required placeholder="Your password">
+      <button type="button" class="password-toggle-btn" data-action="toggle-password" data-target="login_password" aria-label="Show password">👁️</button>
+    </div>
   </div>
   <button type="submit" class="btn-auth">Sign In to Dashboard →</button>
 </form>

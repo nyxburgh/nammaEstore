@@ -24,6 +24,11 @@
 .hero-cta.purple{color:#7b1fa2;}
 .hero-deco{position:absolute;right:80px;font-size:10rem;opacity:.2;pointer-events:none;}
 @media(max-width:768px){.hero-deco{font-size:5rem;right:20px;}}
+.hero-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.25);border:none;color:white;font-size:1.6rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:3;transition:background var(--transition);}
+.hero-arrow:hover{background:rgba(255,255,255,.45);}
+.hero-arrow-prev{left:16px;}
+.hero-arrow-next{right:16px;}
+@media(max-width:768px){.hero-arrow{width:32px;height:32px;font-size:1.3rem;}.hero-arrow-prev{left:8px;}.hero-arrow-next{right:8px;}}
 .hero-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;}
 .hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:all var(--transition);}
 .hero-dot.active{background:white;width:20px;border-radius:4px;}

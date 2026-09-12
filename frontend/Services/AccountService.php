@@ -64,8 +64,8 @@ class AccountService
             [$orderId, $userId]
         );
         if (!$order) return ['success' => false, 'message' => 'Order not found.'];
-        if (!in_array($order['order_status'], ['placed', 'confirmed', 'processing'], true)) {
-            return ['success' => false, 'message' => 'This order can no longer be cancelled — it has already shipped.'];
+        if ($order['order_status'] !== 'placed') {
+            return ['success' => false, 'message' => 'This order can no longer be cancelled — it is already being processed.'];
         }
 
         $items = $this->db->fetchAll(
@@ -183,7 +183,7 @@ class AccountService
         );
     }
 
-    public function updateProfile(int $userId, array $d): array
+    public function updateProfile(int $userId, array $d, ?array $avatarFile = null): array
     {
         $um = new UserRepository();
         if (!empty($d['email'])) {
@@ -199,12 +199,19 @@ class AccountService
             'email' => $d['email'] ?? null,
         ], fn($v) => $v !== null && $v !== '');
 
+        if ($avatarFile && ($avatarFile['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
+            $path = uploadFile($avatarFile, 'avatars');
+            if ($path === null) return ['success' => false, 'message' => 'Profile image must be JPG, PNG, GIF or WEBP and under 5MB.'];
+            $update['avatar'] = $path;
+        }
+
         if (!empty($update)) $um->update($userId, $update);
 
         // Refresh session
         $fresh = $um->findById($userId);
-        $_SESSION['user']['name']  = $fresh['name'];
-        $_SESSION['user']['email'] = $fresh['email'];
+        $_SESSION['user']['name']   = $fresh['name'];
+        $_SESSION['user']['email']  = $fresh['email'];
+        $_SESSION['user']['avatar'] = $fresh['avatar'] ?? null;
 
         return ['success' => true];
     }
@@ -217,7 +224,7 @@ class AccountService
         if (strlen($new) < 8)
             return ['success' => false, 'message' => 'New password must be at least 8 characters.'];
 
-        (new UserRepository())->update($userId, ['password' => password_hash($new, PASSWORD_DEFAULT)]);
+        (new UserRepository())->update($userId, ['password' => hashPassword($new)]);
         return ['success' => true, 'message' => 'Password updated successfully.'];
     }
 

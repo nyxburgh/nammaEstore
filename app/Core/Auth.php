@@ -53,11 +53,12 @@ class Auth
     public static function loginUser(array $user): void
     {
         $_SESSION['user'] = [
-            'id'    => $user['id'],
-            'name'  => $user['name'],
-            'email' => $user['email'],
-            'phone' => $user['phone'] ?? null,
-            'role'  => $user['role'],
+            'id'     => $user['id'],
+            'name'   => $user['name'],
+            'email'  => $user['email'],
+            'phone'  => $user['phone'] ?? null,
+            'role'   => $user['role'],
+            'avatar' => $user['avatar'] ?? null,
         ];
     }
     public static function user(): ?array          { return $_SESSION['user'] ?? null; }

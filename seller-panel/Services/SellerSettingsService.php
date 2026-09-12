@@ -54,7 +54,7 @@ class SellerSettingsService
         }
 
         $this->users->update($sellerId, [
-            'password' => password_hash($new, PASSWORD_DEFAULT),
+            'password' => hashPassword($new),
         ]);
         return ['success' => true];
     }

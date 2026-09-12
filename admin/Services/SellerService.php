@@ -13,7 +13,7 @@ class SellerService
         if ($this->users->findByEmail($d['email'])) return ['success'=>false,'message'=>'Email already registered.'];
         $this->db->beginTransaction();
         try {
-            $uid = $this->users->insert(['name'=>$d['name'],'email'=>$d['email'],'phone'=>$d['phone']??null,'password'=>password_hash($d['password'],PASSWORD_DEFAULT),'role'=>'seller','is_active'=>1,'is_verified'=>1,'created_by'=>$byAdmin]);
+            $uid = $this->users->insert(['name'=>$d['name'],'email'=>$d['email'],'phone'=>$d['phone']??null,'password'=>hashPassword($d['password']),'role'=>'seller','is_active'=>1,'is_verified'=>1,'created_by'=>$byAdmin]);
             $this->db->insert("INSERT INTO `".DB_PREFIX."seller_profiles` (user_id,shop_name,shop_slug,description,gst_number,pan_number,status,approved_by,approved_at) VALUES(?,?,?,?,?,?,'active',?,NOW())", [$uid,$d['shop_name'],slugify($d['shop_name']).'-'.$uid,$d['description']??null,$d['gst_number']??null,$d['pan_number']??null,$byAdmin]);
             $free=$this->db->fetchOne("SELECT id FROM `".DB_PREFIX."subscription_plans` WHERE slug='free' LIMIT 1");
             if ($free) $this->db->insert("INSERT INTO `".DB_PREFIX."seller_subscriptions` (seller_id,plan_id,status,started_at,amount_paid) VALUES(?,?,'active',NOW(),0)", [$uid,$free['id']]);
@@ -48,7 +48,7 @@ class SellerService
                     $this->db->rollBack();
                     return ['success' => false, 'message' => 'Password must be at least 8 characters.'];
                 }
-                $userUpdate['password'] = password_hash($d['password'], PASSWORD_DEFAULT);
+                $userUpdate['password'] = hashPassword($d['password']);
             }
             $this->users->update($uid, $userUpdate);
             $this->db->execute(

@@ -59,13 +59,26 @@
           <div class="card-head"><span class="card-title">💳 Payment Method</span></div>
           <div class="card-body">
             <div class="payment-opts">
-              <?php foreach([['cod','💰','Cash on Delivery','Pay when your order arrives'],['online','💳','Pay Online','UPI, Cards & Net Banking via secure gateway']] as [$v,$ic,$t,$s]): ?>
-              <div class="payment-opt <?= $v==='cod'?'selected':'' ?>">
-                <span class="po-icon"><?= $ic ?></span>
-                <div><div class="po-title"><?= $t ?></div><div class="po-sub"><?= $s ?></div></div>
-                <input type="radio" name="payment_method" value="<?= $v ?>" class="payment-radio visually-hidden" <?= $v==='cod'?'checked':'' ?>>
+              <div class="payment-opt payment-opt-cod selected">
+                <span class="po-icon">💰</span>
+                <div><div class="po-title">Cash on Delivery</div><div class="po-sub">Pay when your order arrives</div></div>
+                <input type="radio" name="payment_method" value="cod" class="payment-radio visually-hidden" checked>
               </div>
-              <?php endforeach; ?>
+              <div class="payment-opts-grid">
+                <?php foreach([
+                  ['upi','📱','UPI','Google Pay, PhonePe, Paytm'],
+                  ['card','💳','Credit / Debit Card','Visa, Mastercard, RuPay'],
+                  ['netbanking','🏦','Net Banking','All major banks'],
+                  ['wallet','👛','Wallet','Paytm, Amazon Pay & more'],
+                ] as [$v,$ic,$t,$s]): ?>
+                <div class="payment-opt">
+                  <span class="po-icon"><?= $ic ?></span>
+                  <div><div class="po-title"><?= $t ?></div><div class="po-sub"><?= $s ?></div></div>
+                  <input type="radio" name="payment_method" value="<?= $v ?>" class="payment-radio visually-hidden">
+                </div>
+                <?php endforeach; ?>
+              </div>
+              <div class="payment-gateway-note">🔒 Online payments are processed securely via Razorpay</div>
             </div>
           </div>
         </div>

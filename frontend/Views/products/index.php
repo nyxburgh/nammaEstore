@@ -51,7 +51,7 @@
         </div>
         <div class="filter-group">
           <h4>Sort By</h4>
-          <?php foreach(['newest'=>'Newest First','popular'=>'Most Popular','price_asc'=>'Price: Low to High','price_desc'=>'Price: High to Low'] as $val=>$lbl): ?>
+          <?php foreach(['newest'=>'Newest First','popular'=>'Most Popular','deals'=>'Flash Deals','price_asc'=>'Price: Low to High','price_desc'=>'Price: High to Low'] as $val=>$lbl): ?>
           <label class="sort-radio">
             <input type="radio" name="sort" value="<?= $val ?>" <?= ($filters['sort']??'newest')===$val?'checked':'' ?>>
             <?= $lbl ?>
@@ -74,7 +74,7 @@
             <?php if(!empty($filters['min_price'])): ?><input type="hidden" name="min_price" value="<?= e($filters['min_price']) ?>"><?php endif; ?>
             <?php if(!empty($filters['max_price'])): ?><input type="hidden" name="max_price" value="<?= e($filters['max_price']) ?>"><?php endif; ?>
             <select name="sort" class="sort-select" data-action="submit-on-change">
-              <?php foreach(['newest'=>'Newest','popular'=>'Popular','price_asc'=>'Price ↑','price_desc'=>'Price ↓'] as $v=>$l): ?>
+              <?php foreach(['newest'=>'Newest','popular'=>'Popular','deals'=>'Flash Deals','price_asc'=>'Price ↑','price_desc'=>'Price ↓'] as $v=>$l): ?>
               <option value="<?= $v ?>" <?= ($filters['sort']??'newest')===$v?'selected':'' ?>><?= $l ?></option>
               <?php endforeach; ?>
             </select>
