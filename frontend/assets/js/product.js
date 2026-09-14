@@ -8,6 +8,11 @@
   const maxStock  = parseInt(page.dataset.maxStock, 10) || 1;
   let selectedVariant = null;
 
+  function scrollThumbs(dir) {
+    const strip = document.getElementById('thumbStrip');
+    if (strip) strip.scrollBy({ left: dir * 160, behavior: 'smooth' });
+  }
+
   function switchImg(thumb) {
     const mi = document.getElementById('mainImg');
     if (mi) mi.src = thumb.dataset.src;
@@ -34,6 +39,19 @@
     selectedVariant = parseInt(btn.dataset.variant, 10);
     document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+  }
+
+  function remindRestock(btn) {
+    const fd = new FormData();
+    fd.append('_csrf_token', typeof CSRF_TOKEN !== 'undefined' ? CSRF_TOKEN : '');
+    btn.disabled = true;
+    fetch(APP_URL + '/product/' + btn.dataset.productId + '/notify-restock', { method: 'POST', body: fd })
+      .then(r => r.json()).then(d => {
+        if (d.requireLogin) { location.href = APP_URL + '/login'; return; }
+        showToast((d.success ? '✅ ' : '⚠️ ') + d.message);
+        if (d.success) { btn.textContent = '🔔 We’ll notify you'; }
+        else btn.disabled = false;
+      }).catch(() => { showToast('⚠️ Something went wrong.'); btn.disabled = false; });
   }
 
   function addToCartFromDetail() {
@@ -76,10 +94,12 @@
     if (!el) return;
     switch (el.dataset.action) {
       case 'switch-img':      switchImg(el); break;
+      case 'scroll-thumbs':   scrollThumbs(parseInt(el.dataset.dir, 10)); break;
       case 'switch-tab':      switchTab(el); break;
       case 'change-qty':      changeQty(parseInt(el.dataset.delta, 10)); break;
       case 'select-variant':  selectVariant(el); break;
       case 'add-detail':      addToCartFromDetail(); break;
+      case 'remind-restock':  remindRestock(el); break;
       case 'buy-now':         addToCartFromDetail(); setTimeout(() => location.href = APP_URL + '/checkout', 600); break;
       case 'set-rating':      setRating(parseInt(el.dataset.star, 10)); break;
       case 'submit-review':   submitReview(); break;

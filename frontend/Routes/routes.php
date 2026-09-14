@@ -47,6 +47,7 @@ $router->get('/search/suggest',                     ProductController::class . '
 $router->get('/category/{slug}',                    ProductController::class . '@category');
 $router->get('/product/{slug}',                     ProductController::class . '@show');
 $router->post('/product/{id}/review',               ProductController::class . '@submitReview');
+$router->post('/product/{id}/notify-restock',       ProductController::class . '@notifyRestock');
 
 // ── Cart ─────────────────────────────────────────────────────
 $router->get('/cart',                               CartController::class . '@index');

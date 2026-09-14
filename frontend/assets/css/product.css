@@ -7,14 +7,18 @@
 .breadcrumb-inner .sep{opacity:.4;}
 .breadcrumb-inner .current{color:var(--pink-deep);font-weight:600;}
 
-.product-layout{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:32px;}
+.product-layout{display:grid;grid-template-columns:6fr 5fr;gap:32px;margin-bottom:32px;}
 @media(max-width:900px){.product-layout{grid-template-columns:1fr;gap:20px;}}
 
 /* Gallery */
-.gallery{position:sticky;top:80px;}
+/* min-width:0 overrides the grid track's implicit min-width:auto —
+   without it, the thumbnail strip's intrinsic content width (all
+   thumbnails laid out flat) forces this whole column wider than the
+   viewport instead of the strip scrolling within it. */
+.gallery{position:sticky;top:80px;min-width:0;}
 @media(max-width:900px){.gallery{position:static;}}
-.main-img-wrap{background:white;border-radius:var(--radius);border:1.5px solid #f0e6ef;overflow:hidden;aspect-ratio:4/3;max-height:340px;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:12px;cursor:zoom-in;}
-@media(max-width:600px){.main-img-wrap{max-height:260px;}}
+.main-img-wrap{background:white;border-radius:var(--radius);border:1.5px solid #f0e6ef;overflow:hidden;aspect-ratio:1;max-height:560px;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:12px;cursor:zoom-in;}
+@media(max-width:600px){.main-img-wrap{max-height:340px;}}
 .main-img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease;}
 .main-img-wrap:hover .main-img{transform:scale(1.06);}
 .main-img-placeholder{font-size:8rem;transition:transform .4s ease;}
@@ -25,8 +29,11 @@
 .img-badge.hot{background:var(--gold);color:var(--dark);}
 .img-wish{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;background:white;border:none;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.12);transition:all var(--transition);}
 .img-wish:hover{background:var(--pink-soft);transform:scale(1.1);}
-.thumbnails{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.thumbnails-wrap{display:flex;align-items:center;gap:6px;min-width:0;}
+.thumbnails{display:flex;flex:1;min-width:0;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;scroll-behavior:smooth;}
 .thumbnails::-webkit-scrollbar{display:none;}
+.thumb-scroll-btn{flex-shrink:0;width:26px;height:26px;border-radius:50%;border:1.5px solid #f0e6ef;background:white;color:var(--dark);font-size:1.1rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition);}
+.thumb-scroll-btn:hover{border-color:var(--pink-main);color:var(--pink-main);}
 .thumb{width:62px;height:62px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid #f0e6ef;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--pink-pale);transition:border-color var(--transition);}
 .thumb.active,.thumb:hover{border-color:var(--pink-main);}
 .thumb img{width:100%;height:100%;object-fit:cover;}
@@ -68,6 +75,11 @@
 .btn-buy{grid-column:1/-1;padding:14px;background:var(--dark);color:white;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all var(--transition);}
 .btn-buy:hover{background:var(--blue-main);}
 .btn-oos{opacity:.5;cursor:not-allowed;width:100%;padding:14px;border:none;border-radius:12px;font-size:1rem;font-weight:700;background:#ccc;color:white;}
+.oos-block{background:var(--red-pale);border:1.5px dashed var(--red);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px;}
+.oos-msg{font-size:.95rem;font-weight:700;color:var(--red);margin-bottom:10px;}
+.btn-remind{padding:11px 22px;background:var(--dark);color:white;border:none;border-radius:10px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all var(--transition);}
+.btn-remind:hover{background:var(--blue-main);}
+.btn-remind:disabled{opacity:.6;cursor:default;}
 
 /* Perks strip (free delivery / returns / secure pay) */
 .perk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}

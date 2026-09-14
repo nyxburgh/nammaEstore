@@ -8,6 +8,21 @@ class HomeController extends FrontendController
     public function index(): void
     {
         $svc = new ProductService();
+        // Fixed set of popular categories for the "Recommended For You"
+        // tabs — a curated slice rather than every category, so the
+        // section stays a quick a glance, not a repeat of "Shop by Category".
+        $recommendedTabs = [
+            'fashion'     => 'Fashion',
+            'electronics' => 'Electronics',
+            'gaming'      => 'Gaming',
+            'sports'      => 'Sports',
+        ];
+        $recommended = [];
+        foreach ($recommendedTabs as $slug => $label) {
+            $products = $svc->getByCategorySlug($slug, 8);
+            if (!empty($products)) $recommended[$slug] = ['label' => $label, 'products' => $products];
+        }
+
         $this->view('home.index', [
             'title'       => SettingsService::get('site_name', 'Namma E Store') . ' — Multi-Seller Marketplace',
             'heroBanners' => (new BannerService())->getByPosition('hero'),
@@ -17,6 +32,7 @@ class HomeController extends FrontendController
             'deals'       => $svc->getDeals(4),
             'featured'    => $svc->getFeatured(6),
             'categories'  => $svc->getCategories(),
+            'recommended' => $recommended,
             'cartCount'   => (new CartService())->getCount(),
             'settings'    => SettingsService::all(),
         ]);

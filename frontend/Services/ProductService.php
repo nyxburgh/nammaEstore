@@ -93,7 +93,18 @@ class ProductService
         $where  = "p.status = 'active' AND (p.name LIKE ? OR p.description LIKE ? OR vp.shop_name LIKE ?)";
         $params = [$s, $s, $s];
 
-        if (!empty($filters['category'])) {
+        // Same filter set as getAll() — the sidebar's category checkboxes,
+        // price range, and "Flash Deals" sort are shared markup with the
+        // plain /products listing and must behave the same way here.
+        if (($filters['sort'] ?? '') === 'deals') {
+            $where .= " AND p.sale_price IS NOT NULL AND p.sale_price < p.price";
+        }
+        if (!empty($filters['categories']) && is_array($filters['categories'])) {
+            $catIds = array_map('intval', $filters['categories']);
+            $placeholders = implode(',', array_fill(0, count($catIds), '?'));
+            $where   .= " AND p.category_id IN ({$placeholders})";
+            array_push($params, ...$catIds);
+        } elseif (!empty($filters['category'])) {
             $where   .= " AND p.category_id = ?";
             $params[] = (int)$filters['category'];
         }
@@ -101,11 +112,38 @@ class ProductService
             $where   .= " AND p.seller_id = ?";
             $params[] = (int)$filters['seller_id'];
         }
+        if (!empty($filters['min_price'])) {
+            $where   .= " AND COALESCE(p.sale_price, p.price) >= ?";
+            $params[] = (float)$filters['min_price'];
+        }
+        if (!empty($filters['max_price'])) {
+            $where   .= " AND COALESCE(p.sale_price, p.price) <= ?";
+            $params[] = (float)$filters['max_price'];
+        }
 
         $order = $this->sortClause($filters['sort'] ?? 'popular');
         $sql   = $this->baseSelect() . " WHERE {$where} ORDER BY {$order}";
 
         return $this->db->paginate($sql, $params, $page);
+    }
+
+    public function getCategoryById(int $id): ?array
+    {
+        return $this->db->fetchOne("SELECT * FROM `".DB_PREFIX."categories` WHERE id = ?", [$id]);
+    }
+
+    /**
+     * Products for one category slug, keyed for the homepage's
+     * "Recommended For You" tabs. Falls back to an empty array (the
+     * view skips a tab with no products) rather than erroring when a
+     * category slug doesn't exist in this install's seed data.
+     */
+    public function getByCategorySlug(string $slug, int $limit = 8): array
+    {
+        return $this->db->fetchAll(
+            $this->baseSelect() . " WHERE p.status='active' AND c.slug = ? ORDER BY p.views DESC LIMIT ?",
+            [$slug, $limit]
+        );
     }
 
     /** Lightweight name/shop match for the header search-as-you-type dropdown. */

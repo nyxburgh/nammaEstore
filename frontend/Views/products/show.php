@@ -26,12 +26,16 @@
         <button class="img-wish" id="wishBtn" data-action="toggle-wishlist" data-product-id="<?= (int)$product['id'] ?>"><?= $isWishlisted?'❤️':'🤍' ?></button>
       </div>
       <?php if(count($product['images'])>1): ?>
-      <div class="thumbnails">
-        <?php foreach($product['images'] as $i=>$img): ?>
-        <div class="thumb <?= $i===0?'active':'' ?>" data-action="switch-img" data-src="<?= UPLOAD_URL.'/'.$img['image_path'] ?>">
-          <img src="<?= UPLOAD_URL.'/'.$img['image_path'] ?>" alt="<?= e($img['alt_text'] ?? $product['name']) ?> — thumbnail <?= $i+1 ?>">
+      <div class="thumbnails-wrap">
+        <button class="thumb-scroll-btn thumb-scroll-prev" data-action="scroll-thumbs" data-dir="-1" aria-label="Scroll thumbnails left">‹</button>
+        <div class="thumbnails" id="thumbStrip">
+          <?php foreach($product['images'] as $i=>$img): ?>
+          <div class="thumb <?= $i===0?'active':'' ?>" data-action="switch-img" data-src="<?= UPLOAD_URL.'/'.$img['image_path'] ?>">
+            <img src="<?= UPLOAD_URL.'/'.$img['image_path'] ?>" alt="<?= e($img['alt_text'] ?? $product['name']) ?> — thumbnail <?= $i+1 ?>">
+          </div>
+          <?php endforeach; ?>
         </div>
-        <?php endforeach; ?>
+        <button class="thumb-scroll-btn thumb-scroll-next" data-action="scroll-thumbs" data-dir="1" aria-label="Scroll thumbnails right">›</button>
       </div>
       <?php endif; ?>
     </div>
@@ -98,7 +102,10 @@
         <button class="btn-buy" data-action="buy-now">⚡ Buy Now</button>
       </div>
       <?php else: ?>
-      <button class="btn-oos" disabled>Out of Stock</button>
+      <div class="oos-block">
+        <div class="oos-msg">😔 Sorry, Out of Stock</div>
+        <button class="btn-remind" data-action="remind-restock" data-product-id="<?= (int)$product['id'] ?>">🔔 Remind Me Later</button>
+      </div>
       <?php endif; ?>
 
       <div class="divider-line"></div>

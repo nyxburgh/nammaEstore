@@ -2,6 +2,7 @@
 namespace App\Frontend\Controllers;
 use App\Core\Auth;
 use App\Frontend\Services\{ProductService, CartService, SettingsService, ReviewService, WishlistService};
+use App\Repositories\StockNotificationRepository;
 
 class ProductController extends FrontendController
 {
@@ -59,20 +60,33 @@ class ProductController extends FrontendController
         $q       = trim($this->input('q', ''));
         $svc     = new ProductService();
         $filters = [
-            'sort'     => $this->input('sort', 'popular'),
-            'category' => $this->input('category'),
+            'sort'       => $this->input('sort', 'popular'),
+            'category'   => $this->input('category'),
+            'categories' => array_filter((array)($_GET['categories'] ?? [])),
+            'min_price'  => $this->input('min_price'),
+            'max_price'  => $this->input('max_price'),
         ];
 
+        // Reached with a category picked from the header search bar's
+        // "All Categories" dropdown but no typed keyword — resolve the
+        // category name so the page heading can show it instead of the
+        // empty Search: "" that a blank $q would otherwise produce.
+        $searchCategory = !empty($filters['category']) ? $svc->getCategoryById((int) $filters['category']) : null;
+        $headingLabel = $q !== ''
+            ? 'Search: "' . $q . '"'
+            : ($searchCategory ? '"' . $searchCategory['name'] . '"' : '"All Products"');
+
         $this->view('products.index', [
-            'title'      => $q
-                            ? 'Search: "' . e($q) . '" — ' . SettingsService::get('site_name', 'Namma E Store')
-                            : 'All Products — ' . SettingsService::get('site_name', 'Namma E Store'),
-            'products'   => $q
+            'title'      => ($q !== '' ? 'Search: "' . e($q) . '"' : ($searchCategory ? e($searchCategory['name']) : 'All Products'))
+                            . ' — ' . SettingsService::get('site_name', 'Namma E Store'),
+            'products'   => $q !== ''
                             ? $svc->search($q, (int)$this->input('page', 1), $filters)
                             : $svc->getAll((int)$this->input('page', 1), $filters),
             'categories' => $svc->getCategories(),
             'filters'    => $filters,
             'searchQ'    => $q,
+            'searchCategory' => $searchCategory,
+            'headingLabel'   => $headingLabel,
             'cartCount'  => (new CartService())->getCount(),
             'settings'   => SettingsService::all(),
         ]);
@@ -158,6 +172,23 @@ class ProductController extends FrontendController
             'categories'   => $svc->getCategories(),
             'cartCount'    => (new CartService())->getCount(),
             'settings'     => SettingsService::all(),
+        ]);
+    }
+
+    /** "Remind Me Later" on an out-of-stock product — registers interest; the actual notification fires when stock is restocked (see SellerPanel ProductController::update()). */
+    public function notifyRestock(string $id): void
+    {
+        csrf_check();
+        if (!Auth::isUserLoggedIn()) {
+            $this->json(['success' => false, 'message' => 'Please login to get notified.', 'requireLogin' => true], 401);
+            return;
+        }
+        $isNew = (new StockNotificationRepository())->subscribe(Auth::userId(), (int) $id);
+        $this->json([
+            'success' => true,
+            'message' => $isNew
+                ? "We'll email you as soon as this product is back in stock!"
+                : "You're already on the list for this product.",
         ]);
     }
 

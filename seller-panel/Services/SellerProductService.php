@@ -66,16 +66,36 @@ class SellerProductService
     public function update(int $id, int $sellerId, array $d, array $files = []): array {
         $p = $this->findById($id, $sellerId);
         if (!$p) return ['success'=>false,'message'=>'Product not found.'];
+        $newStock = max(0,(int)($d['stock']??0));
         $this->db->execute(
             "UPDATE `".DB_PREFIX."products` SET category_id=?,name=?,description=?,price=?,sale_price=?,stock=?,sku=?,barcode=?,hsn_code=?,gst_rate=?,weight=?,is_featured=?,status=? WHERE id=? AND seller_id=?",
-            [$d['category_id'],$d['name'],$d['description']??null,max(0,(float)$d['price']),!empty($d['sale_price'])?max(0,(float)$d['sale_price']):null,max(0,(int)($d['stock']??0)),$d['sku']??null,$d['barcode']??null,$d['hsn_code']??null,$this->normalizeGstRate($d),!empty($d['weight'])?max(0,(float)$d['weight']):null,(int)!empty($d['is_featured']),$d['status']??'active',$id,$sellerId]
+            [$d['category_id'],$d['name'],$d['description']??null,max(0,(float)$d['price']),!empty($d['sale_price'])?max(0,(float)$d['sale_price']):null,$newStock,$d['sku']??null,$d['barcode']??null,$d['hsn_code']??null,$this->normalizeGstRate($d),!empty($d['weight'])?max(0,(float)$d['weight']):null,(int)!empty($d['is_featured']),$d['status']??'active',$id,$sellerId]
         );
         $this->handleImages($id, $files);
         if (isset($d['variants'])) {
             $this->db->execute("DELETE FROM `".DB_PREFIX."product_variants` WHERE product_id=?", [$id]);
             $this->handleVariants($id, $d['variants']);
         }
+        // "Remind Me Later" customers on the product page — fire once
+        // stock actually crosses from 0 back to available.
+        if ((int)$p['stock'] === 0 && $newStock > 0) {
+            $this->notifyRestockSubscribers($id, $d['name']);
+        }
         return ['success'=>true];
+    }
+
+    private function notifyRestockSubscribers(int $productId, string $productName): void {
+        $repo = new \App\Repositories\StockNotificationRepository();
+        $subscribers = $repo->getPendingForProduct($productId);
+        if (empty($subscribers)) return;
+
+        $notifier = new \App\Core\Services\NotificationService();
+        $link = APP_URL . '/product/' . ($this->db->fetchOne("SELECT slug FROM `".DB_PREFIX."products` WHERE id=?", [$productId])['slug'] ?? '');
+        foreach ($subscribers as $sub) {
+            $notifier->notify('customer', (int)$sub['user_id'], 'back_in_stock', 'Back in stock: ' . $productName, $productName . ' is available again — grab it before it sells out!', $link);
+            $notifier->emailAlso($sub['email'], 'Back in stock — ' . $productName, '<p>Hi ' . e($sub['name']) . ',</p><p><strong>' . e($productName) . '</strong> is back in stock! <a href="' . e($link) . '">View product</a></p>');
+        }
+        $repo->markNotified($productId);
     }
 
     public function delete(int $id, int $sellerId): void {

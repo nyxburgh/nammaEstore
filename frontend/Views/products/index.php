@@ -3,7 +3,7 @@
 <!-- PAGE HERO -->
 <div class="page-hero">
   <div class="page-hero-inner">
-    <h1><?= isset($category) ? e($category['name']) : (isset($searchQ) ? 'Search: "'.e($searchQ).'"' : 'All Products') ?></h1>
+    <h1><?= isset($category) ? e($category['name']) : (isset($headingLabel) ? e($headingLabel) : 'All Products') ?></h1>
     <div class="breadcrumb">
       <a href="<?= APP_URL ?>">Home</a><span class="sep">›</span>
       <?php if(isset($category)): ?><a href="<?= APP_URL ?>/products">Products</a><span class="sep">›</span><span><?= e($category['name']) ?></span>

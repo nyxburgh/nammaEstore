@@ -80,7 +80,7 @@ function productCard(array $p): string {
 
 <div class="container home-container">
   <!-- FEATURES STRIP -->
-  <div class="features-strip reveal">
+  <div class="features-strip reveal" id="homeFeatures">
     <?php foreach([['🚚','Free Delivery','On orders above ₹499'],['🔄','Easy Returns','7-day hassle-free'],['🔒','Secure Payment','100% encrypted'],['💬','24/7 Support','Always here to help']] as [$fIcon,$fTitle,$fSub]): ?>
     <div class="feature-item"><div class="feature-icon"><?= $fIcon ?></div><div><div class="f-title"><?= $fTitle ?></div><div class="f-sub"><?= $fSub ?></div></div></div>
     <?php endforeach; ?>
@@ -123,7 +123,7 @@ function productCard(array $p): string {
   </section>
 
   <!-- FLASH SALE -->
-  <section class="reveal home-sec">
+  <section class="reveal home-sec" id="homeFlashSale">
     <div class="flash-header">
       <h2>⚡ Flash Sale</h2>
       <div class="countdown"><div class="count-box" id="ch">04</div><span class="count-sep">:</span><div class="count-box" id="cm">27</div><span class="count-sep">:</span><div class="count-box" id="cs">45</div></div>
@@ -146,6 +146,23 @@ function productCard(array $p): string {
       <?php if(empty($trending)): ?><div class="grid-empty">No products yet — check back soon!</div><?php endif; ?>
     </div>
   </section>
+
+  <!-- RECOMMENDED FOR YOU -->
+  <?php if(!empty($recommended)): ?>
+  <section class="reveal home-sec">
+    <div class="section-header"><h2 class="section-title">🎯 Recommended For You</h2></div>
+    <div class="rec-tabs">
+      <?php $recFirst = true; foreach($recommended as $recSlug => $recData): ?>
+      <button class="rec-tab-btn <?= $recFirst?'active':'' ?>" data-action="switch-rec-tab" data-tab="rec-<?= e($recSlug) ?>"><?= e($recData['label']) ?></button>
+      <?php $recFirst = false; endforeach; ?>
+    </div>
+    <?php $recFirst = true; foreach($recommended as $recSlug => $recData): ?>
+    <div class="products-grid rec-tab-panel <?= $recFirst?'active':'' ?>" id="rec-<?= e($recSlug) ?>">
+      <?php foreach($recData['products'] as $p): echo productCard($p); endforeach; ?>
+    </div>
+    <?php $recFirst = false; endforeach; ?>
+  </section>
+  <?php endif; ?>
 
   <!-- DEALS OF THE DAY -->
   <?php if(!empty($deals)): ?>

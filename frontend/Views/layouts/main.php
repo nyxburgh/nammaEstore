@@ -84,7 +84,7 @@ $selectedCat = $_GET['category'] ?? '';
         <?php if($sellerLoggedIn): ?>
         <a href="<?= SELLER_URL ?>/dashboard" class="header-btn"><span class="icon">👤</span><span class="label">Seller Dashboard</span></a>
         <?php else: ?>
-        <button class="header-btn" data-action="toggle-desk-account"><span class="icon">👤</span><span class="label"><?= $isLogged?e($user['name']):'Account' ?></span></button>
+        <button class="header-btn" data-action="toggle-desk-account"><span class="icon header-acc-icon"><?php if($isLogged && !empty($user['avatar'])): ?><img src="<?= UPLOAD_URL.'/'.e($user['avatar']) ?>" alt="<?= e($user['name']) ?>'s profile picture"><?php else: ?>👤<?php endif; ?></span><span class="label"><?= $isLogged?e($user['name']):'Account' ?></span></button>
         <div class="desk-account-dropdown" id="deskAccDropdown">
           <div class="desk-acc-header">
             <div class="desk-acc-avatar"><?php if($isLogged && !empty($user['avatar'])): ?><img src="<?= UPLOAD_URL.'/'.e($user['avatar']) ?>" alt="<?= e($user['name']) ?>'s profile picture"><?php else: ?><?= $isLogged?strtoupper(substr($user['name'],0,1)):'👤' ?><?php endif; ?></div>
@@ -206,10 +206,11 @@ $selectedCat = $_GET['category'] ?? '';
   <div class="mobile-nav-inner">
     <a href="<?= APP_URL ?>" class="mob-nav-btn nav-home"><span class="m-icon">🏠</span><span class="m-label">Home</span></a>
     <a href="<?= APP_URL ?>/account/wishlist" class="mob-nav-btn nav-wishlist"><span class="m-icon">❤️</span><span class="m-label">Wishlist</span></a>
+    <?php $mobAccIcon = ($isLogged && !empty($user['avatar'])) ? '<img src="'.e(UPLOAD_URL.'/'.$user['avatar']).'" alt="'.e($user['name']).'\'s profile picture">' : '👤'; ?>
     <?php if($sellerLoggedIn): ?>
-    <a href="<?= SELLER_URL ?>/dashboard" class="mob-nav-center-wrap"><div class="mob-nav-center">👤</div><span class="mob-nav-center-label">Account</span></a>
+    <a href="<?= SELLER_URL ?>/dashboard" class="mob-nav-center-wrap"><div class="mob-nav-center"><?= $mobAccIcon ?></div><span class="mob-nav-center-label">Account</span></a>
     <?php else: ?>
-    <div class="mob-nav-center-wrap" data-action="toggle-account"><div class="mob-nav-center">👤</div><span class="mob-nav-center-label">Account</span></div>
+    <div class="mob-nav-center-wrap" data-action="toggle-account"><div class="mob-nav-center"><?= $mobAccIcon ?></div><span class="mob-nav-center-label">Account</span></div>
     <?php endif; ?>
     <div class="mob-nav-btn mob-nav-cart-wrap" data-action="open-cart"><span class="m-icon">🛒<span class="mob-cart-badge-sm" id="cartBadgeMob"><?= $cartCnt ?: '' ?></span></span><span class="m-label">Cart</span></div>
     <button class="mob-nav-btn" data-action="toggle-menu"><span class="m-icon">☰</span><span class="m-label">Menu</span></button>
@@ -240,29 +241,23 @@ $selectedCat = $_GET['category'] ?? '';
 
 <!-- FOOTER -->
 <?php
-$fEmail   = \App\Frontend\Services\SettingsService::get('site_email', 'info@nammaestore.com');
-$fPhone   = \App\Frontend\Services\SettingsService::get('site_phone', '+91 9999999999');
-$fPhoneRaw= preg_replace('/[^0-9]/', '', $fPhone);
 $fAddress = \App\Frontend\Services\SettingsService::get('site_address', '');
 $socials  = [
     'facebook'  => ['📘', \App\Frontend\Services\SettingsService::get('social_facebook', '')],
     'instagram' => ['📷', \App\Frontend\Services\SettingsService::get('social_instagram', '')],
-    'twitter'   => ['🐦', \App\Frontend\Services\SettingsService::get('social_twitter', '')],
-    'youtube'   => ['▶️', \App\Frontend\Services\SettingsService::get('social_youtube', '')],
-    'whatsapp'  => ['💬', $fPhoneRaw ? 'https://wa.me/' . $fPhoneRaw : ''],
+    'x'         => ['✕', \App\Frontend\Services\SettingsService::get('social_twitter', '')],
 ];
 ?>
 <footer class="footer">
   <div class="footer-top">
-    <div class="footer-contact">
-      <?php if($fAddress): ?><div class="footer-contact-item">📍 <span><?= e($fAddress) ?></span></div><?php endif; ?>
-      <div class="footer-contact-item">📞 <a href="tel:+<?= e($fPhoneRaw) ?>"><?= e($fPhone) ?></a></div>
-      <div class="footer-contact-item">✉️ <a href="mailto:<?= e($fEmail) ?>"><?= e($fEmail) ?></a></div>
-    </div>
-    <div class="footer-social">
-      <?php foreach($socials as $key => [$icon, $link]): if(!$link) continue; ?>
-      <a href="<?= e($link) ?>" class="footer-social-link" target="_blank" rel="noopener" aria-label="<?= e(ucfirst($key)) ?>"><?= $icon ?></a>
-      <?php endforeach; ?>
+    <?php if($fAddress): ?><div class="footer-contact"><div class="footer-contact-item">📍 <span><?= e($fAddress) ?></span></div></div><?php endif; ?>
+    <div class="footer-social-block">
+      <div class="footer-social-title">Follow us</div>
+      <div class="footer-social">
+        <?php foreach($socials as $key => [$icon, $link]): if(!$link) continue; ?>
+        <a href="<?= e($link) ?>" class="footer-social-link" target="_blank" rel="noopener" aria-label="<?= e($key === 'x' ? 'X' : ucfirst($key)) ?>"><?= $icon ?></a>
+        <?php endforeach; ?>
+      </div>
     </div>
   </div>
   <nav class="footer-links">

@@ -66,6 +66,7 @@ class AuthController extends FrontendController
     }
     public function logout(): void {
         (new AuthService())->logout();
+        $this->setFlash('success', 'You have been logged out successfully.');
         $this->redirect(APP_URL.'/login');
     }
 

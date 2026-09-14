@@ -59,6 +59,14 @@
       .catch(() => { btn.textContent = 'Subscribe →'; btn.disabled = false; });
   }
 
+  function switchRecTab(btn) {
+    document.querySelectorAll('.rec-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.rec-tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById(btn.dataset.tab);
+    if (panel) panel.classList.add('active');
+  }
+
   document.addEventListener('click', function (e) {
     const el = e.target.closest('[data-action]');
     if (!el) return;
@@ -67,6 +75,7 @@
       case 'hero-prev':            goSlide(slide - 1); restartAutoSlide(); break;
       case 'hero-next':            goSlide(slide + 1); restartAutoSlide(); break;
       case 'subscribe-newsletter': subscribeNewsletter(el); break;
+      case 'switch-rec-tab':       switchRecTab(el); break;
     }
   });
 })();
